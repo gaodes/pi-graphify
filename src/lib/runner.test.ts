@@ -172,6 +172,7 @@ describe("ensureGraphifyGitignore", () => {
 			const content = await readFile(join(dir, ".gitignore"), "utf-8");
 			expect(content).toContain("graphify-out/cache/");
 			expect(content).toContain("graphify-out/.graphify_python");
+			expect(content).toContain("graphify-out/.graphify_root");
 			expect(content).toContain("graphify-out/cost.json");
 			expect(content).not.toContain("graphify-out/\n");
 		} finally {
@@ -197,6 +198,7 @@ describe("ensureGraphifyGitignore", () => {
 			expect(content).toContain("custom-file.txt");
 			expect(content).toContain("graphify-out/cache/");
 			expect(content).toContain("graphify-out/.graphify_python");
+			expect(content).toContain("graphify-out/.graphify_root");
 			expect(content).toContain("graphify-out/cost.json");
 			expect(content).not.toContain("\ngraphify-out/\n");
 		} finally {
@@ -209,7 +211,7 @@ describe("ensureGraphifyGitignore", () => {
 
 		try {
 			const expected =
-				"node_modules/\ngraphify-out/cache/\ngraphify-out/.graphify_python\ngraphify-out/cost.json\n";
+				"node_modules/\ngraphify-out/cache/\ngraphify-out/.graphify_python\ngraphify-out/.graphify_root\ngraphify-out/cost.json\n";
 			await writeFile(join(dir, ".gitignore"), expected, "utf-8");
 
 			const result = await ensureGraphifyGitignore(dir);

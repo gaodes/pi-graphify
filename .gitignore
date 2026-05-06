@@ -5,4 +5,5 @@ node_modules/
 .gitnexus
 graphify-out/cache/
 graphify-out/.graphify_python
+graphify-out/.graphify_root
 graphify-out/cost.json

@@ -84,6 +84,7 @@ On build initialization, the extension ensures `.gitignore` exists and applies G
 - ignores only:
   - `graphify-out/cache/`
   - `graphify-out/.graphify_python`
+  - `graphify-out/.graphify_root`
   - `graphify-out/cost.json`
 
 If a legacy `graphify-out/` ignore entry exists, it is removed automatically.

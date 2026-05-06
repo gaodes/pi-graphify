@@ -27,6 +27,7 @@ export type ExecFn = (command: string, options?: ExecOptions) => Promise<ExecRes
 const GRAPHIFY_GITIGNORE_REQUIRED = [
 	"graphify-out/cache/",
 	"graphify-out/.graphify_python",
+	"graphify-out/.graphify_root",
 	"graphify-out/cost.json",
 ] as const;
 
