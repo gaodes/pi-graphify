@@ -40,5 +40,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Tools: `graphify_build`, `graphify_query`, `graphify_path`, `graphify_explain`, `graphify_add`, `graphify_update`, `graphify_watch`, `graphify_cluster`.
 - Single `/graphify` command with autocomplete for subcommands and flags (build, query, path, explain, add, update, watch, cluster, hook).
 
-[Unreleased]: https://gitlab.elches.dev/agents/primecodex/extensions/pi-graphify/-/compare/v0.1.0...main
-[0.1.0]: https://gitlab.elches.dev/agents/primecodex/extensions/pi-graphify/-/tags/v0.1.0
+[Unreleased]: https://gitlab.elches.dev/agents/primecodex/packages/pi-graphify/-/compare/v0.1.0...main
+[0.1.0]: https://gitlab.elches.dev/agents/primecodex/packages/pi-graphify/-/tags/v0.1.0

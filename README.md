@@ -2,7 +2,7 @@
 
 Turn any folder of files (code, docs, papers, images, video) into a queryable knowledge graph with community detection, an honest audit trail, and three outputs: interactive HTML, GraphRAG-ready JSON, and a plain-language GRAPH_REPORT.md.
 
-[**Source**](https://gitlab.elches.dev/agents/primecodex/extensions/pi-graphify) · [**npm**](https://www.npmjs.com/package/@gaodes/pi-graphify)
+[**Source**](https://gitlab.elches.dev/agents/primecodex/packages/pi-graphify) · [**npm**](https://www.npmjs.com/package/@gaodes/pi-graphify)
 
 Inspired by [graphify](https://github.com/safishamsi/graphify) — the AI coding assistant skill. This extension wraps graphify's Python CLI for native Pi integration.
 
@@ -91,6 +91,6 @@ If a legacy `graphify-out/` ignore entry exists, it is removed automatically.
 
 ## Source
 
-- Canonical: `~/agents/primecodex/extensions/pi-graphify/`
-- GitLab: `agents/primecodex/extensions/pi-graphify`
+- Canonical: `~/agents/primecodex/packages/pi-graphify/`
+- GitLab: `agents/primecodex/packages/pi-graphify`
 - GitHub: `github.com/gaodes/pi-graphify`
