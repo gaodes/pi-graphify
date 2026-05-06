@@ -2,6 +2,8 @@
   "source": "ssh://git@gitlab-ssh.elches.dev:2222/agents/primecodex/extensions/pi-graphify.git",
   "description": "Turn any folder into a queryable knowledge graph — build, query, explore, and update graphs from inside Pi via tools and /graphify command",
   "topic": "knowledge-graph",
-  "requires": ["graphifyy (Python 3.10+)"],
+  "requires": [
+    "graphifyy (Python 3.10+)"
+  ],
   "npmPublished": false
 }

@@ -15,11 +15,13 @@ import type { ExecFn } from "../lib/runner";
 import {
 	addUrl,
 	buildGraph,
+	clusterOnly,
 	detectPython,
 	ensureInstalled,
 	explainNode,
 	findPath,
 	queryGraph,
+	startWatch,
 	updateGraph,
 } from "../lib/runner";
 
@@ -774,6 +776,178 @@ export function createUpdateTool(pi: ExtensionAPI, config: ResolvedConfig) {
 }
 
 // ---------------------------------------------------------------------------
+// graphify_watch
+// ---------------------------------------------------------------------------
+
+const watchParameters = Type.Object({
+	path: Type.String({ description: "Directory path to watch" }),
+	debounce: Type.Optional(
+		Type.Number({
+			description: "Debounce seconds before triggering rebuild (default 3)",
+			default: 3,
+		}),
+	),
+});
+
+type WatchParams = Static<typeof watchParameters>;
+
+interface WatchDetails {
+	path: string;
+	message: string;
+}
+
+export function createWatchTool(pi: ExtensionAPI, config: ResolvedConfig) {
+	return defineTool({
+		name: "graphify_watch",
+		label: "Graphify Watch",
+		description:
+			"Watch a directory for file changes and auto-rebuild the graph. Code changes trigger AST rebuild; doc changes flag for manual update.",
+		parameters: watchParameters,
+		promptSnippet:
+			"Use graphify_watch to start a file watcher that auto-updates the knowledge graph when code changes.",
+		promptGuidelines: [
+			"graphify_watch runs in the foreground — use the process tool to run it in the background.",
+			"Code-only changes are rebuilt automatically. Doc/image changes require manual /graphify --update.",
+		],
+
+		async execute(
+			_toolCallId: string,
+			params: WatchParams,
+			signal: AbortSignal,
+			onUpdate: AgentToolUpdateCallback<WatchDetails> | undefined,
+			ctx: ExtensionContext,
+		): Promise<AgentToolResult<WatchDetails>> {
+			const exec = createExec(pi, ctx.cwd);
+			const python = await detectPython(exec, config.pythonPath, ctx.cwd, signal);
+			await ensureInstalled(exec, python, ctx.cwd, signal);
+
+			const message = await startWatch(
+				exec,
+				python,
+				ctx.cwd,
+				params.path,
+				params.debounce ?? 3,
+				signal,
+				(msg) =>
+					onUpdate?.({ content: [{ type: "text", text: msg }], details: {} as WatchDetails }),
+			);
+
+			return {
+				content: [{ type: "text", text: message }],
+				details: { path: params.path, message },
+			};
+		},
+
+		renderCall(params: WatchParams, theme: Theme) {
+			return new ToolCallHeader(
+				{
+					toolName: "Graphify",
+					action: "watch",
+					mainArg: params.path,
+					optionArgs: params.debounce
+						? [{ label: "debounce", value: String(params.debounce) }]
+						: [],
+					showColon: true,
+				},
+				theme,
+			);
+		},
+
+		renderResult(
+			result: AgentToolResult<WatchDetails>,
+			options: ToolRenderResultOptions,
+			theme: Theme,
+		) {
+			if (options.isPartial) {
+				return new Text(theme.fg("muted", "Graphify: watching for changes..."), 0, 0);
+			}
+			const details = result.details as WatchDetails | undefined;
+			if (!details?.message) {
+				return new Text(theme.fg("muted", "Watch ended."), 0, 0);
+			}
+			return new Text(theme.fg("muted", details.message), 0, 0);
+		},
+	});
+}
+
+// ---------------------------------------------------------------------------
+// graphify_cluster
+// ---------------------------------------------------------------------------
+
+const clusterParameters = Type.Object({});
+
+type ClusterParams = Static<typeof clusterParameters>;
+
+interface ClusterDetails {
+	communities: number;
+}
+
+export function createClusterTool(pi: ExtensionAPI, config: ResolvedConfig) {
+	return defineTool({
+		name: "graphify_cluster",
+		label: "Graphify Cluster",
+		description:
+			"Re-run community detection on an existing graph.json and regenerate the report. No re-extraction needed.",
+		parameters: clusterParameters,
+		promptSnippet:
+			"Use graphify_cluster to re-cluster an existing graph without re-extracting files.",
+		promptGuidelines: [
+			"graphify_cluster is cheap — it only reruns the clustering algorithm on existing data.",
+			"Requires an existing graphify-out/graph.json.",
+		],
+
+		async execute(
+			_toolCallId: string,
+			_params: ClusterParams,
+			signal: AbortSignal,
+			_onUpdate: AgentToolUpdateCallback<ClusterDetails> | undefined,
+			ctx: ExtensionContext,
+		): Promise<AgentToolResult<ClusterDetails>> {
+			const exec = createExec(pi, ctx.cwd);
+			const python = await detectPython(exec, config.pythonPath, ctx.cwd, signal);
+			await ensureInstalled(exec, python, ctx.cwd, signal);
+
+			const result = await clusterOnly(exec, python, ctx.cwd, signal);
+
+			return {
+				content: [{ type: "text", text: `Re-clustered: ${result.communities} communities` }],
+				details: { communities: result.communities },
+			};
+		},
+
+		renderCall(_params: ClusterParams, theme: Theme) {
+			return new ToolCallHeader(
+				{ toolName: "Graphify", action: "cluster", mainArg: "re-cluster", showColon: true },
+				theme,
+			);
+		},
+
+		renderResult(
+			result: AgentToolResult<ClusterDetails>,
+			options: ToolRenderResultOptions,
+			theme: Theme,
+		) {
+			if (options.isPartial) {
+				return new Text(theme.fg("muted", "Graphify: re-clustering..."), 0, 0);
+			}
+			const details = result.details as ClusterDetails | undefined;
+			if (!details?.communities) {
+				return new Text(theme.fg("error", "Cluster failed"), 0, 0);
+			}
+			return new ToolBody(
+				{
+					fields: [
+						{ label: "Communities", value: String(details.communities), showCollapsed: false },
+					],
+				},
+				options,
+				theme,
+			);
+		},
+	});
+}
+
+// ---------------------------------------------------------------------------
 // Re-export all creators
 // ---------------------------------------------------------------------------
 
@@ -785,5 +959,7 @@ export function createAllTools(pi: ExtensionAPI, config: ResolvedConfig) {
 		createExplainTool(pi, config),
 		createAddTool(pi, config),
 		createUpdateTool(pi, config),
+		createWatchTool(pi, config),
+		createClusterTool(pi, config),
 	];
 }

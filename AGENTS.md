@@ -5,10 +5,52 @@ Pi extension wrapping the [graphify](https://github.com/safishamsi/graphify) Pyt
 ## Architecture
 
 - `src/config.ts` — Raw/resolved config loader
-- `src/lib/runner.ts` — Graphify CLI execution logic (no Pi imports)
+- `src/lib/runner.ts` — Graphify CLI execution logic (no Pi imports). All functions accept an injected `exec` callback for testability.
+- `src/lib/runner.test.ts` — Unit tests for runner (7 passing)
 - `src/tools/` — LLM-callable tools (thin wrappers around runner)
-  - `build.ts`, `query.ts`, `path.ts`, `explain.ts`, `add.ts`, `update.ts`
-- `src/commands/` — `/graphify` slash command with autocomplete
+  - All tools in `graphify-tools.ts`: build, query, path, explain, add, update, watch, cluster
+  - Integration tests in `graphify.integration.test.ts` (10 passing)
+- `src/commands/` — `/graphify` slash command with autocomplete for all subcommands
+- `skills/graphify/` — Bundled skill for full-pipeline orchestration (semantic extraction, community labeling, export formats, video transcription, guided exploration)
+
+## Tools (8)
+
+| Tool               | Description                                           |
+| ------------------ | ----------------------------------------------------- |
+| `graphify_build`   | Full pipeline: detect → extract → cluster → visualize |
+| `graphify_query`   | BFS/DFS graph traversal                               |
+| `graphify_path`    | Shortest path between two concepts                    |
+| `graphify_explain` | Plain-language node explanation                       |
+| `graphify_add`     | Fetch URL and add to corpus                           |
+| `graphify_update`  | Incremental update (changed files only)               |
+| `graphify_watch`   | Watch directory for changes                           |
+| `graphify_cluster` | Re-run clustering on existing graph                   |
+
+## Commands
+
+Subcommands: build, query, path, explain, add, update, watch, cluster, hook
+
+## Runner Functions (not yet exposed as tools)
+
+These are implemented in `runner.ts` but not yet wired as dedicated tools or command handlers:
+
+- `pushNeo4j` — push graph to Neo4j instance
+- `saveResult` — save Q&A feedback loop to graph memory
+- `cloneRepo` — clone a GitHub repo for graphing
+- `mergeGraphs` — merge multiple graph.json files
+- `generateTree` — collapsible tree HTML visualization
+
+## CLI Coverage Gaps
+
+The following graphify CLI commands are **not** exposed through the extension (available via the graphify skill or direct CLI):
+
+- `graphify extract` — headless full extraction for CI
+- `graphify tree` — D3 collapsible tree HTML
+- `graphify clone` — clone GitHub repos
+- `graphify merge-graphs` — cross-repo graph merging
+- `graphify check-update` — cron-safe update check
+- `graphify save-result` — Q&A feedback loop
+- IDE integrations (`claude install`, `cursor install`, etc.) — use `graphify pi install` instead
 
 ## Deviation Notes
 
@@ -24,3 +66,48 @@ Pi extension wrapping the [graphify](https://github.com/safishamsi/graphify) Pyt
 ## Config
 
 Key: `graphify` in `prime-settings.json`
+
+<!-- gitnexus:start -->
+
+# GitNexus — Code Intelligence
+
+This project is indexed by GitNexus as **pi-graphify** (195 symbols, 291 relationships, 8 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+
+> If any GitNexus tool warns the index is stale, run `npx gitnexus analyze` in terminal first.
+
+## Always Do
+
+- **MUST run impact analysis before editing any symbol.** Before modifying a function, class, or method, run `gitnexus_impact({target: "symbolName", direction: "upstream"})` and report the blast radius (direct callers, affected processes, risk level) to the user.
+- **MUST run `gitnexus_detect_changes()` before committing** to verify your changes only affect expected symbols and execution flows.
+- **MUST warn the user** if impact analysis returns HIGH or CRITICAL risk before proceeding with edits.
+- When exploring unfamiliar code, use `gitnexus_query({query: "concept"})` to find execution flows instead of grepping. It returns process-grouped results ranked by relevance.
+- When you need full context on a specific symbol — callers, callees, which execution flows it participates in — use `gitnexus_context({name: "symbolName"})`.
+
+## Never Do
+
+- NEVER edit a function, class, or method without first running `gitnexus_impact` on it.
+- NEVER ignore HIGH or CRITICAL risk warnings from impact analysis.
+- NEVER rename symbols with find-and-replace — use `gitnexus_rename` which understands the call graph.
+- NEVER commit changes without running `gitnexus_detect_changes()` to check affected scope.
+
+## Resources
+
+| Resource                                     | Use for                                  |
+| -------------------------------------------- | ---------------------------------------- |
+| `gitnexus://repo/pi-graphify/context`        | Codebase overview, check index freshness |
+| `gitnexus://repo/pi-graphify/clusters`       | All functional areas                     |
+| `gitnexus://repo/pi-graphify/processes`      | All execution flows                      |
+| `gitnexus://repo/pi-graphify/process/{name}` | Step-by-step execution trace             |
+
+## CLI
+
+| Task                                         | Read this skill file                                        |
+| -------------------------------------------- | ----------------------------------------------------------- |
+| Understand architecture / "How does X work?" | `.claude/skills/gitnexus/gitnexus-exploring/SKILL.md`       |
+| Blast radius / "What breaks if I change X?"  | `.claude/skills/gitnexus/gitnexus-impact-analysis/SKILL.md` |
+| Trace bugs / "Why is X failing?"             | `.claude/skills/gitnexus/gitnexus-debugging/SKILL.md`       |
+| Rename / extract / split / refactor          | `.claude/skills/gitnexus/gitnexus-refactoring/SKILL.md`     |
+| Tools, resources, schema reference           | `.claude/skills/gitnexus/gitnexus-guide/SKILL.md`           |
+| Index, status, clean, wiki CLI commands      | `.claude/skills/gitnexus/gitnexus-cli/SKILL.md`             |
+
+<!-- gitnexus:end -->

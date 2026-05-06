@@ -3,10 +3,12 @@ import type { AutocompleteItem } from "@mariozechner/pi-tui";
 import { loadConfig, type ResolvedConfig } from "../config";
 import type { ExecFn } from "../lib/runner";
 import {
+	clusterOnly,
 	detectPython,
 	ensureInstalled,
 	explainNode,
 	findPath,
+	hookAction,
 	queryGraph,
 	updateGraph,
 } from "../lib/runner";
@@ -46,6 +48,21 @@ const SUBCOMMANDS: AutocompleteItem[] = [
 		label: "update",
 		description: "Incremental update — re-extract only changed files",
 	},
+	{
+		value: "watch",
+		label: "watch",
+		description: "Watch directory for changes, auto-rebuild graph",
+	},
+	{
+		value: "cluster",
+		label: "cluster",
+		description: "Re-run clustering on existing graph (no re-extraction)",
+	},
+	{
+		value: "hook",
+		label: "hook",
+		description: "Manage git hooks (install/uninstall/status)",
+	},
 ];
 
 const BUILD_FLAGS: AutocompleteItem[] = [
@@ -59,7 +76,6 @@ const BUILD_FLAGS: AutocompleteItem[] = [
 	{ value: "--svg", label: "--svg", description: "Export graph.svg" },
 	{ value: "--graphml", label: "--graphml", description: "Export for Gephi / yEd" },
 	{ value: "--neo4j", label: "--neo4j", description: "Generate cypher.txt for Neo4j" },
-	{ value: "--watch", label: "--watch", description: "Watch folder, auto-rebuild on changes" },
 	{
 		value: "--update",
 		label: "--update",
@@ -154,6 +170,27 @@ function getCompletions(argumentPrefix: string): AutocompleteItem[] {
 				},
 			];
 		}
+		case "watch": {
+			return [
+				{
+					value: `watch ${parts.slice(1).join(" ")}`,
+					label: parts.slice(1).join(" ") || ".",
+					description: "Directory path to watch",
+				},
+			];
+		}
+		case "cluster": {
+			return [{ value: "cluster", label: "cluster", description: "Re-cluster existing graph" }];
+		}
+		case "hook": {
+			const hookActions: AutocompleteItem[] = [
+				{ value: "hook install", label: "install", description: "Install git hooks" },
+				{ value: "hook uninstall", label: "uninstall", description: "Remove git hooks" },
+				{ value: "hook status", label: "status", description: "Check hook status" },
+			];
+			const partial = parts.slice(1).join(" ").toLowerCase();
+			return hookActions.filter((h) => h.label.startsWith(partial || h.label));
+		}
 		default: {
 			if (parts[parts.length - 1]?.startsWith("--")) {
 				return BUILD_FLAGS.filter((f) => f.value.startsWith(parts[parts.length - 1] ?? ""));
@@ -168,7 +205,16 @@ function getCompletions(argumentPrefix: string): AutocompleteItem[] {
 // ---------------------------------------------------------------------------
 
 interface ParsedArgs {
-	subcommand: "build" | "query" | "path" | "explain" | "add" | "update";
+	subcommand:
+		| "build"
+		| "query"
+		| "path"
+		| "explain"
+		| "add"
+		| "update"
+		| "watch"
+		| "cluster"
+		| "hook";
 	positionals: string[];
 	flags: Record<string, string | boolean>;
 }
@@ -183,7 +229,10 @@ function parseArgs(raw: string): ParsedArgs {
 
 	if (tokens.length > 0) {
 		const first = tokens[0].toLowerCase();
-		if (["query", "path", "explain", "add", "update"].includes(first) && !first.startsWith("-")) {
+		if (
+			["query", "path", "explain", "add", "update", "watch", "cluster", "hook"].includes(first) &&
+			!first.startsWith("-")
+		) {
 			subcommand = first as ParsedArgs["subcommand"];
 			i = 1;
 		}
@@ -202,6 +251,9 @@ function parseArgs(raw: string): ParsedArgs {
 			i += 2;
 		} else if (token === "--contributor" && tokens[i + 1]) {
 			flags.contributor = tokens[i + 1];
+			i += 2;
+		} else if (token === "--debounce" && tokens[i + 1]) {
+			flags.debounce = tokens[i + 1];
 			i += 2;
 		} else if (token.startsWith("--")) {
 			flags[token.slice(2)] = true;
@@ -285,10 +337,19 @@ print(f'Re-clustered: {len(communities)} communities')
 		return;
 	}
 
-	// Full build — send a message to the agent so it uses the tool
-	const modeFlag = flags.mode === "deep" ? " in deep mode" : "";
+	const buildArgs = {
+		path: inputPath,
+		...(flags.mode === "deep" ? { mode: "deep" } : {}),
+		...(flags["no-viz"] === true ? { no_viz: true } : {}),
+		...(flags.obsidian === true ? { obsidian: true } : {}),
+		...(flags.svg === true ? { svg: true } : {}),
+		...(flags.graphml === true ? { graphml: true } : {}),
+		...(flags.neo4j === true ? { neo4j: true } : {}),
+	};
+
+	// Full build — send a message to the agent so it uses the tool with explicit params
 	pi.sendUserMessage(
-		`Use the graphify_build tool to build a knowledge graph from "${inputPath}"${modeFlag}. After the graph is built, read graphify-out/GRAPH_REPORT.md and show me the God Nodes, Surprising Connections, and Suggested Questions.`,
+		`Use the graphify_build tool with these exact params: ${JSON.stringify(buildArgs)}. After the graph is built, read graphify-out/GRAPH_REPORT.md and show me the God Nodes, Surprising Connections, and Suggested Questions.`,
 	);
 }
 
@@ -389,6 +450,63 @@ async function handleUpdate(pi: ExtensionAPI, positionals: string[]) {
 	);
 }
 
+async function handleWatch(
+	pi: ExtensionAPI,
+	_ctx: ExtensionCommandContext,
+	_config: ResolvedConfig,
+	positionals: string[],
+	flags: Record<string, string | boolean>,
+) {
+	const inputPath = positionals[0] ?? ".";
+	const debounce = typeof flags.debounce === "string" ? flags.debounce : "3";
+	pi.sendUserMessage(
+		`Use the graphify_watch tool to watch "${inputPath}" for changes with debounce ${debounce}s. Run it as a background process.`,
+	);
+}
+
+async function handleCluster(
+	pi: ExtensionAPI,
+	ctx: ExtensionCommandContext,
+	config: ResolvedConfig,
+) {
+	const exec = createExec(pi, ctx.cwd);
+	const python = await detectPython(exec, config.pythonPath, ctx.cwd);
+	await ensureInstalled(exec, python, ctx.cwd);
+
+	try {
+		const result = await clusterOnly(exec, python, ctx.cwd);
+		await ctx.ui.notify(`Re-clustered: ${result.communities} communities`);
+	} catch (err) {
+		const message = err instanceof Error ? err.message : String(err);
+		await ctx.ui.notify(`Cluster failed: ${message}`, "error");
+	}
+}
+
+async function handleHook(
+	pi: ExtensionAPI,
+	ctx: ExtensionCommandContext,
+	config: ResolvedConfig,
+	positionals: string[],
+) {
+	const action = positionals[0];
+	if (!action || !["install", "uninstall", "status"].includes(action)) {
+		await ctx.ui.notify("Usage: /graphify hook <install|uninstall|status>", "warning");
+		return;
+	}
+
+	const exec = createExec(pi, ctx.cwd);
+	const python = await detectPython(exec, config.pythonPath, ctx.cwd);
+	await ensureInstalled(exec, python, ctx.cwd);
+
+	const result = await hookAction(
+		exec,
+		python,
+		ctx.cwd,
+		action as "install" | "uninstall" | "status",
+	);
+	await ctx.ui.notify(result);
+}
+
 // ---------------------------------------------------------------------------
 // Command registration
 // ---------------------------------------------------------------------------
@@ -424,6 +542,15 @@ export default function (pi: ExtensionAPI) {
 						break;
 					case "update":
 						await handleUpdate(pi, parsed.positionals);
+						break;
+					case "watch":
+						await handleWatch(pi, ctx, config, parsed.positionals, parsed.flags);
+						break;
+					case "cluster":
+						await handleCluster(pi, ctx, config);
+						break;
+					case "hook":
+						await handleHook(pi, ctx, config, parsed.positionals);
 						break;
 				}
 			} catch (err) {

@@ -758,6 +758,213 @@ print(json.dumps(r, indent=2))
 }
 
 // ---------------------------------------------------------------------------
+// Watch (file watcher)
+// ---------------------------------------------------------------------------
+
+export async function startWatch(
+	exec: ExecFn,
+	python: string,
+	cwd: string,
+	inputPath: string,
+	debounce: number = 3,
+	signal?: AbortSignal,
+	onUpdate?: (message: string) => void,
+): Promise<string> {
+	onUpdate?.(`Watching ${inputPath} for changes...`);
+	const escapedPath = escapeShell(inputPath);
+	const result = await exec(`${python} -m graphify.watch '${escapedPath}' --debounce ${debounce}`, {
+		cwd,
+		signal,
+	});
+	return result.stdout.trim() || result.stderr.trim();
+}
+
+// ---------------------------------------------------------------------------
+// Cluster-only (rerun clustering)
+// ---------------------------------------------------------------------------
+
+export async function clusterOnly(
+	exec: ExecFn,
+	python: string,
+	cwd: string,
+	signal?: AbortSignal,
+): Promise<{ communities: number }> {
+	const result = await exec(
+		`${python} -c "
+import json, sys
+from graphify.cluster import cluster, score_all
+from graphify.report import generate
+from graphify.export import to_json
+from networkx.readwrite import json_graph
+from pathlib import Path
+
+data = json.loads(Path('graphify-out/graph.json').read_text())
+import networkx as nx
+G = json_graph.node_link_graph(data, edges='links')
+communities = cluster(G)
+to_json(G, communities, 'graphify-out/graph.json')
+print(f'Re-clustered: {len(communities)} communities')
+"`,
+		{ cwd, signal },
+	);
+
+	if (result.exitCode !== 0) {
+		throw new Error(`Cluster-only failed: ${result.stderr || result.stdout}`);
+	}
+
+	const match = result.stdout.trim().match(/(\d+) communities/);
+	return { communities: match ? Number.parseInt(match[1], 10) : 0 };
+}
+
+// ---------------------------------------------------------------------------
+// Tree HTML (collapsible tree visualization)
+// ---------------------------------------------------------------------------
+
+export async function generateTree(
+	exec: ExecFn,
+	python: string,
+	cwd: string,
+	options?: { graphPath?: string; outputPath?: string; root?: string; label?: string },
+	signal?: AbortSignal,
+): Promise<string> {
+	const graphPath = options?.graphPath ?? "graphify-out/graph.json";
+	const outputPath = options?.outputPath ?? "graphify-out/GRAPH_TREE.html";
+	let cmd = `${python} -m graphify tree --graph '${escapeShell(graphPath)}' --output '${escapeShell(outputPath)}'`;
+	if (options?.root) cmd += ` --root '${escapeShell(options.root)}'`;
+	if (options?.label) cmd += ` --label '${escapeShell(options.label)}'`;
+
+	const result = await exec(cmd, { cwd, signal });
+	if (result.exitCode !== 0) {
+		throw new Error(`Tree generation failed: ${result.stderr}`);
+	}
+	return outputPath;
+}
+
+// ---------------------------------------------------------------------------
+// Git hooks (install/uninstall/status)
+// ---------------------------------------------------------------------------
+
+export async function hookAction(
+	exec: ExecFn,
+	python: string,
+	cwd: string,
+	action: "install" | "uninstall" | "status",
+	signal?: AbortSignal,
+): Promise<string> {
+	const result = await exec(`${python} -m graphify hook ${action}`, { cwd, signal });
+	if (result.exitCode !== 0 && action !== "status") {
+		throw new Error(`Hook ${action} failed: ${result.stderr}`);
+	}
+	return result.stdout.trim() || result.stderr.trim();
+}
+
+// ---------------------------------------------------------------------------
+// Neo4j push
+// ---------------------------------------------------------------------------
+
+export async function pushNeo4j(
+	exec: ExecFn,
+	python: string,
+	cwd: string,
+	uri: string,
+	user: string,
+	credentials: string,
+	signal?: AbortSignal,
+): Promise<string> {
+	const result = await exec(
+		`NEO4J_URI='${escapeShell(uri)}' NEO4J_USER='${escapeShell(user)}' NEO4J_CREDS='${escapeShell(credentials)}' ${python} -c "
+import json, os
+from graphify.build import build_from_json
+from graphify.export import push_to_neo4j
+from pathlib import Path
+
+extraction = json.loads(Path('.graphify_extract.json').read_text()) if Path('.graphify_extract.json').exists() else None
+if extraction:
+    G = build_from_json(extraction)
+else:
+    from networkx.readwrite import json_graph; import networkx as nx
+    data = json.loads(Path('graphify-out/graph.json').read_text())
+    G = json_graph.node_link_graph(data, edges='links')
+
+r = push_to_neo4j(G, uri=os.environ['NEO4J_URI'], user=os.environ['NEO4J_USER'], credentials=os.environ['NEO4J_CREDS'])
+print(f'Pushed to Neo4j: {r["nodes"]} nodes, {r["edges"]} edges')
+"`,
+		{ cwd, signal },
+	);
+	if (result.exitCode !== 0) {
+		throw new Error(`Neo4j push failed: ${result.stderr || result.stdout}`);
+	}
+	return result.stdout.trim();
+}
+
+// ---------------------------------------------------------------------------
+// Save result (feedback loop)
+// ---------------------------------------------------------------------------
+
+export async function saveResult(
+	exec: ExecFn,
+	python: string,
+	cwd: string,
+	options: { question: string; answer: string; type: string; nodes: string[] },
+	signal?: AbortSignal,
+): Promise<string> {
+	const q = escapeShell(options.question);
+	const a = escapeShell(options.answer);
+	const t = escapeShell(options.type);
+	const nodes = options.nodes.map((n) => `'${escapeShell(n)}'`).join(" ");
+
+	const result = await exec(
+		`${python} -m graphify save-result --question '${q}' --answer '${a}' --type '${t}' --nodes ${nodes}`,
+		{ cwd, signal },
+	);
+	return result.stdout.trim() || result.stderr.trim();
+}
+
+// ---------------------------------------------------------------------------
+// Clone repo
+// ---------------------------------------------------------------------------
+
+export async function cloneRepo(
+	exec: ExecFn,
+	python: string,
+	cwd: string,
+	githubUrl: string,
+	signal?: AbortSignal,
+): Promise<string> {
+	const result = await exec(`${python} -m graphify clone '${escapeShell(githubUrl)}'`, {
+		cwd,
+		signal,
+	});
+	if (result.exitCode !== 0) {
+		throw new Error(`Clone failed: ${result.stderr}`);
+	}
+	return result.stdout.trim();
+}
+
+// ---------------------------------------------------------------------------
+// Merge graphs
+// ---------------------------------------------------------------------------
+
+export async function mergeGraphs(
+	exec: ExecFn,
+	python: string,
+	cwd: string,
+	graphs: string[],
+	outPath?: string,
+	signal?: AbortSignal,
+): Promise<string> {
+	const graphArgs = graphs.map((g) => `'${escapeShell(g)}'`).join(" ");
+	let cmd = `${python} -m graphify merge-graphs ${graphArgs}`;
+	if (outPath) cmd += ` --out '${escapeShell(outPath)}'`;
+
+	const result = await exec(cmd, { cwd, signal });
+	if (result.exitCode !== 0) {
+		throw new Error(`Merge failed: ${result.stderr}`);
+	}
+	return result.stdout.trim();
+}
+
+// ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
 
