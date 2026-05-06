@@ -458,7 +458,7 @@ export async function queryGraph(
 	signal?: AbortSignal,
 ): Promise<string> {
 	const { question, mode, budget = 2000 } = options;
-	const escapedQuestion = JSON.stringify(question).replace(/'/g, "'\\''");
+	const escapedQuestion = escapeShell(question);
 
 	const result = await exec(
 		`${python} -c "
@@ -523,14 +523,14 @@ def relevance(nid):
 
 ranked_nodes = sorted(subgraph_nodes, key=relevance, reverse=True)
 
-lines = [f'Traversal: {mode.upper()} | Start: {[G.nodes[n].get("label",n) for n in start_nodes]} | {len(subgraph_nodes)} nodes']
+lines = [f'Traversal: {mode.upper()} | Start: {[G.nodes[n].get('label', n) for n in start_nodes]} | {len(subgraph_nodes)} nodes']
 for nid in ranked_nodes:
     d = G.nodes[nid]
-    lines.append(f'  NODE {d.get("label", nid)} [src={d.get("source_file","")}]')
+    lines.append(f'  NODE {d.get('label', nid)} [src={d.get('source_file', '')}]')
 for u, v in subgraph_edges:
     if u in subgraph_nodes and v in subgraph_nodes:
         d = G.edges[u, v]
-        lines.append(f'  EDGE {G.nodes[u].get("label",u)} --{d.get("relation","")} [{d.get("confidence","")}]--> {G.nodes[v].get("label",v)}')
+        lines.append(f'  EDGE {G.nodes[u].get('label', u)} --{d.get('relation', '')} [{d.get('confidence', '')}]--> {G.nodes[v].get('label', v)}')
 
 output = chr(10).join(lines)
 if len(output) > ${budget * 4}:
@@ -627,7 +627,7 @@ export async function explainNode(
 	concept: string,
 	signal?: AbortSignal,
 ): Promise<string> {
-	const escapedConcept = JSON.stringify(concept).replace(/'/g, "'\\''");
+	const escapedConcept = escapeShell(concept);
 
 	const result = await exec(
 		`${python} -c "
@@ -652,9 +652,9 @@ if not scored or scored[0][0] == 0:
 
 nid = scored[0][1]
 d = G.nodes[nid]
-print(f'NODE: {d.get("label", nid)}')
-print(f'  source: {d.get("source_file","unknown")}')
-print(f'  type: {d.get("file_type","unknown")}')
+print(f'NODE: {d.get('label', nid)}')
+print(f'  source: {d.get('source_file', 'unknown')}')
+print(f'  type: {d.get('file_type', 'unknown')}')
 print(f'  degree: {G.degree(nid)}')
 print()
 print('CONNECTIONS:')
