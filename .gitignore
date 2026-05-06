@@ -3,4 +3,6 @@ node_modules/
 .pi-lens/
 .primecodex.local.json
 .gitnexus
-graphify-out/
+graphify-out/cache/
+graphify-out/.graphify_python
+graphify-out/cost.json

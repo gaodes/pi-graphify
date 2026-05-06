@@ -8,6 +8,9 @@
  * The exec adapter in the tools/commands layer wraps this to accept a single shell string.
  */
 
+import { readFile, writeFile } from "node:fs/promises";
+import { join } from "node:path";
+
 export interface ExecOptions {
 	cwd?: string;
 	signal?: AbortSignal;
@@ -20,6 +23,14 @@ export interface ExecResult {
 }
 
 export type ExecFn = (command: string, options?: ExecOptions) => Promise<ExecResult>;
+
+const GRAPHIFY_GITIGNORE_REQUIRED = [
+	"graphify-out/cache/",
+	"graphify-out/.graphify_python",
+	"graphify-out/cost.json",
+] as const;
+
+const GRAPHIFY_GITIGNORE_LEGACY = ["graphify-out/", "/graphify-out/"] as const;
 
 // ---------------------------------------------------------------------------
 // Python / graphify detection
@@ -134,6 +145,11 @@ export async function buildGraph(
 ): Promise<{ nodes: number; edges: number; communities: number }> {
 	const { inputPath } = options;
 	const outDir = "graphify-out";
+
+	const gitignoreResult = await ensureGraphifyGitignore(cwd);
+	if (gitignoreResult.updated) {
+		onUpdate?.("Updated .gitignore for graphify artifacts.");
+	}
 
 	await exec(`mkdir -p ${outDir}`, { cwd, signal });
 
@@ -967,6 +983,43 @@ export async function mergeGraphs(
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
+
+export async function ensureGraphifyGitignore(cwd: string): Promise<{ updated: boolean }> {
+	const path = join(cwd, ".gitignore");
+	let original = "";
+
+	try {
+		original = await readFile(path, "utf-8");
+	} catch {
+		original = "";
+	}
+
+	const lines = original.length > 0 ? original.split(/\r?\n/) : [];
+	const filtered = lines.filter((line) => {
+		const trimmed = line.trim();
+		return !GRAPHIFY_GITIGNORE_LEGACY.includes(
+			trimmed as (typeof GRAPHIFY_GITIGNORE_LEGACY)[number],
+		);
+	});
+
+	for (const entry of GRAPHIFY_GITIGNORE_REQUIRED) {
+		if (!filtered.some((line) => line.trim() === entry)) {
+			filtered.push(entry);
+		}
+	}
+
+	let next = filtered.join("\n");
+	if (next.length > 0 && !next.endsWith("\n")) {
+		next += "\n";
+	}
+
+	if (next === original) {
+		return { updated: false };
+	}
+
+	await writeFile(path, next, "utf-8");
+	return { updated: true };
+}
 
 function escapeShell(str: string): string {
 	return str.replace(/'/g, "'\\''");

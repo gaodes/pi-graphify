@@ -15,14 +15,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `/graphify cluster` command.
 - `/graphify hook <install|uninstall|status>` command to manage git hooks.
 - Runner functions for `watch`, `clusterOnly`, `hookAction`, `pushNeo4j`, `saveResult`, `cloneRepo`, `mergeGraphs`, `generateTree`.
-- Unit tests for runner module (7 passing).
-- Integration tests using @gaodes/pi-test-harness (10 passing): all 8 tools exercised via playbook DSL with mocked bash.
+- Unit tests for runner module (10 passing).
+- Integration tests using @gaodes/pi-test-harness (12 passing): all 8 tools exercised via playbook DSL with mocked bash, plus command-level forwarding coverage.
 - `@gaodes/pi-test-harness` as dev dependency.
 - Bundled `graphify` skill: full-pipeline orchestration guide (semantic extraction, community labeling, export formats, video transcription, guided exploration). Replaces the standalone skill in `~/.pi/agent/skills/graphify/`.
 
 ### Fixed
 
-- `.gitignore` now excludes `graphify-out/` directory.
+- Graphify build initialization now auto-manages `.gitignore`: creates the file if missing, removes legacy `graphify-out/` ignore entries, and keeps only `graphify-out/cache/`, `graphify-out/.graphify_python`, and `graphify-out/cost.json` ignored so `graphify-out/` stays tracked.
 - Lint script scoped to `src/` instead of `.`.
 - Removed leaked `graphify-out/cache` from `src/`.
 - Bundled `graphify` skill command snippets now use consistent temporary-file paths (`.graphify_python`, `.graphify_detect.json`, `.graphify_chunk_*.json`, `.graphify_semantic_new.json`).

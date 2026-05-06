@@ -76,6 +76,18 @@ Key: `graphify` in `prime-settings.json`.
 | `pythonPath` | `string`  | `"python3"`      | Path to Python interpreter   |
 | `outputDir`  | `string`  | `"graphify-out"` | Output directory name        |
 
+## Git tracking policy
+
+On build initialization, the extension ensures `.gitignore` exists and applies Graphify-specific rules:
+
+- keeps `graphify-out/` **tracked**
+- ignores only:
+  - `graphify-out/cache/`
+  - `graphify-out/.graphify_python`
+  - `graphify-out/cost.json`
+
+If a legacy `graphify-out/` ignore entry exists, it is removed automatically.
+
 ## Source
 
 - Canonical: `~/agents/primecodex/extensions/pi-graphify/`
