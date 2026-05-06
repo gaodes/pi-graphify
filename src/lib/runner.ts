@@ -172,9 +172,11 @@ export async function buildGraph(
 		`Corpus: ${detection.total_files} files · ~${detection.total_words.toLocaleString()} words`,
 	);
 
+	// Save detection result for downstream steps
+	await writeFile(join(cwd, ".graphify_detect.json"), JSON.stringify(detection, null, 2), "utf-8");
+
 	// AST extraction
 	onUpdate?.("Extracting structural relationships (AST)...");
-	const detectionJson = JSON.stringify(detection).replace(/'/g, "'\\''");
 	const astResult = await exec(
 		`${python} -c "
 import sys, json
@@ -182,14 +184,14 @@ from graphify.extract import collect_files, extract
 from pathlib import Path
 
 code_files = []
-detect = json.loads('${escapeShell(detectionJson)}')
+detect = json.loads(Path('.graphify_detect.json').read_text())
 for f in detect.get('files', {}).get('code', []):
     code_files.extend(collect_files(Path(f)) if Path(f).is_dir() else [Path(f)])
 
 if code_files:
     result = extract(code_files)
     Path('.graphify_ast.json').write_text(json.dumps(result, indent=2))
-    print(f'AST: {len(result["nodes"])} nodes, {len(result["edges"])} edges')
+    print(f'AST: {len(result['nodes'])} nodes, {len(result['edges'])} edges')
 else:
     Path('.graphify_ast.json').write_text(json.dumps({'nodes':[],'edges':[],'input_tokens':0,'output_tokens':0}))
     print('No code files - skipping AST extraction')
@@ -903,7 +905,7 @@ else:
     G = json_graph.node_link_graph(data, edges='links')
 
 r = push_to_neo4j(G, uri=os.environ['NEO4J_URI'], user=os.environ['NEO4J_USER'], credentials=os.environ['NEO4J_CREDS'])
-print(f'Pushed to Neo4j: {r["nodes"]} nodes, {r["edges"]} edges')
+print(f'Pushed to Neo4j: {r['nodes']} nodes, {r['edges']} edges')
 "`,
 		{ cwd, signal },
 	);
