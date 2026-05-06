@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "updatedAt": "2025-05-06",
+  "primary": {
+    "name": "graphify",
+    "type": "git",
+    "url": "https://github.com/safishamsi/graphify",
+    "repo": "https://github.com/safishamsi/graphify",
+    "license": "MIT",
+    "relationship": "inspiration",
+    "upstreamVersion": "v7"
+  },
+  "inspirations": [],
+  "localEnhancements": []
+}

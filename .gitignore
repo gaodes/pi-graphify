@@ -1,0 +1,4 @@
+node_modules/
+.pi/tasks/
+.pi-lens/
+.primecodex.local.json
