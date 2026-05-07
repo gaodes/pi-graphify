@@ -6,9 +6,9 @@ import type {
 	ExtensionContext,
 	Theme,
 	ToolRenderResultOptions,
-} from "@mariozechner/pi-coding-agent";
-import { defineTool, truncateHead } from "@mariozechner/pi-coding-agent";
-import { Text } from "@mariozechner/pi-tui";
+} from "@earendil-works/pi-coding-agent";
+import { defineTool, truncateHead } from "@earendil-works/pi-coding-agent";
+import { Text } from "@earendil-works/pi-tui";
 import { type Static, Type } from "typebox";
 import type { ResolvedConfig } from "../config";
 import type { ExecFn } from "../lib/runner";
