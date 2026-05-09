@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.2] - 2026-05-09
+
+### Changed
+
+- Added `.pi/gateway/` to `.gitignore`.
+- Clarified README configuration table formatting and `statusbar` option description.
+- Synced tracked `graphify-out` artifacts after regeneration.
+
 ## [0.1.1] - 2026-05-09
 
 ### Added
@@ -47,6 +55,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Tools: `graphify_build`, `graphify_query`, `graphify_path`, `graphify_explain`, `graphify_add`, `graphify_update`, `graphify_watch`, `graphify_cluster`.
 - Single `/graphify` command with autocomplete for subcommands and flags (build, query, path, explain, add, update, watch, cluster, hook).
 
-[Unreleased]: https://gitlab.elches.dev/agents/primecodex/packages/pi-graphify/-/compare/v0.1.1...main
+[Unreleased]: https://gitlab.elches.dev/agents/primecodex/packages/pi-graphify/-/compare/v0.1.2...main
+[0.1.2]: https://gitlab.elches.dev/agents/primecodex/packages/pi-graphify/-/compare/v0.1.1...v0.1.2
 [0.1.1]: https://gitlab.elches.dev/agents/primecodex/packages/pi-graphify/-/compare/v0.1.0...v0.1.1
 [0.1.0]: https://gitlab.elches.dev/agents/primecodex/packages/pi-graphify/-/tags/v0.1.0
