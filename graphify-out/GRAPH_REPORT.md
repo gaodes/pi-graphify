@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `7f3c8683`
+- Built from commit: `02f2594d`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -38,11 +38,11 @@
 10. `handleQuery()` - 6 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `handleCluster()` --calls--> `detectPython()`  [INFERRED]
+- `handlePath()` --calls--> `detectPython()`  [INFERRED]
   commands/index.ts → lib/runner.ts
 - `handleHook()` --calls--> `detectPython()`  [INFERRED]
   commands/index.ts → lib/runner.ts
-- `handleCluster()` --calls--> `ensureInstalled()`  [INFERRED]
+- `handlePath()` --calls--> `ensureInstalled()`  [INFERRED]
   commands/index.ts → lib/runner.ts
 - `handleHook()` --calls--> `ensureInstalled()`  [INFERRED]
   commands/index.ts → lib/runner.ts
@@ -64,12 +64,12 @@ Cohesion: 0.33
 Nodes (9): createAddTool(), createAllTools(), createBuildTool(), createClusterTool(), createExplainTool(), createPathTool(), createQueryTool(), createUpdateTool() (+1 more)
 
 ### Community 3 - "Community 3"
-Cohesion: 0.43
-Nodes (7): getArgumentCompletions(), getCompletions(), handleAdd(), handler(), handleUpdate(), handleWatch(), parseArgs()
+Cohesion: 0.46
+Nodes (8): createExec(), handleBuild(), handleCluster(), handleExplain(), handleQuery(), clusterOnly(), detectPython(), ensureInstalled()
 
 ### Community 4 - "Community 4"
-Cohesion: 0.46
-Nodes (8): createExec(), handleBuild(), handleExplain(), handlePath(), handleQuery(), detectPython(), ensureInstalled(), findPath()
+Cohesion: 0.43
+Nodes (7): getArgumentCompletions(), getCompletions(), handleAdd(), handler(), handleUpdate(), handleWatch(), parseArgs()
 
 ## Knowledge Gaps
 - **4 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
@@ -79,9 +79,9 @@ _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `createAllTools()` connect `Community 2` to `Community 1`?**
   _High betweenness centrality (0.115) - this node is a cross-community bridge._
-- **Why does `loadConfig()` connect `Community 1` to `Community 3`?**
+- **Why does `loadConfig()` connect `Community 1` to `Community 4`?**
   _High betweenness centrality (0.114) - this node is a cross-community bridge._
-- **Why does `ensurePrimeSettings()` connect `Community 1` to `Community 3`?**
+- **Why does `ensurePrimeSettings()` connect `Community 1` to `Community 4`?**
   _High betweenness centrality (0.071) - this node is a cross-community bridge._
 - **Are the 6 inferred relationships involving `detectPython()` (e.g. with `handleBuild()` and `handleQuery()`) actually correct?**
   _`detectPython()` has 6 INFERRED edges - model-reasoned connections that need verification._

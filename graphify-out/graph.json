@@ -306,7 +306,7 @@
       "source_file": "lib/runner.ts",
       "source_location": "L41",
       "id": "lib_runner_detectpython",
-      "community": 4,
+      "community": 3,
       "norm_label": "detectpython()"
     },
     {
@@ -315,7 +315,7 @@
       "source_file": "lib/runner.ts",
       "source_location": "L68",
       "id": "lib_runner_ensureinstalled",
-      "community": 4,
+      "community": 3,
       "norm_label": "ensureinstalled()"
     },
     {
@@ -351,7 +351,7 @@
       "source_file": "lib/runner.ts",
       "source_location": "L555",
       "id": "lib_runner_findpath",
-      "community": 4,
+      "community": 7,
       "norm_label": "findpath()"
     },
     {
@@ -396,7 +396,7 @@
       "source_file": "lib/runner.ts",
       "source_location": "L805",
       "id": "lib_runner_clusteronly",
-      "community": 7,
+      "community": 3,
       "norm_label": "clusteronly()"
     },
     {
@@ -513,7 +513,7 @@
       "source_file": "commands/index.ts",
       "source_location": "L1",
       "id": "commands_index_ts",
-      "community": 3,
+      "community": 4,
       "norm_label": "index.ts"
     },
     {
@@ -522,7 +522,7 @@
       "source_file": "commands/index.ts",
       "source_location": "L100",
       "id": "commands_index_getcompletions",
-      "community": 3,
+      "community": 4,
       "norm_label": "getcompletions()"
     },
     {
@@ -531,7 +531,7 @@
       "source_file": "commands/index.ts",
       "source_location": "L222",
       "id": "commands_index_parseargs",
-      "community": 3,
+      "community": 4,
       "norm_label": "parseargs()"
     },
     {
@@ -540,7 +540,7 @@
       "source_file": "commands/index.ts",
       "source_location": "L274",
       "id": "commands_index_createexec",
-      "community": 4,
+      "community": 3,
       "norm_label": "createexec()"
     },
     {
@@ -549,7 +549,7 @@
       "source_file": "commands/index.ts",
       "source_location": "L292",
       "id": "commands_index_handlebuild",
-      "community": 4,
+      "community": 3,
       "norm_label": "handlebuild()"
     },
     {
@@ -558,7 +558,7 @@
       "source_file": "commands/index.ts",
       "source_location": "L356",
       "id": "commands_index_handlequery",
-      "community": 4,
+      "community": 3,
       "norm_label": "handlequery()"
     },
     {
@@ -567,7 +567,7 @@
       "source_file": "commands/index.ts",
       "source_location": "L383",
       "id": "commands_index_handlepath",
-      "community": 4,
+      "community": 7,
       "norm_label": "handlepath()"
     },
     {
@@ -576,7 +576,7 @@
       "source_file": "commands/index.ts",
       "source_location": "L403",
       "id": "commands_index_handleexplain",
-      "community": 4,
+      "community": 3,
       "norm_label": "handleexplain()"
     },
     {
@@ -585,7 +585,7 @@
       "source_file": "commands/index.ts",
       "source_location": "L426",
       "id": "commands_index_handleadd",
-      "community": 3,
+      "community": 4,
       "norm_label": "handleadd()"
     },
     {
@@ -594,7 +594,7 @@
       "source_file": "commands/index.ts",
       "source_location": "L446",
       "id": "commands_index_handleupdate",
-      "community": 3,
+      "community": 4,
       "norm_label": "handleupdate()"
     },
     {
@@ -603,7 +603,7 @@
       "source_file": "commands/index.ts",
       "source_location": "L453",
       "id": "commands_index_handlewatch",
-      "community": 3,
+      "community": 4,
       "norm_label": "handlewatch()"
     },
     {
@@ -612,7 +612,7 @@
       "source_file": "commands/index.ts",
       "source_location": "L467",
       "id": "commands_index_handlecluster",
-      "community": 7,
+      "community": 3,
       "norm_label": "handlecluster()"
     },
     {
@@ -630,7 +630,7 @@
       "source_file": "commands/index.ts",
       "source_location": "L522",
       "id": "commands_index_getargumentcompletions",
-      "community": 3,
+      "community": 4,
       "norm_label": "getargumentcompletions()"
     },
     {
@@ -639,7 +639,7 @@
       "source_file": "commands/index.ts",
       "source_location": "L525",
       "id": "commands_index_handler",
-      "community": 3,
+      "community": 4,
       "norm_label": "handler()"
     }
   ],
@@ -2377,5 +2377,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "7f3c8683e48284846612b393dd592f5f7466b617"
+  "built_at_commit": "02f2594d16e3ce3d3c8b2e13656dc806fd7d7725"
 }
