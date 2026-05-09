@@ -351,7 +351,7 @@
       "source_file": "lib/runner.ts",
       "source_location": "L555",
       "id": "lib_runner_findpath",
-      "community": 7,
+      "community": 3,
       "norm_label": "findpath()"
     },
     {
@@ -396,7 +396,7 @@
       "source_file": "lib/runner.ts",
       "source_location": "L805",
       "id": "lib_runner_clusteronly",
-      "community": 3,
+      "community": 8,
       "norm_label": "clusteronly()"
     },
     {
@@ -414,7 +414,7 @@
       "source_file": "lib/runner.ts",
       "source_location": "L866",
       "id": "lib_runner_hookaction",
-      "community": 8,
+      "community": 7,
       "norm_label": "hookaction()"
     },
     {
@@ -567,7 +567,7 @@
       "source_file": "commands/index.ts",
       "source_location": "L383",
       "id": "commands_index_handlepath",
-      "community": 7,
+      "community": 3,
       "norm_label": "handlepath()"
     },
     {
@@ -612,7 +612,7 @@
       "source_file": "commands/index.ts",
       "source_location": "L467",
       "id": "commands_index_handlecluster",
-      "community": 3,
+      "community": 8,
       "norm_label": "handlecluster()"
     },
     {
@@ -621,7 +621,7 @@
       "source_file": "commands/index.ts",
       "source_location": "L485",
       "id": "commands_index_handlehook",
-      "community": 8,
+      "community": 7,
       "norm_label": "handlehook()"
     },
     {
@@ -2377,5 +2377,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "02f2594d16e3ce3d3c8b2e13656dc806fd7d7725"
+  "built_at_commit": "0dc0ae9840b94b4de3924c5fda09b4bd3e678456"
 }

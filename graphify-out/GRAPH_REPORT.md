@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `02f2594d`
+- Built from commit: `0dc0ae98`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -38,11 +38,11 @@
 10. `handleQuery()` - 6 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `handlePath()` --calls--> `detectPython()`  [INFERRED]
+- `handleCluster()` --calls--> `detectPython()`  [INFERRED]
   commands/index.ts → lib/runner.ts
 - `handleHook()` --calls--> `detectPython()`  [INFERRED]
   commands/index.ts → lib/runner.ts
-- `handlePath()` --calls--> `ensureInstalled()`  [INFERRED]
+- `handleCluster()` --calls--> `ensureInstalled()`  [INFERRED]
   commands/index.ts → lib/runner.ts
 - `handleHook()` --calls--> `ensureInstalled()`  [INFERRED]
   commands/index.ts → lib/runner.ts
@@ -65,7 +65,7 @@ Nodes (9): createAddTool(), createAllTools(), createBuildTool(), createClusterTo
 
 ### Community 3 - "Community 3"
 Cohesion: 0.46
-Nodes (8): createExec(), handleBuild(), handleCluster(), handleExplain(), handleQuery(), clusterOnly(), detectPython(), ensureInstalled()
+Nodes (8): createExec(), handleBuild(), handleExplain(), handlePath(), handleQuery(), detectPython(), ensureInstalled(), findPath()
 
 ### Community 4 - "Community 4"
 Cohesion: 0.43
