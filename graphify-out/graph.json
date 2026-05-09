@@ -1,0 +1,2381 @@
+{
+  "directed": false,
+  "multigraph": false,
+  "graph": {},
+  "nodes": [
+    {
+      "label": "config.ts",
+      "file_type": "code",
+      "source_file": "config.ts",
+      "source_location": "L1",
+      "id": "config_ts",
+      "community": 1,
+      "norm_label": "config.ts"
+    },
+    {
+      "label": "readJsonFile()",
+      "file_type": "code",
+      "source_file": "config.ts",
+      "source_location": "L42",
+      "id": "src_config_readjsonfile",
+      "community": 1,
+      "norm_label": "readjsonfile()"
+    },
+    {
+      "label": "resolveConfig()",
+      "file_type": "code",
+      "source_file": "config.ts",
+      "source_location": "L50",
+      "id": "src_config_resolveconfig",
+      "community": 1,
+      "norm_label": "resolveconfig()"
+    },
+    {
+      "label": "loadConfig()",
+      "file_type": "code",
+      "source_file": "config.ts",
+      "source_location": "L62",
+      "id": "src_config_loadconfig",
+      "community": 1,
+      "norm_label": "loadconfig()"
+    },
+    {
+      "label": "ensurePrimeSettings()",
+      "file_type": "code",
+      "source_file": "config.ts",
+      "source_location": "L107",
+      "id": "src_config_ensureprimesettings",
+      "community": 1,
+      "norm_label": "ensureprimesettings()"
+    },
+    {
+      "label": "statusbar.ts",
+      "file_type": "code",
+      "source_file": "statusbar.ts",
+      "source_location": "L1",
+      "id": "statusbar_ts",
+      "community": 1,
+      "norm_label": "statusbar.ts"
+    },
+    {
+      "label": "makeStatusbarState()",
+      "file_type": "code",
+      "source_file": "statusbar.ts",
+      "source_location": "L40",
+      "id": "src_statusbar_makestatusbarstate",
+      "community": 1,
+      "norm_label": "makestatusbarstate()"
+    },
+    {
+      "label": "emitStatusbarEvent()",
+      "file_type": "code",
+      "source_file": "statusbar.ts",
+      "source_location": "L46",
+      "id": "src_statusbar_emitstatusbarevent",
+      "community": 1,
+      "norm_label": "emitstatusbarevent()"
+    },
+    {
+      "label": "getDefaultPlacement()",
+      "file_type": "code",
+      "source_file": "statusbar.ts",
+      "source_location": "L59",
+      "id": "src_statusbar_getdefaultplacement",
+      "community": 1,
+      "norm_label": "getdefaultplacement()"
+    },
+    {
+      "label": "resolveStatusbarConfig()",
+      "file_type": "code",
+      "source_file": "statusbar.ts",
+      "source_location": "L63",
+      "id": "src_statusbar_resolvestatusbarconfig",
+      "community": 1,
+      "norm_label": "resolvestatusbarconfig()"
+    },
+    {
+      "label": "shouldAttemptUpdate()",
+      "file_type": "code",
+      "source_file": "statusbar.ts",
+      "source_location": "L85",
+      "id": "src_statusbar_shouldattemptupdate",
+      "community": 1,
+      "norm_label": "shouldattemptupdate()"
+    },
+    {
+      "label": "registerGraphifyStatusbar()",
+      "file_type": "code",
+      "source_file": "statusbar.ts",
+      "source_location": "L105",
+      "id": "src_statusbar_registergraphifystatusbar",
+      "community": 1,
+      "norm_label": "registergraphifystatusbar()"
+    },
+    {
+      "label": "unregisterGraphifyStatusbar()",
+      "file_type": "code",
+      "source_file": "statusbar.ts",
+      "source_location": "L147",
+      "id": "src_statusbar_unregistergraphifystatusbar",
+      "community": 1,
+      "norm_label": "unregistergraphifystatusbar()"
+    },
+    {
+      "label": "updateGraphifyStatusbar()",
+      "file_type": "code",
+      "source_file": "statusbar.ts",
+      "source_location": "L151",
+      "id": "src_statusbar_updategraphifystatusbar",
+      "community": 1,
+      "norm_label": "updategraphifystatusbar()"
+    },
+    {
+      "label": "graphify.integration.test.ts",
+      "file_type": "code",
+      "source_file": "tools/graphify.integration.test.ts",
+      "source_location": "L1",
+      "id": "tools_graphify_integration_test_ts",
+      "community": 6,
+      "norm_label": "graphify.integration.test.ts"
+    },
+    {
+      "label": "createGraphifyBashMock()",
+      "file_type": "code",
+      "source_file": "tools/graphify.integration.test.ts",
+      "source_location": "L66",
+      "id": "tools_graphify_integration_test_creategraphifybashmock",
+      "community": 6,
+      "norm_label": "creategraphifybashmock()"
+    },
+    {
+      "label": "createSession()",
+      "file_type": "code",
+      "source_file": "tools/graphify.integration.test.ts",
+      "source_location": "L233",
+      "id": "tools_graphify_integration_test_createsession",
+      "community": 6,
+      "norm_label": "createsession()"
+    },
+    {
+      "label": "index.ts",
+      "file_type": "code",
+      "source_file": "tools/index.ts",
+      "source_location": "L1",
+      "id": "tools_index_ts",
+      "community": 1,
+      "norm_label": "index.ts"
+    },
+    {
+      "label": "createToolsExtensionState()",
+      "file_type": "code",
+      "source_file": "tools/index.ts",
+      "source_location": "L16",
+      "id": "tools_index_createtoolsextensionstate",
+      "community": 1,
+      "norm_label": "createtoolsextensionstate()"
+    },
+    {
+      "label": "graphify-tools.ts",
+      "file_type": "code",
+      "source_file": "tools/graphify-tools.ts",
+      "source_location": "L1",
+      "id": "tools_graphify_tools_ts",
+      "community": 2,
+      "norm_label": "graphify-tools.ts"
+    },
+    {
+      "label": "createExec()",
+      "file_type": "code",
+      "source_file": "tools/graphify-tools.ts",
+      "source_location": "L32",
+      "id": "tools_graphify_tools_createexec",
+      "community": 2,
+      "norm_label": "createexec()"
+    },
+    {
+      "label": "createBuildTool()",
+      "file_type": "code",
+      "source_file": "tools/graphify-tools.ts",
+      "source_location": "L74",
+      "id": "tools_graphify_tools_createbuildtool",
+      "community": 2,
+      "norm_label": "createbuildtool()"
+    },
+    {
+      "label": "createQueryTool()",
+      "file_type": "code",
+      "source_file": "tools/graphify-tools.ts",
+      "source_location": "L220",
+      "id": "tools_graphify_tools_createquerytool",
+      "community": 2,
+      "norm_label": "createquerytool()"
+    },
+    {
+      "label": "createPathTool()",
+      "file_type": "code",
+      "source_file": "tools/graphify-tools.ts",
+      "source_location": "L349",
+      "id": "tools_graphify_tools_createpathtool",
+      "community": 2,
+      "norm_label": "createpathtool()"
+    },
+    {
+      "label": "createExplainTool()",
+      "file_type": "code",
+      "source_file": "tools/graphify-tools.ts",
+      "source_location": "L443",
+      "id": "tools_graphify_tools_createexplaintool",
+      "community": 2,
+      "norm_label": "createexplaintool()"
+    },
+    {
+      "label": "createAddTool()",
+      "file_type": "code",
+      "source_file": "tools/graphify-tools.ts",
+      "source_location": "L534",
+      "id": "tools_graphify_tools_createaddtool",
+      "community": 2,
+      "norm_label": "createaddtool()"
+    },
+    {
+      "label": "createUpdateTool()",
+      "file_type": "code",
+      "source_file": "tools/graphify-tools.ts",
+      "source_location": "L658",
+      "id": "tools_graphify_tools_createupdatetool",
+      "community": 2,
+      "norm_label": "createupdatetool()"
+    },
+    {
+      "label": "createWatchTool()",
+      "file_type": "code",
+      "source_file": "tools/graphify-tools.ts",
+      "source_location": "L799",
+      "id": "tools_graphify_tools_createwatchtool",
+      "community": 2,
+      "norm_label": "createwatchtool()"
+    },
+    {
+      "label": "createClusterTool()",
+      "file_type": "code",
+      "source_file": "tools/graphify-tools.ts",
+      "source_location": "L885",
+      "id": "tools_graphify_tools_createclustertool",
+      "community": 2,
+      "norm_label": "createclustertool()"
+    },
+    {
+      "label": "createAllTools()",
+      "file_type": "code",
+      "source_file": "tools/graphify-tools.ts",
+      "source_location": "L954",
+      "id": "tools_graphify_tools_createalltools",
+      "community": 2,
+      "norm_label": "createalltools()"
+    },
+    {
+      "label": "runner.test.ts",
+      "file_type": "code",
+      "source_file": "lib/runner.test.ts",
+      "source_location": "L1",
+      "id": "lib_runner_test_ts",
+      "community": 0,
+      "norm_label": "runner.test.ts"
+    },
+    {
+      "label": "createMockExec()",
+      "file_type": "code",
+      "source_file": "lib/runner.test.ts",
+      "source_location": "L11",
+      "id": "lib_runner_test_createmockexec",
+      "community": 0,
+      "norm_label": "createmockexec()"
+    },
+    {
+      "label": "runner.ts",
+      "file_type": "code",
+      "source_file": "lib/runner.ts",
+      "source_location": "L1",
+      "id": "lib_runner_ts",
+      "community": 0,
+      "norm_label": "runner.ts"
+    },
+    {
+      "label": "detectPython()",
+      "file_type": "code",
+      "source_file": "lib/runner.ts",
+      "source_location": "L41",
+      "id": "lib_runner_detectpython",
+      "community": 4,
+      "norm_label": "detectpython()"
+    },
+    {
+      "label": "ensureInstalled()",
+      "file_type": "code",
+      "source_file": "lib/runner.ts",
+      "source_location": "L68",
+      "id": "lib_runner_ensureinstalled",
+      "community": 4,
+      "norm_label": "ensureinstalled()"
+    },
+    {
+      "label": "detectFiles()",
+      "file_type": "code",
+      "source_file": "lib/runner.ts",
+      "source_location": "L107",
+      "id": "lib_runner_detectfiles",
+      "community": 0,
+      "norm_label": "detectfiles()"
+    },
+    {
+      "label": "buildGraph()",
+      "file_type": "code",
+      "source_file": "lib/runner.ts",
+      "source_location": "L139",
+      "id": "lib_runner_buildgraph",
+      "community": 0,
+      "norm_label": "buildgraph()"
+    },
+    {
+      "label": "queryGraph()",
+      "file_type": "code",
+      "source_file": "lib/runner.ts",
+      "source_location": "L454",
+      "id": "lib_runner_querygraph",
+      "community": 0,
+      "norm_label": "querygraph()"
+    },
+    {
+      "label": "findPath()",
+      "file_type": "code",
+      "source_file": "lib/runner.ts",
+      "source_location": "L555",
+      "id": "lib_runner_findpath",
+      "community": 4,
+      "norm_label": "findpath()"
+    },
+    {
+      "label": "explainNode()",
+      "file_type": "code",
+      "source_file": "lib/runner.ts",
+      "source_location": "L624",
+      "id": "lib_runner_explainnode",
+      "community": 0,
+      "norm_label": "explainnode()"
+    },
+    {
+      "label": "addUrl()",
+      "file_type": "code",
+      "source_file": "lib/runner.ts",
+      "source_location": "L690",
+      "id": "lib_runner_addurl",
+      "community": 0,
+      "norm_label": "addurl()"
+    },
+    {
+      "label": "updateGraph()",
+      "file_type": "code",
+      "source_file": "lib/runner.ts",
+      "source_location": "L732",
+      "id": "lib_runner_updategraph",
+      "community": 0,
+      "norm_label": "updategraph()"
+    },
+    {
+      "label": "startWatch()",
+      "file_type": "code",
+      "source_file": "lib/runner.ts",
+      "source_location": "L783",
+      "id": "lib_runner_startwatch",
+      "community": 0,
+      "norm_label": "startwatch()"
+    },
+    {
+      "label": "clusterOnly()",
+      "file_type": "code",
+      "source_file": "lib/runner.ts",
+      "source_location": "L805",
+      "id": "lib_runner_clusteronly",
+      "community": 7,
+      "norm_label": "clusteronly()"
+    },
+    {
+      "label": "generateTree()",
+      "file_type": "code",
+      "source_file": "lib/runner.ts",
+      "source_location": "L842",
+      "id": "lib_runner_generatetree",
+      "community": 0,
+      "norm_label": "generatetree()"
+    },
+    {
+      "label": "hookAction()",
+      "file_type": "code",
+      "source_file": "lib/runner.ts",
+      "source_location": "L866",
+      "id": "lib_runner_hookaction",
+      "community": 8,
+      "norm_label": "hookaction()"
+    },
+    {
+      "label": "pushNeo4j()",
+      "file_type": "code",
+      "source_file": "lib/runner.ts",
+      "source_location": "L884",
+      "id": "lib_runner_pushneo4j",
+      "community": 0,
+      "norm_label": "pushneo4j()"
+    },
+    {
+      "label": "saveResult()",
+      "file_type": "code",
+      "source_file": "lib/runner.ts",
+      "source_location": "L923",
+      "id": "lib_runner_saveresult",
+      "community": 0,
+      "norm_label": "saveresult()"
+    },
+    {
+      "label": "cloneRepo()",
+      "file_type": "code",
+      "source_file": "lib/runner.ts",
+      "source_location": "L946",
+      "id": "lib_runner_clonerepo",
+      "community": 0,
+      "norm_label": "clonerepo()"
+    },
+    {
+      "label": "mergeGraphs()",
+      "file_type": "code",
+      "source_file": "lib/runner.ts",
+      "source_location": "L967",
+      "id": "lib_runner_mergegraphs",
+      "community": 0,
+      "norm_label": "mergegraphs()"
+    },
+    {
+      "label": "ensureGraphifyGitignore()",
+      "file_type": "code",
+      "source_file": "lib/runner.ts",
+      "source_location": "L990",
+      "id": "lib_runner_ensuregraphifygitignore",
+      "community": 0,
+      "norm_label": "ensuregraphifygitignore()"
+    },
+    {
+      "label": "escapeShell()",
+      "file_type": "code",
+      "source_file": "lib/runner.ts",
+      "source_location": "L1027",
+      "id": "lib_runner_escapeshell",
+      "community": 0,
+      "norm_label": "escapeshell()"
+    },
+    {
+      "label": "graphify.command.integration.test.ts",
+      "file_type": "code",
+      "source_file": "commands/graphify.command.integration.test.ts",
+      "source_location": "L1",
+      "id": "commands_graphify_command_integration_test_ts",
+      "community": 5,
+      "norm_label": "graphify.command.integration.test.ts"
+    },
+    {
+      "label": "createBashMock()",
+      "file_type": "code",
+      "source_file": "commands/graphify.command.integration.test.ts",
+      "source_location": "L10",
+      "id": "commands_graphify_command_integration_test_createbashmock",
+      "community": 5,
+      "norm_label": "createbashmock()"
+    },
+    {
+      "label": "textOfContent()",
+      "file_type": "code",
+      "source_file": "commands/graphify.command.integration.test.ts",
+      "source_location": "L23",
+      "id": "commands_graphify_command_integration_test_textofcontent",
+      "community": 5,
+      "norm_label": "textofcontent()"
+    },
+    {
+      "label": "createSession()",
+      "file_type": "code",
+      "source_file": "commands/graphify.command.integration.test.ts",
+      "source_location": "L35",
+      "id": "commands_graphify_command_integration_test_createsession",
+      "community": 5,
+      "norm_label": "createsession()"
+    },
+    {
+      "label": "index.ts",
+      "file_type": "code",
+      "source_file": "commands/index.ts",
+      "source_location": "L1",
+      "id": "commands_index_ts",
+      "community": 3,
+      "norm_label": "index.ts"
+    },
+    {
+      "label": "getCompletions()",
+      "file_type": "code",
+      "source_file": "commands/index.ts",
+      "source_location": "L100",
+      "id": "commands_index_getcompletions",
+      "community": 3,
+      "norm_label": "getcompletions()"
+    },
+    {
+      "label": "parseArgs()",
+      "file_type": "code",
+      "source_file": "commands/index.ts",
+      "source_location": "L222",
+      "id": "commands_index_parseargs",
+      "community": 3,
+      "norm_label": "parseargs()"
+    },
+    {
+      "label": "createExec()",
+      "file_type": "code",
+      "source_file": "commands/index.ts",
+      "source_location": "L274",
+      "id": "commands_index_createexec",
+      "community": 4,
+      "norm_label": "createexec()"
+    },
+    {
+      "label": "handleBuild()",
+      "file_type": "code",
+      "source_file": "commands/index.ts",
+      "source_location": "L292",
+      "id": "commands_index_handlebuild",
+      "community": 4,
+      "norm_label": "handlebuild()"
+    },
+    {
+      "label": "handleQuery()",
+      "file_type": "code",
+      "source_file": "commands/index.ts",
+      "source_location": "L356",
+      "id": "commands_index_handlequery",
+      "community": 4,
+      "norm_label": "handlequery()"
+    },
+    {
+      "label": "handlePath()",
+      "file_type": "code",
+      "source_file": "commands/index.ts",
+      "source_location": "L383",
+      "id": "commands_index_handlepath",
+      "community": 4,
+      "norm_label": "handlepath()"
+    },
+    {
+      "label": "handleExplain()",
+      "file_type": "code",
+      "source_file": "commands/index.ts",
+      "source_location": "L403",
+      "id": "commands_index_handleexplain",
+      "community": 4,
+      "norm_label": "handleexplain()"
+    },
+    {
+      "label": "handleAdd()",
+      "file_type": "code",
+      "source_file": "commands/index.ts",
+      "source_location": "L426",
+      "id": "commands_index_handleadd",
+      "community": 3,
+      "norm_label": "handleadd()"
+    },
+    {
+      "label": "handleUpdate()",
+      "file_type": "code",
+      "source_file": "commands/index.ts",
+      "source_location": "L446",
+      "id": "commands_index_handleupdate",
+      "community": 3,
+      "norm_label": "handleupdate()"
+    },
+    {
+      "label": "handleWatch()",
+      "file_type": "code",
+      "source_file": "commands/index.ts",
+      "source_location": "L453",
+      "id": "commands_index_handlewatch",
+      "community": 3,
+      "norm_label": "handlewatch()"
+    },
+    {
+      "label": "handleCluster()",
+      "file_type": "code",
+      "source_file": "commands/index.ts",
+      "source_location": "L467",
+      "id": "commands_index_handlecluster",
+      "community": 7,
+      "norm_label": "handlecluster()"
+    },
+    {
+      "label": "handleHook()",
+      "file_type": "code",
+      "source_file": "commands/index.ts",
+      "source_location": "L485",
+      "id": "commands_index_handlehook",
+      "community": 8,
+      "norm_label": "handlehook()"
+    },
+    {
+      "label": "getArgumentCompletions()",
+      "file_type": "code",
+      "source_file": "commands/index.ts",
+      "source_location": "L522",
+      "id": "commands_index_getargumentcompletions",
+      "community": 3,
+      "norm_label": "getargumentcompletions()"
+    },
+    {
+      "label": "handler()",
+      "file_type": "code",
+      "source_file": "commands/index.ts",
+      "source_location": "L525",
+      "id": "commands_index_handler",
+      "community": 3,
+      "norm_label": "handler()"
+    }
+  ],
+  "links": [
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "statusbar.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "statusbar_ts",
+      "target": "config_ts"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "config.ts",
+      "source_location": "L26",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "config_ts",
+      "target": "src_config_readjsonfile"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "config.ts",
+      "source_location": "L34",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "config_ts",
+      "target": "src_config_resolveconfig"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "config.ts",
+      "source_location": "L45",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "config_ts",
+      "target": "src_config_loadconfig"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "config.ts",
+      "source_location": "L107",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "config_ts",
+      "target": "src_config_ensureprimesettings"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "config.ts",
+      "source_location": "L48",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_config_loadconfig",
+      "target": "src_config_readjsonfile"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "config.ts",
+      "source_location": "L51",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_config_loadconfig",
+      "target": "src_config_resolveconfig"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tools/index.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tools_index_ts",
+      "target": "src_config_loadconfig"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "commands/index.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commands_index_ts",
+      "target": "src_config_loadconfig"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tools/index.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tools_index_ts",
+      "target": "src_config_ensureprimesettings"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "commands/index.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commands_index_ts",
+      "target": "src_config_ensureprimesettings"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "statusbar.ts",
+      "source_location": "L40",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "statusbar_ts",
+      "target": "src_statusbar_makestatusbarstate"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "statusbar.ts",
+      "source_location": "L46",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "statusbar_ts",
+      "target": "src_statusbar_emitstatusbarevent"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "statusbar.ts",
+      "source_location": "L59",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "statusbar_ts",
+      "target": "src_statusbar_getdefaultplacement"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "statusbar.ts",
+      "source_location": "L63",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "statusbar_ts",
+      "target": "src_statusbar_resolvestatusbarconfig"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "statusbar.ts",
+      "source_location": "L85",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "statusbar_ts",
+      "target": "src_statusbar_shouldattemptupdate"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "statusbar.ts",
+      "source_location": "L105",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "statusbar_ts",
+      "target": "src_statusbar_registergraphifystatusbar"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "statusbar.ts",
+      "source_location": "L147",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "statusbar_ts",
+      "target": "src_statusbar_unregistergraphifystatusbar"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "statusbar.ts",
+      "source_location": "L151",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "statusbar_ts",
+      "target": "src_statusbar_updategraphifystatusbar"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tools/index.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tools_index_ts",
+      "target": "statusbar_ts"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "statusbar.ts",
+      "source_location": "L128",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_statusbar_registergraphifystatusbar",
+      "target": "src_statusbar_emitstatusbarevent"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "statusbar.ts",
+      "source_location": "L148",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_statusbar_unregistergraphifystatusbar",
+      "target": "src_statusbar_emitstatusbarevent"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "statusbar.ts",
+      "source_location": "L198",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_statusbar_updategraphifystatusbar",
+      "target": "src_statusbar_emitstatusbarevent"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "statusbar.ts",
+      "source_location": "L67",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_statusbar_resolvestatusbarconfig",
+      "target": "src_statusbar_getdefaultplacement"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "statusbar.ts",
+      "source_location": "L106",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_statusbar_registergraphifystatusbar",
+      "target": "src_statusbar_resolvestatusbarconfig"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "statusbar.ts",
+      "source_location": "L157",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_statusbar_updategraphifystatusbar",
+      "target": "src_statusbar_resolvestatusbarconfig"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "statusbar.ts",
+      "source_location": "L159",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_statusbar_updategraphifystatusbar",
+      "target": "src_statusbar_shouldattemptupdate"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tools/index.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tools_index_ts",
+      "target": "src_statusbar_registergraphifystatusbar"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tools/index.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tools_index_ts",
+      "target": "src_statusbar_unregistergraphifystatusbar"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tools/index.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tools_index_ts",
+      "target": "src_statusbar_updategraphifystatusbar"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tools/graphify.integration.test.ts",
+      "source_location": "L66",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tools_graphify_integration_test_ts",
+      "target": "tools_graphify_integration_test_creategraphifybashmock"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tools/graphify.integration.test.ts",
+      "source_location": "L233",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tools_graphify_integration_test_ts",
+      "target": "tools_graphify_integration_test_createsession"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tools/graphify.integration.test.ts",
+      "source_location": "L237",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tools_graphify_integration_test_createsession",
+      "target": "tools_graphify_integration_test_creategraphifybashmock"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tools/index.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tools_index_ts",
+      "target": "tools_graphify_tools_createalltools"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tools/index.ts",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tools_index_ts",
+      "target": "tools_index_createtoolsextensionstate"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tools/graphify-tools.ts",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tools_graphify_tools_ts",
+      "target": "lib_runner_addurl"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tools/graphify-tools.ts",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tools_graphify_tools_ts",
+      "target": "lib_runner_buildgraph"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tools/graphify-tools.ts",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tools_graphify_tools_ts",
+      "target": "lib_runner_clusteronly"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tools/graphify-tools.ts",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tools_graphify_tools_ts",
+      "target": "lib_runner_detectpython"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tools/graphify-tools.ts",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tools_graphify_tools_ts",
+      "target": "lib_runner_ensureinstalled"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tools/graphify-tools.ts",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tools_graphify_tools_ts",
+      "target": "lib_runner_explainnode"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tools/graphify-tools.ts",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tools_graphify_tools_ts",
+      "target": "lib_runner_findpath"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tools/graphify-tools.ts",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tools_graphify_tools_ts",
+      "target": "lib_runner_querygraph"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tools/graphify-tools.ts",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tools_graphify_tools_ts",
+      "target": "lib_runner_startwatch"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tools/graphify-tools.ts",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tools_graphify_tools_ts",
+      "target": "lib_runner_updategraph"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tools/graphify-tools.ts",
+      "source_location": "L32",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tools_graphify_tools_ts",
+      "target": "tools_graphify_tools_createexec"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tools/graphify-tools.ts",
+      "source_location": "L74",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tools_graphify_tools_ts",
+      "target": "tools_graphify_tools_createbuildtool"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tools/graphify-tools.ts",
+      "source_location": "L220",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tools_graphify_tools_ts",
+      "target": "tools_graphify_tools_createquerytool"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tools/graphify-tools.ts",
+      "source_location": "L349",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tools_graphify_tools_ts",
+      "target": "tools_graphify_tools_createpathtool"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tools/graphify-tools.ts",
+      "source_location": "L443",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tools_graphify_tools_ts",
+      "target": "tools_graphify_tools_createexplaintool"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tools/graphify-tools.ts",
+      "source_location": "L534",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tools_graphify_tools_ts",
+      "target": "tools_graphify_tools_createaddtool"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tools/graphify-tools.ts",
+      "source_location": "L658",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tools_graphify_tools_ts",
+      "target": "tools_graphify_tools_createupdatetool"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tools/graphify-tools.ts",
+      "source_location": "L799",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tools_graphify_tools_ts",
+      "target": "tools_graphify_tools_createwatchtool"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tools/graphify-tools.ts",
+      "source_location": "L885",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tools_graphify_tools_ts",
+      "target": "tools_graphify_tools_createclustertool"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tools/graphify-tools.ts",
+      "source_location": "L954",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tools_graphify_tools_ts",
+      "target": "tools_graphify_tools_createalltools"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tools/graphify-tools.ts",
+      "source_location": "L956",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tools_graphify_tools_createalltools",
+      "target": "tools_graphify_tools_createbuildtool"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tools/graphify-tools.ts",
+      "source_location": "L957",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tools_graphify_tools_createalltools",
+      "target": "tools_graphify_tools_createquerytool"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tools/graphify-tools.ts",
+      "source_location": "L958",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tools_graphify_tools_createalltools",
+      "target": "tools_graphify_tools_createpathtool"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tools/graphify-tools.ts",
+      "source_location": "L959",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tools_graphify_tools_createalltools",
+      "target": "tools_graphify_tools_createexplaintool"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tools/graphify-tools.ts",
+      "source_location": "L960",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tools_graphify_tools_createalltools",
+      "target": "tools_graphify_tools_createaddtool"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tools/graphify-tools.ts",
+      "source_location": "L961",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tools_graphify_tools_createalltools",
+      "target": "tools_graphify_tools_createupdatetool"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tools/graphify-tools.ts",
+      "source_location": "L962",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tools_graphify_tools_createalltools",
+      "target": "tools_graphify_tools_createwatchtool"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tools/graphify-tools.ts",
+      "source_location": "L963",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tools_graphify_tools_createalltools",
+      "target": "tools_graphify_tools_createclustertool"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/runner.test.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_runner_test_ts",
+      "target": "lib_runner_detectfiles"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/runner.test.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_runner_test_ts",
+      "target": "lib_runner_detectpython"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/runner.test.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_runner_test_ts",
+      "target": "lib_runner_ensuregraphifygitignore"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/runner.test.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_runner_test_ts",
+      "target": "lib_runner_ensureinstalled"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/runner.test.ts",
+      "source_location": "L11",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_runner_test_ts",
+      "target": "lib_runner_test_createmockexec"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/runner.ts",
+      "source_location": "L41",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_runner_ts",
+      "target": "lib_runner_detectpython"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/runner.ts",
+      "source_location": "L68",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_runner_ts",
+      "target": "lib_runner_ensureinstalled"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/runner.ts",
+      "source_location": "L107",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_runner_ts",
+      "target": "lib_runner_detectfiles"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/runner.ts",
+      "source_location": "L139",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_runner_ts",
+      "target": "lib_runner_buildgraph"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/runner.ts",
+      "source_location": "L454",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_runner_ts",
+      "target": "lib_runner_querygraph"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/runner.ts",
+      "source_location": "L555",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_runner_ts",
+      "target": "lib_runner_findpath"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/runner.ts",
+      "source_location": "L624",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_runner_ts",
+      "target": "lib_runner_explainnode"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/runner.ts",
+      "source_location": "L690",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_runner_ts",
+      "target": "lib_runner_addurl"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/runner.ts",
+      "source_location": "L732",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_runner_ts",
+      "target": "lib_runner_updategraph"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/runner.ts",
+      "source_location": "L783",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_runner_ts",
+      "target": "lib_runner_startwatch"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/runner.ts",
+      "source_location": "L805",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_runner_ts",
+      "target": "lib_runner_clusteronly"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/runner.ts",
+      "source_location": "L842",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_runner_ts",
+      "target": "lib_runner_generatetree"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/runner.ts",
+      "source_location": "L866",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_runner_ts",
+      "target": "lib_runner_hookaction"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/runner.ts",
+      "source_location": "L884",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_runner_ts",
+      "target": "lib_runner_pushneo4j"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/runner.ts",
+      "source_location": "L923",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_runner_ts",
+      "target": "lib_runner_saveresult"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/runner.ts",
+      "source_location": "L946",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_runner_ts",
+      "target": "lib_runner_clonerepo"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/runner.ts",
+      "source_location": "L967",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_runner_ts",
+      "target": "lib_runner_mergegraphs"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/runner.ts",
+      "source_location": "L990",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_runner_ts",
+      "target": "lib_runner_ensuregraphifygitignore"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/runner.ts",
+      "source_location": "L1027",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_runner_ts",
+      "target": "lib_runner_escapeshell"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "commands/index.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commands_index_ts",
+      "target": "lib_runner_detectpython"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "commands/index.ts",
+      "source_location": "L301",
+      "weight": 1.0,
+      "source": "commands_index_handlebuild",
+      "target": "lib_runner_detectpython"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "commands/index.ts",
+      "source_location": "L370",
+      "weight": 1.0,
+      "source": "commands_index_handlequery",
+      "target": "lib_runner_detectpython"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "commands/index.ts",
+      "source_location": "L395",
+      "weight": 1.0,
+      "source": "commands_index_handlepath",
+      "target": "lib_runner_detectpython"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "commands/index.ts",
+      "source_location": "L416",
+      "weight": 1.0,
+      "source": "commands_index_handleexplain",
+      "target": "lib_runner_detectpython"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "commands/index.ts",
+      "source_location": "L473",
+      "weight": 1.0,
+      "source": "commands_index_handlecluster",
+      "target": "lib_runner_detectpython"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "commands/index.ts",
+      "source_location": "L498",
+      "weight": 1.0,
+      "source": "commands_index_handlehook",
+      "target": "lib_runner_detectpython"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "commands/index.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commands_index_ts",
+      "target": "lib_runner_ensureinstalled"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "commands/index.ts",
+      "source_location": "L302",
+      "weight": 1.0,
+      "source": "commands_index_handlebuild",
+      "target": "lib_runner_ensureinstalled"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "commands/index.ts",
+      "source_location": "L371",
+      "weight": 1.0,
+      "source": "commands_index_handlequery",
+      "target": "lib_runner_ensureinstalled"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "commands/index.ts",
+      "source_location": "L396",
+      "weight": 1.0,
+      "source": "commands_index_handlepath",
+      "target": "lib_runner_ensureinstalled"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "commands/index.ts",
+      "source_location": "L417",
+      "weight": 1.0,
+      "source": "commands_index_handleexplain",
+      "target": "lib_runner_ensureinstalled"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "commands/index.ts",
+      "source_location": "L474",
+      "weight": 1.0,
+      "source": "commands_index_handlecluster",
+      "target": "lib_runner_ensureinstalled"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "commands/index.ts",
+      "source_location": "L499",
+      "weight": 1.0,
+      "source": "commands_index_handlehook",
+      "target": "lib_runner_ensureinstalled"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/runner.ts",
+      "source_location": "L115",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_runner_detectfiles",
+      "target": "lib_runner_escapeshell"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/runner.ts",
+      "source_location": "L166",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_runner_buildgraph",
+      "target": "lib_runner_detectfiles"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/runner.ts",
+      "source_location": "L150",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_runner_buildgraph",
+      "target": "lib_runner_ensuregraphifygitignore"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/runner.ts",
+      "source_location": "L251",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_runner_buildgraph",
+      "target": "lib_runner_escapeshell"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/runner.ts",
+      "source_location": "L770",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_runner_updategraph",
+      "target": "lib_runner_buildgraph"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/runner.ts",
+      "source_location": "L462",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_runner_querygraph",
+      "target": "lib_runner_escapeshell"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "commands/index.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commands_index_ts",
+      "target": "lib_runner_querygraph"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "commands/index.ts",
+      "source_location": "L376",
+      "weight": 1.0,
+      "source": "commands_index_handlequery",
+      "target": "lib_runner_querygraph"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "commands/index.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commands_index_ts",
+      "target": "lib_runner_findpath"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "commands/index.ts",
+      "source_location": "L398",
+      "weight": 1.0,
+      "source": "commands_index_handlepath",
+      "target": "lib_runner_findpath"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/runner.ts",
+      "source_location": "L631",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_runner_explainnode",
+      "target": "lib_runner_escapeshell"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "commands/index.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commands_index_ts",
+      "target": "lib_runner_explainnode"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "commands/index.ts",
+      "source_location": "L419",
+      "weight": 1.0,
+      "source": "commands_index_handleexplain",
+      "target": "lib_runner_explainnode"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/runner.ts",
+      "source_location": "L698",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_runner_addurl",
+      "target": "lib_runner_escapeshell"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/runner.ts",
+      "source_location": "L742",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_runner_updategraph",
+      "target": "lib_runner_escapeshell"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "commands/index.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commands_index_ts",
+      "target": "lib_runner_updategraph"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "commands/index.ts",
+      "source_location": "L331",
+      "weight": 1.0,
+      "source": "commands_index_handlebuild",
+      "target": "lib_runner_updategraph"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/runner.ts",
+      "source_location": "L793",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_runner_startwatch",
+      "target": "lib_runner_escapeshell"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "commands/index.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commands_index_ts",
+      "target": "lib_runner_clusteronly"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "commands/index.ts",
+      "source_location": "L477",
+      "weight": 1.0,
+      "source": "commands_index_handlecluster",
+      "target": "lib_runner_clusteronly"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/runner.ts",
+      "source_location": "L851",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_runner_generatetree",
+      "target": "lib_runner_escapeshell"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "commands/index.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commands_index_ts",
+      "target": "lib_runner_hookaction"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "commands/index.ts",
+      "source_location": "L501",
+      "weight": 1.0,
+      "source": "commands_index_handlehook",
+      "target": "lib_runner_hookaction"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/runner.ts",
+      "source_location": "L894",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_runner_pushneo4j",
+      "target": "lib_runner_escapeshell"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/runner.ts",
+      "source_location": "L930",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_runner_saveresult",
+      "target": "lib_runner_escapeshell"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/runner.ts",
+      "source_location": "L953",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_runner_clonerepo",
+      "target": "lib_runner_escapeshell"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/runner.ts",
+      "source_location": "L977",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_runner_mergegraphs",
+      "target": "lib_runner_escapeshell"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "commands/graphify.command.integration.test.ts",
+      "source_location": "L10",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commands_graphify_command_integration_test_ts",
+      "target": "commands_graphify_command_integration_test_createbashmock"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "commands/graphify.command.integration.test.ts",
+      "source_location": "L23",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commands_graphify_command_integration_test_ts",
+      "target": "commands_graphify_command_integration_test_textofcontent"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "commands/graphify.command.integration.test.ts",
+      "source_location": "L35",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commands_graphify_command_integration_test_ts",
+      "target": "commands_graphify_command_integration_test_createsession"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "commands/graphify.command.integration.test.ts",
+      "source_location": "L39",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commands_graphify_command_integration_test_createsession",
+      "target": "commands_graphify_command_integration_test_createbashmock"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "commands/index.ts",
+      "source_location": "L100",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commands_index_ts",
+      "target": "commands_index_getcompletions"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "commands/index.ts",
+      "source_location": "L222",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commands_index_ts",
+      "target": "commands_index_parseargs"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "commands/index.ts",
+      "source_location": "L274",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commands_index_ts",
+      "target": "commands_index_createexec"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "commands/index.ts",
+      "source_location": "L292",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commands_index_ts",
+      "target": "commands_index_handlebuild"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "commands/index.ts",
+      "source_location": "L356",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commands_index_ts",
+      "target": "commands_index_handlequery"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "commands/index.ts",
+      "source_location": "L383",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commands_index_ts",
+      "target": "commands_index_handlepath"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "commands/index.ts",
+      "source_location": "L403",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commands_index_ts",
+      "target": "commands_index_handleexplain"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "commands/index.ts",
+      "source_location": "L426",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commands_index_ts",
+      "target": "commands_index_handleadd"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "commands/index.ts",
+      "source_location": "L446",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commands_index_ts",
+      "target": "commands_index_handleupdate"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "commands/index.ts",
+      "source_location": "L453",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commands_index_ts",
+      "target": "commands_index_handlewatch"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "commands/index.ts",
+      "source_location": "L467",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commands_index_ts",
+      "target": "commands_index_handlecluster"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "commands/index.ts",
+      "source_location": "L485",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commands_index_ts",
+      "target": "commands_index_handlehook"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "commands/index.ts",
+      "source_location": "L520",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commands_index_ts",
+      "target": "commands_index_getargumentcompletions"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "commands/index.ts",
+      "source_location": "L523",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commands_index_ts",
+      "target": "commands_index_handler"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "commands/index.ts",
+      "source_location": "L521",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commands_index_getargumentcompletions",
+      "target": "commands_index_getcompletions"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "commands/index.ts",
+      "source_location": "L524",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commands_index_handler",
+      "target": "commands_index_parseargs"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "commands/index.ts",
+      "source_location": "L300",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commands_index_handlebuild",
+      "target": "commands_index_createexec"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "commands/index.ts",
+      "source_location": "L369",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commands_index_handlequery",
+      "target": "commands_index_createexec"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "commands/index.ts",
+      "source_location": "L394",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commands_index_handlepath",
+      "target": "commands_index_createexec"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "commands/index.ts",
+      "source_location": "L415",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commands_index_handleexplain",
+      "target": "commands_index_createexec"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "commands/index.ts",
+      "source_location": "L472",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commands_index_handlecluster",
+      "target": "commands_index_createexec"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "commands/index.ts",
+      "source_location": "L497",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commands_index_handlehook",
+      "target": "commands_index_createexec"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "commands/index.ts",
+      "source_location": "L529",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commands_index_handler",
+      "target": "commands_index_handlebuild"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "commands/index.ts",
+      "source_location": "L532",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commands_index_handler",
+      "target": "commands_index_handlequery"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "commands/index.ts",
+      "source_location": "L535",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commands_index_handler",
+      "target": "commands_index_handlepath"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "commands/index.ts",
+      "source_location": "L538",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commands_index_handler",
+      "target": "commands_index_handleexplain"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "commands/index.ts",
+      "source_location": "L541",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commands_index_handler",
+      "target": "commands_index_handleadd"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "commands/index.ts",
+      "source_location": "L544",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commands_index_handler",
+      "target": "commands_index_handleupdate"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "commands/index.ts",
+      "source_location": "L547",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commands_index_handler",
+      "target": "commands_index_handlewatch"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "commands/index.ts",
+      "source_location": "L550",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commands_index_handler",
+      "target": "commands_index_handlecluster"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "commands/index.ts",
+      "source_location": "L553",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commands_index_handler",
+      "target": "commands_index_handlehook"
+    }
+  ],
+  "hyperedges": [],
+  "built_at_commit": "7f3c8683e48284846612b393dd592f5f7466b617"
+}

@@ -1,0 +1,58 @@
+{
+  "/Users/elche/agents/primecodex/packages/pi-graphify/src/config.ts": {
+    "mtime": 1778294473.544328,
+    "hash": "508ff85714eb42317851259d12ac3a08"
+  },
+  "/Users/elche/agents/primecodex/packages/pi-graphify/src/statusbar.ts": {
+    "mtime": 1778294457.0858607,
+    "hash": "6b8c43985e365129f0fa67f26be6394f"
+  },
+  "/Users/elche/agents/primecodex/packages/pi-graphify/src/tools/graphify.integration.test.ts": {
+    "mtime": 1778082353.999994,
+    "hash": "e5becfedfc4cb4be27e657b5168203fc"
+  },
+  "/Users/elche/agents/primecodex/packages/pi-graphify/src/tools/index.ts": {
+    "mtime": 1778294011.2175498,
+    "hash": "a8ad886c0aab8e73b2a7e0d299d124b3"
+  },
+  "/Users/elche/agents/primecodex/packages/pi-graphify/src/tools/graphify-tools.ts": {
+    "mtime": 1778336205.14182,
+    "hash": "8bf03995d345cb7308d39f3b62aa46c0"
+  },
+  "/Users/elche/agents/primecodex/packages/pi-graphify/src/lib/runner.test.ts": {
+    "mtime": 1778096219.4101882,
+    "hash": "a778ccad177492bf1ccafe19f0119543"
+  },
+  "/Users/elche/agents/primecodex/packages/pi-graphify/src/lib/runner.ts": {
+    "mtime": 1778096219.4101746,
+    "hash": "ead83f3f10000fb8dbb00acb2233a870"
+  },
+  "/Users/elche/agents/primecodex/packages/pi-graphify/src/commands/graphify.command.integration.test.ts": {
+    "mtime": 1778087846.8790765,
+    "hash": "fba980d9903af06fbdb65e1c01243f7e"
+  },
+  "/Users/elche/agents/primecodex/packages/pi-graphify/src/commands/index.ts": {
+    "mtime": 1778294058.9523616,
+    "hash": "046d4cc96d6211808887a446598d77d4"
+  },
+  "/Users/elche/agents/primecodex/packages/pi-graphify/CHANGELOG.md": {
+    "mtime": 1778336509.1452565,
+    "hash": "2cc317d03be02fd5a21d6c7b3f1fb3ae"
+  },
+  "/Users/elche/agents/primecodex/packages/pi-graphify/README.md": {
+    "mtime": 1778336499.7143455,
+    "hash": "c8c75826d4cd50611fbb964934738762"
+  },
+  "/Users/elche/agents/primecodex/packages/pi-graphify/AGENTS.md": {
+    "mtime": 1778336502.877405,
+    "hash": "425c8ed524006becec9db59cbf3eba74"
+  },
+  "/Users/elche/agents/primecodex/packages/pi-graphify/CLAUDE.md": {
+    "mtime": 1778033304.7469337,
+    "hash": "201b97de1da3b605e28e87e2beca99a9"
+  },
+  "/Users/elche/agents/primecodex/packages/pi-graphify/skills/graphify/SKILL.md": {
+    "mtime": 1778083170.6656098,
+    "hash": "bcf9ea34850ba134f08ff3ef646db243"
+  }
+}

@@ -1,6 +1,7 @@
 node_modules/
 .pi/tasks/
 .pi-lens/
+.pi/gateway/
 .primecodex.local.json
 .gitnexus
 graphify-out/cache/
