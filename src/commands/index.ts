@@ -1,6 +1,6 @@
 import type { ExtensionAPI, ExtensionCommandContext } from "@earendil-works/pi-coding-agent";
 import type { AutocompleteItem } from "@earendil-works/pi-tui";
-import { loadConfig, type ResolvedConfig } from "../config";
+import { ensurePrimeSettings, loadConfig, type ResolvedConfig } from "../config";
 import type { ExecFn } from "../lib/runner";
 import {
 	clusterOnly,
@@ -512,6 +512,8 @@ async function handleHook(
 // ---------------------------------------------------------------------------
 
 export default function (pi: ExtensionAPI) {
+	ensurePrimeSettings();
+
 	const config = loadConfig(process.cwd());
 	if (!config.enabled) return;
 

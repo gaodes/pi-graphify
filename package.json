@@ -1,12 +1,13 @@
 {
 	"name": "@gaodes/pi-graphify",
-	"version": "0.1.0",
-	"description": "Turn any folder into a queryable knowledge graph \u2014 build, query, explore, and update graphs from inside Pi",
+	"version": "0.1.1",
+	"description": "Turn any folder into a queryable knowledge graph — build, query, explore, and update graphs from inside Pi",
 	"keywords": [
 		"pi-package",
 		"pi-extension"
 	],
 	"type": "module",
+	"private": false,
 	"main": "./src/tools/index.ts",
 	"files": [
 		"src/",
@@ -41,7 +42,8 @@
 		"typebox": ">=1.0.0",
 		"typescript": "^5.0.0",
 		"vitest": "^4.1.5",
-		"@gaodes/pi-test-harness": ">=0.1.0"
+		"@gaodes/pi-test-harness": ">=0.1.0",
+		"@biomejs/biome": "^2.4.3"
 	},
 	"peerDependencies": {
 		"@earendil-works/pi-ai": ">=0.69.0",
@@ -67,6 +69,13 @@
 		"type": "git",
 		"url": "git+https://github.com/gaodes/pi-graphify.git"
 	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"bugs": {
+		"url": "https://github.com/gaodes/pi-graphify/issues"
+	},
+	"homepage": "https://github.com/gaodes/pi-graphify#readme",
 	"license": "MIT",
 	"author": "El Che"
 }

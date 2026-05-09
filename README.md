@@ -68,13 +68,14 @@ pi install @gaodes/pi-graphify
 
 ## Configuration
 
-Key: `graphify` in `prime-settings.json`.
+Key: `pi-graphify` in `prime-settings.json` (legacy `graphify` key auto-migrates on load).
 
 | Setting      | Type      | Default          | Description                  |
 | ------------ | --------- | ---------------- | ---------------------------- |
 | `enabled`    | `boolean` | `true`           | Enable/disable the extension |
 | `pythonPath` | `string`  | `"python3"`      | Path to Python interpreter   |
 | `outputDir`  | `string`  | `"graphify-out"` | Output directory name        |
+| `statusbar`  | `object`  | built-in defaults | Optional pi-statusbar widget settings |
 
 ## Git tracking policy
 

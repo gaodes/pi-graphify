@@ -1,4 +1,3 @@
-import { ToolBody, ToolCallHeader, ToolFooter } from "@gaodes/pi-utils-ui";
 import type {
 	AgentToolResult,
 	AgentToolUpdateCallback,
@@ -9,6 +8,7 @@ import type {
 } from "@earendil-works/pi-coding-agent";
 import { defineTool, truncateHead } from "@earendil-works/pi-coding-agent";
 import { Text } from "@earendil-works/pi-tui";
+import { ToolBody, ToolCallHeader, ToolFooter } from "@gaodes/pi-utils-ui";
 import { type Static, Type } from "typebox";
 import type { ResolvedConfig } from "../config";
 import type { ExecFn } from "../lib/runner";

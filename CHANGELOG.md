@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-05-09
+
 ### Added
 
 - `graphify_watch` tool: watch a directory for file changes, auto-rebuild graph on code edits.
@@ -14,14 +16,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `/graphify watch <path>` command with autocomplete.
 - `/graphify cluster` command.
 - `/graphify hook <install|uninstall|status>` command to manage git hooks.
+- Optional `pi-statusbar` widget integration with auto-refresh on session start and agent start.
 - Runner functions for `watch`, `clusterOnly`, `hookAction`, `pushNeo4j`, `saveResult`, `cloneRepo`, `mergeGraphs`, `generateTree`.
 - Unit tests for runner module (10 passing).
 - Integration tests using @gaodes/pi-test-harness (12 passing): all 8 tools exercised via playbook DSL with mocked bash, plus command-level forwarding coverage.
 - `@gaodes/pi-test-harness` as dev dependency.
 - Bundled `graphify` skill: full-pipeline orchestration guide (semantic extraction, community labeling, export formats, video transcription, guided exploration). Replaces the standalone skill in `~/.pi/agent/skills/graphify/`.
+- Config key standardized to `pi-graphify` with automatic migration from legacy `graphify`.
 
 ### Fixed
 
+- npm package metadata now includes `publishConfig.access=public` plus GitHub `bugs`/`homepage` fields for clean scoped-package publishing.
+- Added `@biomejs/biome` as a dev dependency so `npm run lint` works in clean environments.
+- Relaxed local typecheck strictness that was pulling in `@gaodes/pi-utils-ui` source-level unused-variable diagnostics from `node_modules`.
 - Graphify build initialization now auto-manages `.gitignore`: creates the file if missing, removes legacy `graphify-out/` ignore entries, and keeps only `graphify-out/cache/`, `graphify-out/.graphify_python`, and `graphify-out/cost.json` ignored so `graphify-out/` stays tracked.
 - Lint script scoped to `src/` instead of `.`.
 - Removed leaked `graphify-out/cache` from `src/`.
@@ -40,5 +47,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Tools: `graphify_build`, `graphify_query`, `graphify_path`, `graphify_explain`, `graphify_add`, `graphify_update`, `graphify_watch`, `graphify_cluster`.
 - Single `/graphify` command with autocomplete for subcommands and flags (build, query, path, explain, add, update, watch, cluster, hook).
 
-[Unreleased]: https://gitlab.elches.dev/agents/primecodex/packages/pi-graphify/-/compare/v0.1.0...main
+[Unreleased]: https://gitlab.elches.dev/agents/primecodex/packages/pi-graphify/-/compare/v0.1.1...main
+[0.1.1]: https://gitlab.elches.dev/agents/primecodex/packages/pi-graphify/-/compare/v0.1.0...v0.1.1
 [0.1.0]: https://gitlab.elches.dev/agents/primecodex/packages/pi-graphify/-/tags/v0.1.0

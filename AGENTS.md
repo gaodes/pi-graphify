@@ -65,7 +65,7 @@ The following graphify CLI commands are **not** exposed through the extension (a
 
 ## Config
 
-Key: `graphify` in `prime-settings.json`
+Key: `pi-graphify` in `prime-settings.json` (legacy `graphify` key auto-migrates)
 
 <!-- gitnexus:start -->
 
