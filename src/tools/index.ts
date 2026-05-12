@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync } from "node:fs";
 import { join } from "node:path";
 import type { ExtensionAPI, ExtensionContext } from "@earendil-works/pi-coding-agent";
 import { ensurePrimeSettings, loadConfig, type ResolvedConfig } from "../config";
@@ -11,7 +11,7 @@ import {
 } from "../statusbar.js";
 import { createAllTools } from "./graphify-tools";
 
-const AUTO_CONTEXT_TOOL_NAMES = new Set(["grep", "ffgrep", "find", "fffind", "read", "bash"]);
+const AUTO_CONTEXT_TOOL_NAMES = new Set(["grep", "ffgrep", "find", "fffind"]);
 
 type GraphContextState = {
 	graphExists: boolean;
@@ -122,26 +122,12 @@ function buildGraphifyAugmentContext(
 	graphContextState: GraphContextState,
 	config: ResolvedConfig,
 ): string | undefined {
-	const sections: string[] = [
-		`[Graphify] Graph detected at ${config.outputDir}/graph.json.`,
-		`Prefer graphify_query (budget ${config.autoContext.queryBudget}), graphify_path, and graphify_explain for structural questions.`,
-	];
+	if (!graphContextState.graphExists) return undefined;
 
-	if (config.autoContext.includeReport && existsSync(graphContextState.reportPath)) {
-		const report = readFileSync(graphContextState.reportPath, "utf-8").trim();
-		if (report.length > 0) {
-			sections.push(
-				`GRAPH_REPORT.md excerpt:\n${report.slice(0, config.autoContext.reportMaxChars)}`,
-			);
-		}
-	}
-
-	if (config.autoContext.includeWiki && existsSync(graphContextState.wikiIndexPath)) {
-		sections.push(`Wiki index: ${config.outputDir}/wiki/index.md`);
-	}
-
-	if (sections.length <= 2) return undefined;
-	return sections.join("\n\n");
+	return (
+		`[Graphify] Graph detected at ${config.outputDir}/graph.json. ` +
+		`Prefer graphify_query (budget ${config.autoContext.queryBudget}), graphify_path, and graphify_explain for structural questions.`
+	);
 }
 
 export default function (pi: ExtensionAPI) {

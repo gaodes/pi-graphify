@@ -178,6 +178,27 @@ describe("tools/index auto-context hooks", () => {
 		expect(disabledResult).toBeUndefined();
 	});
 
+	it("does not augment bash or read tool results", async () => {
+		const { root } = createTempGraphProject();
+		mockLoadConfig.mockReturnValue(baseConfig());
+		const { pi, handlers } = createPiStub();
+		extension(pi as never);
+
+		await handlers.get("session_start")?.({}, { cwd: root });
+
+		for (const toolName of ["bash", "read"]) {
+			const result = await handlers.get("tool_result")?.(
+				{
+					toolName,
+					input: { command: "echo hi" },
+					content: [{ type: "text", text: "output" }],
+				},
+				{ cwd: root },
+			);
+			expect(result).toBeUndefined();
+		}
+	});
+
 	it("respects configured outputDir for graph detection", async () => {
 		const { root } = createTempGraphProject("custom-out");
 		mockLoadConfig.mockReturnValue(baseConfig({ outputDir: "custom-out" }));
