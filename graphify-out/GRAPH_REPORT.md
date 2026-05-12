@@ -1,16 +1,16 @@
-# Graph Report - pi-graphify  (2026-05-09)
+# Graph Report - pi-graphify  (2026-05-12)
 
 ## Corpus Check
-- 9 files · ~18,232 words
+- 15 files · ~22,708 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 71 nodes · 163 edges · 9 communities (5 shown, 4 thin omitted)
-- Extraction: 89% EXTRACTED · 11% INFERRED · 0% AMBIGUOUS · INFERRED: 18 edges (avg confidence: 0.8)
+- 280 nodes · 483 edges · 13 communities (12 shown, 1 thin omitted)
+- Extraction: 96% EXTRACTED · 4% INFERRED · 0% AMBIGUOUS · INFERRED: 18 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `d6f382e9`
+- Built from commit: `e8348c6b`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -24,66 +24,104 @@
 - [[_COMMUNITY_Community 6|Community 6]]
 - [[_COMMUNITY_Community 7|Community 7]]
 - [[_COMMUNITY_Community 8|Community 8]]
+- [[_COMMUNITY_Community 9|Community 9]]
+- [[_COMMUNITY_Community 10|Community 10]]
+- [[_COMMUNITY_Community 11|Community 11]]
+- [[_COMMUNITY_Community 12|Community 12]]
 
 ## God Nodes (most connected - your core abstractions)
-1. `escapeShell()` - 13 edges
-2. `handler()` - 11 edges
-3. `createAllTools()` - 10 edges
-4. `detectPython()` - 10 edges
-5. `ensureInstalled()` - 10 edges
-6. `createExec()` - 7 edges
-7. `buildGraph()` - 6 edges
-8. `updateGraph()` - 6 edges
-9. `handleBuild()` - 6 edges
-10. `handleQuery()` - 6 edges
+1. `escapeShell()` - 16 edges
+2. `createAllTools()` - 15 edges
+3. `detectPython()` - 14 edges
+4. `ensureInstalled()` - 14 edges
+5. `handler()` - 14 edges
+6. `Full pipeline → follow these steps` - 11 edges
+7. `updateGraph()` - 9 edges
+8. `createExec()` - 9 edges
+9. `Pi Graphify` - 9 edges
+10. `/graphify` - 9 edges
 
 ## Surprising Connections (you probably didn't know these)
+- `handleBuild()` --calls--> `updateGraph()`  [INFERRED]
+  src/commands/index.ts → src/lib/runner.ts
+- `handleBuild()` --calls--> `detectPython()`  [INFERRED]
+  src/commands/index.ts → src/lib/runner.ts
+- `handleQuery()` --calls--> `detectPython()`  [INFERRED]
+  src/commands/index.ts → src/lib/runner.ts
 - `handlePath()` --calls--> `detectPython()`  [INFERRED]
-  commands/index.ts → lib/runner.ts
-- `handleHook()` --calls--> `detectPython()`  [INFERRED]
-  commands/index.ts → lib/runner.ts
-- `handlePath()` --calls--> `ensureInstalled()`  [INFERRED]
-  commands/index.ts → lib/runner.ts
-- `handleHook()` --calls--> `ensureInstalled()`  [INFERRED]
-  commands/index.ts → lib/runner.ts
-- `handleQuery()` --calls--> `queryGraph()`  [INFERRED]
-  commands/index.ts → lib/runner.ts
+  src/commands/index.ts → src/lib/runner.ts
+- `handleExplain()` --calls--> `detectPython()`  [INFERRED]
+  src/commands/index.ts → src/lib/runner.ts
 
-## Communities (9 total, 4 thin omitted)
+## Communities (13 total, 1 thin omitted)
 
 ### Community 0 - "Community 0"
-Cohesion: 0.24
-Nodes (14): addUrl(), buildGraph(), cloneRepo(), detectFiles(), ensureGraphifyGitignore(), escapeShell(), explainNode(), generateTree() (+6 more)
+Cohesion: 0.06
+Nodes (41): AutoContextConfig, DEFAULT_AUTO_CONTEXT_CONFIG, DEFAULT_CONFIG, DEFAULT_EXTENSION_SETTINGS, DEFAULT_STATUSBAR_CONFIG, ensurePrimeSettings(), loadConfig(), RawConfig (+33 more)
 
 ### Community 1 - "Community 1"
-Cohesion: 0.24
-Nodes (11): ensurePrimeSettings(), loadConfig(), readJsonFile(), resolveConfig(), emitStatusbarEvent(), getDefaultPlacement(), registerGraphifyStatusbar(), resolveStatusbarConfig() (+3 more)
+Cohesion: 0.06
+Nodes (46): AddDetails, addParameters, AddParams, BuildDetails, buildParameters, BuildParams, ClusterDetails, clusterParameters (+38 more)
 
 ### Community 2 - "Community 2"
-Cohesion: 0.33
-Nodes (9): createAddTool(), createAllTools(), createBuildTool(), createClusterTool(), createExplainTool(), createPathTool(), createQueryTool(), createUpdateTool() (+1 more)
+Cohesion: 0.11
+Nodes (30): AddOptions, addUrl(), buildGraph(), BuildOptions, checkUpgrade(), cloneRepo(), detectFiles(), DetectResult (+22 more)
 
 ### Community 3 - "Community 3"
-Cohesion: 0.46
-Nodes (8): createExec(), handleBuild(), handleCluster(), handleExplain(), handleQuery(), clusterOnly(), detectPython(), ensureInstalled()
+Cohesion: 0.2
+Nodes (28): BUILD_FLAGS, config, createExec(), getArgumentCompletions(), getCompletions(), handleAdd(), handleBuild(), handleCluster() (+20 more)
 
 ### Community 4 - "Community 4"
-Cohesion: 0.43
-Nodes (7): getArgumentCompletions(), getCompletions(), handleAdd(), handler(), handleUpdate(), handleWatch(), parseArgs()
+Cohesion: 0.07
+Nodes (30): code:bash ($(cat .graphify_python) -c "), code:bash ($(cat .graphify_python) -c "), code:bash (mkdir -p graphify-out), code:bash ($(cat .graphify_python) -c "), code:bash ($(cat .graphify_python) -c "), code:bash ($(cat .graphify_python) -c "), code:bash (# Detect the correct Python interpreter (handles pipx, venv,), code:bash ($(cat .graphify_python) -c ") (+22 more)
+
+### Community 5 - "Community 5"
+Cohesion: 0.11
+Nodes (17): Advanced orchestration options (skill-level, not `/graphify` flags), code:block1 (/graphify                                             # full), code:bash ($(cat .graphify_python) -c "), code:bash ($(cat .graphify_python) -c "), code:bash ($(cat .graphify_python) -c "), code:bash ($(cat .graphify_python) -c "), Extension Tools vs. This Skill, For --cluster-only (+9 more)
+
+### Community 6 - "Community 6"
+Cohesion: 0.13
+Nodes (14): Always Do, Architecture, CLI, CLI Coverage Gaps, Commands, Config, Dependencies, Deviation Notes (+6 more)
+
+### Community 7 - "Community 7"
+Cohesion: 0.15
+Nodes (12): Auto-context behavior, code:block1 (/graphify <path>                              # build graph ), code:bash (pi install @gaodes/pi-graphify), Commands, Configuration, @gaodes/pi-graphify, Git tracking policy, Install (+4 more)
+
+### Community 8 - "Community 8"
+Cohesion: 0.17
+Nodes (11): [0.1.0] - 2025-05-06, [0.1.1] - 2026-05-09, [0.1.2] - 2026-05-09, Added, Added, Added, Changed, Changed (+3 more)
+
+### Community 9 - "Community 9"
+Cohesion: 0.18
+Nodes (11): code:bash ($(cat .graphify_python) -c "), code:bash ($(cat .graphify_python) -c "), code:bash ($(cat .graphify_python) -c "), code:bash ($(cat .graphify_python) -c "), code:bash (python3 -m graphify.serve graphify-out/graph.json), code:json ({), GraphML export (only if --graphml flag), MCP server (only if --mcp flag) (+3 more)
+
+### Community 10 - "Community 10"
+Cohesion: 0.33
+Nodes (5): Always Do, CLI, GitNexus — Code Intelligence, Never Do, Resources
+
+### Community 11 - "Community 11"
+Cohesion: 0.7
+Nodes (3): createBashMock(), createSession(), textOfContent()
 
 ## Knowledge Gaps
-- **4 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **137 isolated node(s):** `AutoContextConfig`, `ResolvedAutoContextConfig`, `RawConfig`, `DEFAULT_AUTO_CONTEXT_CONFIG`, `DEFAULT_CONFIG` (+132 more)
+  These have ≤1 connection - possible missing edges or undocumented components.
+- **1 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `createAllTools()` connect `Community 2` to `Community 1`?**
-  _High betweenness centrality (0.115) - this node is a cross-community bridge._
-- **Why does `loadConfig()` connect `Community 1` to `Community 4`?**
-  _High betweenness centrality (0.114) - this node is a cross-community bridge._
-- **Why does `ensurePrimeSettings()` connect `Community 1` to `Community 4`?**
-  _High betweenness centrality (0.071) - this node is a cross-community bridge._
+- **Why does `Full pipeline → follow these steps` connect `Community 4` to `Community 9`, `Community 5`?**
+  _High betweenness centrality (0.036) - this node is a cross-community bridge._
+- **Why does `What You Must Do When Invoked` connect `Community 5` to `Community 4`?**
+  _High betweenness centrality (0.018) - this node is a cross-community bridge._
 - **Are the 6 inferred relationships involving `detectPython()` (e.g. with `handleBuild()` and `handleQuery()`) actually correct?**
   _`detectPython()` has 6 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 6 inferred relationships involving `ensureInstalled()` (e.g. with `handleBuild()` and `handleQuery()`) actually correct?**
   _`ensureInstalled()` has 6 INFERRED edges - model-reasoned connections that need verification._
+- **What connects `AutoContextConfig`, `ResolvedAutoContextConfig`, `RawConfig` to the rest of the system?**
+  _137 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Should `Community 0` be split into smaller, more focused modules?**
+  _Cohesion score 0.06 - nodes in this community are weakly interconnected._
+- **Should `Community 1` be split into smaller, more focused modules?**
+  _Cohesion score 0.06 - nodes in this community are weakly interconnected._
