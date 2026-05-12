@@ -10,16 +10,19 @@ It also bundles a `graphify` skill (`skills/graphify/SKILL.md`) for full-pipelin
 
 ## Tools
 
-| Tool               | Description                                                                                      |
-| ------------------ | ------------------------------------------------------------------------------------------------ |
-| `graphify_build`   | Build a knowledge graph from a directory (full pipeline: detect → extract → cluster → visualize) |
-| `graphify_query`   | Query the graph — BFS for broad context, DFS for tracing specific paths                          |
-| `graphify_path`    | Find the shortest path between two concepts in the graph                                         |
-| `graphify_explain` | Plain-language explanation of a node — everything connected to it                                |
-| `graphify_add`     | Fetch a URL and add it to the corpus, then update the graph                                      |
-| `graphify_update`  | Incremental update — re-extract only changed files                                               |
-| `graphify_watch`   | Watch a directory for changes, auto-rebuild graph on code edits                                  |
-| `graphify_cluster` | Re-run community detection on an existing graph (no re-extraction)                               |
+| Tool                       | Description                                                                                      |
+| -------------------------- | ------------------------------------------------------------------------------------------------ |
+| `graphify_build`           | Build a knowledge graph from a directory (full pipeline: detect → extract → cluster → visualize) |
+| `graphify_query`           | Query the graph — BFS for broad context, DFS for tracing specific paths                          |
+| `graphify_path`            | Find the shortest path between two concepts in the graph                                         |
+| `graphify_explain`         | Plain-language explanation of a node — everything connected to it                                |
+| `graphify_add`             | Fetch a URL and add it to the corpus, then update the graph                                      |
+| `graphify_update`          | Incremental update — re-extract only changed files                                               |
+| `graphify_watch`           | Watch a directory for changes, auto-rebuild graph on code edits                                  |
+| `graphify_cluster`         | Re-run community detection on an existing graph (no re-extraction)                               |
+| `graphify_extract`         | Headless LLM extraction for CI — supports claude, kimi, openai, gemini, ollama, bedrock backends |
+| `graphify_export_callflow` | Generate self-contained Mermaid architecture/call-flow HTML from graph.json                      |
+| `graphify_upgrade`         | Check for and install graphifyy CLI updates via uv                                               |
 
 ## Commands
 
@@ -39,6 +42,7 @@ It also bundles a `graphify` skill (`skills/graphify/SKILL.md`) for full-pipelin
 /graphify <path> --svg                        # export graph.svg
 /graphify <path> --graphml                    # export for Gephi / yEd
 /graphify <path> --neo4j                      # generate cypher.txt for Neo4j
+/graphify <path> --callflow                   # generate callflow architecture HTML
 
 /graphify query "<question>"                  # BFS traversal — broad context
 /graphify query "<question>" --dfs            # DFS — trace a specific path
@@ -53,6 +57,18 @@ It also bundles a `graphify` skill (`skills/graphify/SKILL.md`) for full-pipelin
 /graphify hook install                        # install git hooks for auto-rebuild
 /graphify hook uninstall                      # remove git hooks
 /graphify hook status                         # check hook status
+/graphify extract <path>                      # headless LLM extraction for CI
+/graphify extract <path> --backend claude     # specify LLM backend
+/graphify extract <path> --backend kimi       # Kimi AI backend
+/graphify extract <path> --backend openai     # OpenAI backend
+/graphify extract <path> --backend gemini     # Google Gemini backend
+/graphify extract <path> --backend ollama     # Ollama (local) backend
+/graphify extract <path> --backend bedrock    # AWS Bedrock backend
+/graphify extract <path> --max-workers 4      # limit parallel workers
+/graphify extract <path> --token-budget 4096  # cap tokens per LLM call
+/graphify extract <path> --api-timeout 300    # HTTP timeout in seconds
+/graphify uninstall                           # remove graphify from all platforms
+/graphify uninstall --purge                   # also delete graphify-out/
 ```
 
 ## Prerequisites
@@ -70,12 +86,30 @@ pi install @gaodes/pi-graphify
 
 Key: `pi-graphify` in `prime-settings.json` (legacy `graphify` key auto-migrates on load).
 
-| Setting      | Type      | Default           | Description                           |
-| ------------ | --------- | ----------------- | ------------------------------------- |
-| `enabled`    | `boolean` | `true`            | Enable/disable the extension          |
-| `pythonPath` | `string`  | `"python3"`       | Path to Python interpreter            |
-| `outputDir`  | `string`  | `"graphify-out"`  | Output directory name                 |
-| `statusbar`  | `object`  | built-in defaults | Optional pi-statusbar widget settings |
+| Setting                            | Type      | Default           | Description                                                      |
+| ---------------------------------- | --------- | ----------------- | ---------------------------------------------------------------- |
+| `enabled`                          | `boolean` | `true`            | Enable/disable the extension                                     |
+| `pythonPath`                       | `string`  | `"python3"`       | Path to Python interpreter                                       |
+| `outputDir`                        | `string`  | `"graphify-out"`  | Output directory name                                            |
+| `statusbar`                        | `object`  | built-in defaults | Optional pi-statusbar widget settings                            |
+| `autoContext.enabled`              | `boolean` | `true`            | Enable Graphify auto-context hooks                               |
+| `autoContext.augmentSearchResults` | `boolean` | `true`            | Append Graphify context to search/read tool results              |
+| `autoContext.includeReport`        | `boolean` | `true`            | Include `GRAPH_REPORT.md` excerpt in auto-context                |
+| `autoContext.includeWiki`          | `boolean` | `true`            | Include `wiki/index.md` hint when available                      |
+| `autoContext.reportMaxChars`       | `number`  | `6000`            | Max characters to append from `GRAPH_REPORT.md` per augmentation |
+| `autoContext.queryBudget`          | `number`  | `1200`            | Budget hint for `graphify_query` follow-up usage                 |
+
+### Auto-context behavior
+
+When `graphify-out/graph.json` exists in the current project, pi-graphify now:
+
+- injects a concise `[Graphify active]` system-prompt hint on `before_agent_start`
+- optionally augments `grep`, `ffgrep`, `find`, `fffind`, `read`, and `bash` tool results with Graphify context
+
+Notes:
+
+- This is Pi-native behavior in this extension; upstream `graphify pi install` installs the Graphify skill but does not install these Pi runtime hooks.
+- Auto-context hooks stay idle in projects where `<outputDir>/graph.json` is missing.
 
 ## Git tracking policy
 

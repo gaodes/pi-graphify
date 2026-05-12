@@ -836,6 +836,110 @@ print(f'Re-clustered: {len(communities)} communities')
 }
 
 // ---------------------------------------------------------------------------
+// Extract (headless extraction for CI)
+// ---------------------------------------------------------------------------
+
+export interface ExtractOptions {
+	inputPath: string;
+	backend?: string;
+	maxWorkers?: number;
+	tokenBudget?: number;
+	maxConcurrency?: number;
+	apiTimeout?: number;
+	update?: boolean;
+	global?: boolean;
+	asTag?: string;
+}
+
+export interface ExtractResult {
+	files: number;
+	inputTokens: number;
+	outputTokens: number;
+	nodes: number;
+	edges: number;
+}
+
+export async function runExtract(
+	exec: ExecFn,
+	python: string,
+	cwd: string,
+	options: ExtractOptions,
+	signal?: AbortSignal,
+	onUpdate?: (message: string) => void,
+): Promise<ExtractResult> {
+	const { inputPath, backend, maxWorkers, tokenBudget, maxConcurrency, apiTimeout } = options;
+	const escapedPath = escapeShell(inputPath);
+
+	let cmd = `${python} -m graphify extract '${escapedPath}'`;
+	if (backend) cmd += ` --backend ${backend}`;
+	if (maxWorkers) cmd += ` --max-workers ${maxWorkers}`;
+	if (tokenBudget) cmd += ` --token-budget ${tokenBudget}`;
+	if (maxConcurrency) cmd += ` --max-concurrency ${maxConcurrency}`;
+	if (apiTimeout) cmd += ` --api-timeout ${apiTimeout}`;
+
+	onUpdate?.(`Running headless extraction with backend: ${backend ?? "auto-detected"}...`);
+
+	const result = await exec(cmd, { cwd, signal });
+
+	if (result.exitCode !== 0) {
+		throw new Error(`Extract failed: ${result.stderr || result.stdout}`);
+	}
+
+	onUpdate?.(result.stdout.trim());
+
+	// Parse output to get token counts
+	const inputMatch = result.stdout.match(/input_tokens[=:](\d+)/i);
+	const outputMatch = result.stdout.match(/output_tokens[=:](\d+)/i);
+	const filesMatch = result.stdout.match(/(\d+)\s+files?/i);
+	const nodesMatch = result.stdout.match(/(\d+)\s+nodes?/i);
+	const edgesMatch = result.stdout.match(/(\d+)\s+edges?/i);
+
+	const extractedRaw = await exec(
+		`${python} -c "import json; from pathlib import Path; p=Path('.graphify_extract.json'); print(p.read_text() if p.exists() else '{"nodes":[],"edges":[]}')"`,
+		{ cwd, signal },
+	);
+	const extracted = JSON.parse(extractedRaw.stdout);
+
+	return {
+		files: filesMatch ? Number.parseInt(filesMatch[1], 10) : 0,
+		inputTokens: inputMatch ? Number.parseInt(inputMatch[1], 10) : (extracted.input_tokens ?? 0),
+		outputTokens: outputMatch
+			? Number.parseInt(outputMatch[1], 10)
+			: (extracted.output_tokens ?? 0),
+		nodes: nodesMatch ? Number.parseInt(nodesMatch[1], 10) : (extracted.nodes?.length ?? 0),
+		edges: edgesMatch ? Number.parseInt(edgesMatch[1], 10) : (extracted.edges?.length ?? 0),
+	};
+}
+
+// ---------------------------------------------------------------------------
+// Export callflow HTML
+// ---------------------------------------------------------------------------
+
+export async function exportCallflowHtml(
+	exec: ExecFn,
+	python: string,
+	cwd: string,
+	options?: { graphPath?: string; outputPath?: string },
+	signal?: AbortSignal,
+): Promise<string> {
+	const graphPath = options?.graphPath ?? "graphify-out/graph.json";
+	const outputPath = options?.outputPath ?? "graphify-out/callflow.html";
+	const escapedGraph = escapeShell(graphPath);
+	const escapedOutput = escapeShell(outputPath);
+
+	const result = await exec(
+		`${python} -m graphify export callflow-html --graph '${escapedGraph}' --output '${escapedOutput}'`,
+		{ cwd, signal },
+	);
+
+	if (result.exitCode !== 0) {
+		throw new Error(`Callflow export failed: ${result.stderr || result.stdout}`);
+	}
+
+	return outputPath;
+}
+
+// ---------------------------------------------------------------------------
 // Tree HTML (collapsible tree visualization)
 // ---------------------------------------------------------------------------
 
@@ -981,6 +1085,92 @@ export async function mergeGraphs(
 		throw new Error(`Merge failed: ${result.stderr}`);
 	}
 	return result.stdout.trim();
+}
+
+// ---------------------------------------------------------------------------
+// Upgrade (check/install graphifyy via uv)
+// ---------------------------------------------------------------------------
+
+export interface UpgradeCheckResult {
+	installedVersion: string;
+	latestVersion: string;
+	updateAvailable: boolean;
+}
+
+export interface UpgradeRunResult {
+	previousVersion: string;
+	newVersion: string;
+	upgraded: boolean;
+}
+
+/** Check the currently installed and latest available version of graphifyy. */
+export async function checkUpgrade(
+	exec: ExecFn,
+	signal?: AbortSignal,
+): Promise<UpgradeCheckResult> {
+	const installedResult = await exec(
+		"graphify --version 2>/dev/null || uv tool list 2>/dev/null | grep graphifyy | awk '{print $2}'",
+		{ signal },
+	);
+	const installedVersion = installedResult.stdout.trim().replace(/^v/, "");
+
+	const latestResult = await exec(
+		"uv tool upgrade graphifyy --dry-run 2>&1 | grep -oP 'upgraded from v?\\S+ to v?\\K\\S+' || echo ''",
+		{ signal },
+	);
+	const latestLine = latestResult.stdout.trim();
+
+	// If dry-run shows an upgrade, parse the target version. Otherwise latest = installed.
+	let latestVersion = installedVersion;
+	let updateAvailable = false;
+
+	if (latestLine) {
+		latestVersion = latestLine;
+		updateAvailable = true;
+	} else {
+		// Fallback: check PyPI index
+		const pypiResult = await exec(
+			"uv pip index versions graphifyy 2>/dev/null | head -1 | grep -oP 'graphifyy v?\\K\\S+'",
+			{ signal },
+		);
+		const pypiVersion = pypiResult.stdout.trim();
+		if (pypiVersion && pypiVersion !== installedVersion) {
+			latestVersion = pypiVersion;
+			updateAvailable = true;
+		}
+	}
+
+	return { installedVersion, latestVersion, updateAvailable };
+}
+
+/** Run uv tool upgrade graphifyy and return the result. */
+export async function runUpgrade(exec: ExecFn, signal?: AbortSignal): Promise<UpgradeRunResult> {
+	const before = await checkUpgrade(exec, signal);
+
+	if (!before.updateAvailable) {
+		return {
+			previousVersion: before.installedVersion,
+			newVersion: before.installedVersion,
+			upgraded: false,
+		};
+	}
+
+	const result = await exec("uv tool upgrade graphifyy 2>&1", { signal });
+	if (result.exitCode !== 0) {
+		throw new Error(`Upgrade failed: ${result.stderr || result.stdout}`);
+	}
+
+	const after = await exec(
+		"graphify --version 2>/dev/null || uv tool list 2>/dev/null | grep graphifyy | awk '{print $2}'",
+		{ signal },
+	);
+	const newVersion = after.stdout.trim().replace(/^v/, "");
+
+	return {
+		previousVersion: before.installedVersion,
+		newVersion: newVersion || before.latestVersion,
+		upgraded: true,
+	};
 }
 
 // ---------------------------------------------------------------------------

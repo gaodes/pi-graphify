@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `graphify_extract` tool: headless LLM extraction for CI with backend selection (claude, kimi, openai, gemini, ollama, bedrock). Supports `--max-workers`, `--token-budget`, `--api-timeout` for concurrency and cost control.
+- `graphify_export_callflow` tool: generate self-contained Mermaid architecture/call-flow HTML from an existing graph.
+- `/graphify extract <path>` command with autocomplete for `--backend`, `--max-workers`, `--token-budget`, `--api-timeout`.
+- `/graphify uninstall` command with optional `--purge` to also delete `graphify-out/`.
+- `--callflow` build flag to generate callflow HTML during a full build.
+- `runExtract` and `exportCallflowHtml` runner functions.
+- `graphify_upgrade` tool: check for and install graphifyy Python CLI updates via `uv`. Supports `check` (see current/latest versions) and `install` (upgrade) actions.
+- `checkUpgrade` and `runUpgrade` runner functions.
+- Pi-native Graphify auto-context hooks:
+  - `before_agent_start` prompt injection when `<outputDir>/graph.json` exists
+  - optional tool-result augmentation for `grep`, `ffgrep`, `find`, `fffind`, `read`, and `bash`
+- Configurable `autoContext` settings under `pi-graphify` in `prime-settings.json`.
+- New `src/tools/index.test.ts` coverage for Graphify auto-context hooks and output-dir detection.
+
+### Changed
+
+- Updated `.upstream.json` to track graphify v0.7.13 (was v0.7.5).
+- `pi-graphify` session state now tracks graph presence, report injection, hook fires, augmentation hits, and per-session augmentation caches.
+
 ## [0.1.2] - 2026-05-09
 
 ### Changed

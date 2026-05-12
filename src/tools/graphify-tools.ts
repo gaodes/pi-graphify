@@ -15,15 +15,20 @@ import type { ExecFn } from "../lib/runner";
 import {
 	addUrl,
 	buildGraph,
+	checkUpgrade,
 	clusterOnly,
 	detectPython,
 	ensureInstalled,
 	explainNode,
+	exportCallflowHtml,
 	findPath,
 	queryGraph,
+	runExtract,
+	runUpgrade,
 	startWatch,
 	updateGraph,
 } from "../lib/runner";
+import { type StatusbarState, updateGraphifyStatusbar } from "../statusbar.js";
 
 // ---------------------------------------------------------------------------
 // Shared exec adapter — wraps pi.exec(command, args[], opts) → ExecFn
@@ -71,7 +76,11 @@ interface BuildDetails {
 	outputDir: string;
 }
 
-export function createBuildTool(pi: ExtensionAPI, config: ResolvedConfig) {
+export function createBuildTool(
+	pi: ExtensionAPI,
+	config: ResolvedConfig,
+	statusbarState: StatusbarState,
+) {
 	return defineTool({
 		name: "graphify_build",
 		label: "Graphify Build",
@@ -115,6 +124,8 @@ export function createBuildTool(pi: ExtensionAPI, config: ResolvedConfig) {
 						details: {} as BuildDetails,
 					}),
 			);
+
+			updateGraphifyStatusbar(pi, config, ctx, statusbarState).catch(() => {});
 
 			return {
 				content: [
@@ -217,7 +228,11 @@ interface QueryDetails {
 	result: string;
 }
 
-export function createQueryTool(pi: ExtensionAPI, config: ResolvedConfig) {
+export function createQueryTool(
+	pi: ExtensionAPI,
+	config: ResolvedConfig,
+	_statusbarState: StatusbarState,
+) {
 	return defineTool({
 		name: "graphify_query",
 		label: "Graphify Query",
@@ -346,7 +361,11 @@ interface PathDetails {
 	result: string;
 }
 
-export function createPathTool(pi: ExtensionAPI, config: ResolvedConfig) {
+export function createPathTool(
+	pi: ExtensionAPI,
+	config: ResolvedConfig,
+	_statusbarState: StatusbarState,
+) {
 	return defineTool({
 		name: "graphify_path",
 		label: "Graphify Path",
@@ -440,7 +459,11 @@ interface ExplainDetails {
 	result: string;
 }
 
-export function createExplainTool(pi: ExtensionAPI, config: ResolvedConfig) {
+export function createExplainTool(
+	pi: ExtensionAPI,
+	config: ResolvedConfig,
+	_statusbarState: StatusbarState,
+) {
 	return defineTool({
 		name: "graphify_explain",
 		label: "Graphify Explain",
@@ -531,7 +554,11 @@ interface AddDetails {
 	savedTo: string;
 }
 
-export function createAddTool(pi: ExtensionAPI, config: ResolvedConfig) {
+export function createAddTool(
+	pi: ExtensionAPI,
+	config: ResolvedConfig,
+	statusbarState: StatusbarState,
+) {
 	return defineTool({
 		name: "graphify_add",
 		label: "Graphify Add",
@@ -578,6 +605,8 @@ export function createAddTool(pi: ExtensionAPI, config: ResolvedConfig) {
 			});
 
 			await updateGraph(exec, python, ctx.cwd, "./raw", signal);
+
+			updateGraphifyStatusbar(pi, config, ctx, statusbarState).catch(() => {});
 
 			return {
 				content: [{ type: "text", text: `Added ${params.url} to corpus and updated graph.` }],
@@ -655,7 +684,11 @@ interface UpdateDetails {
 	edges: number;
 }
 
-export function createUpdateTool(pi: ExtensionAPI, config: ResolvedConfig) {
+export function createUpdateTool(
+	pi: ExtensionAPI,
+	config: ResolvedConfig,
+	statusbarState: StatusbarState,
+) {
 	return defineTool({
 		name: "graphify_update",
 		label: "Graphify Update",
@@ -686,6 +719,8 @@ export function createUpdateTool(pi: ExtensionAPI, config: ResolvedConfig) {
 					details: {} as UpdateDetails,
 				}),
 			);
+
+			updateGraphifyStatusbar(pi, config, ctx, statusbarState).catch(() => {});
 
 			if (updateResult.newFiles === 0) {
 				return {
@@ -796,7 +831,11 @@ interface WatchDetails {
 	message: string;
 }
 
-export function createWatchTool(pi: ExtensionAPI, config: ResolvedConfig) {
+export function createWatchTool(
+	pi: ExtensionAPI,
+	config: ResolvedConfig,
+	_statusbarState: StatusbarState,
+) {
 	return defineTool({
 		name: "graphify_watch",
 		label: "Graphify Watch",
@@ -882,7 +921,11 @@ interface ClusterDetails {
 	communities: number;
 }
 
-export function createClusterTool(pi: ExtensionAPI, config: ResolvedConfig) {
+export function createClusterTool(
+	pi: ExtensionAPI,
+	config: ResolvedConfig,
+	statusbarState: StatusbarState,
+) {
 	return defineTool({
 		name: "graphify_cluster",
 		label: "Graphify Cluster",
@@ -908,6 +951,8 @@ export function createClusterTool(pi: ExtensionAPI, config: ResolvedConfig) {
 			await ensureInstalled(exec, python, ctx.cwd, signal);
 
 			const result = await clusterOnly(exec, python, ctx.cwd, signal);
+
+			updateGraphifyStatusbar(pi, config, ctx, statusbarState).catch(() => {});
 
 			return {
 				content: [{ type: "text", text: `Re-clustered: ${result.communities} communities` }],
@@ -948,18 +993,475 @@ export function createClusterTool(pi: ExtensionAPI, config: ResolvedConfig) {
 }
 
 // ---------------------------------------------------------------------------
+// graphify_extract
+// ---------------------------------------------------------------------------
+
+const extractParameters = Type.Object({
+	inputPath: Type.String({ description: "Directory path to extract (headless, no IDE needed)" }),
+	backend: Type.Optional(
+		Type.Union(
+			[
+				Type.Literal("claude"),
+				Type.Literal("kimi"),
+				Type.Literal("openai"),
+				Type.Literal("gemini"),
+				Type.Literal("ollama"),
+				Type.Literal("bedrock"),
+			],
+			{
+				description:
+					"LLM backend: claude (Anthropic), kimi, openai, gemini, ollama (local), bedrock (AWS). Defaults to auto-detected.",
+			},
+		),
+	),
+	maxWorkers: Type.Optional(
+		Type.Number({ description: "Max parallel workers for AST extraction (default: unlimited)" }),
+	),
+	tokenBudget: Type.Optional(
+		Type.Number({ description: "Max tokens per LLM call (default: 8192)" }),
+	),
+	maxConcurrency: Type.Optional(
+		Type.Number({ description: "Max concurrent LLM API calls (default: unlimited)" }),
+	),
+	apiTimeout: Type.Optional(
+		Type.Number({ description: "HTTP timeout for API calls in seconds (default: 600)" }),
+	),
+});
+
+type ExtractParams = Static<typeof extractParameters>;
+
+interface ExtractDetails {
+	inputPath: string;
+	backend: string;
+	files: number;
+	inputTokens: number;
+	outputTokens: number;
+	nodes: number;
+	edges: number;
+}
+
+export function createExtractTool(
+	pi: ExtensionAPI,
+	config: ResolvedConfig,
+	_statusbarState: StatusbarState,
+) {
+	return defineTool({
+		name: "graphify_extract",
+		label: "Graphify Extract",
+		description:
+			"Headless LLM extraction for CI — extracts entities and relationships from a directory using an LLM backend without requiring an IDE. Supports claude, kimi, openai, gemini, ollama, and bedrock backends.",
+		parameters: extractParameters,
+		promptSnippet:
+			"Use graphify_extract for headless extraction in CI pipelines or when you want pure LLM-based graph building without interactive mode.",
+		promptGuidelines: [
+			"graphify_extract runs in headless mode — no IDE interaction needed.",
+			"Specify the backend explicitly for reproducibility: claude, kimi, openai, gemini, ollama, or bedrock.",
+			"After extraction, use graphify_build to run the full pipeline (cluster, visualize, analyze).",
+		],
+
+		async execute(
+			_toolCallId: string,
+			params: ExtractParams,
+			signal: AbortSignal,
+			onUpdate: AgentToolUpdateCallback<ExtractDetails> | undefined,
+			ctx: ExtensionContext,
+		): Promise<AgentToolResult<ExtractDetails>> {
+			const exec = createExec(pi, ctx.cwd);
+			const python = await detectPython(exec, config.pythonPath, ctx.cwd, signal);
+			await ensureInstalled(exec, python, ctx.cwd, signal);
+
+			const result = await runExtract(
+				exec,
+				python,
+				ctx.cwd,
+				{
+					inputPath: params.inputPath,
+					backend: params.backend,
+					maxWorkers: params.maxWorkers,
+					tokenBudget: params.tokenBudget,
+					maxConcurrency: params.maxConcurrency,
+					apiTimeout: params.apiTimeout,
+				},
+				signal,
+				(msg) =>
+					onUpdate?.({ content: [{ type: "text", text: msg }], details: {} as ExtractDetails }),
+			);
+
+			return {
+				content: [
+					{
+						type: "text",
+						text: `Extracted ${result.files} files: ${result.nodes} nodes, ${result.edges} edges (${result.inputTokens} in / ${result.outputTokens} out tokens)`,
+					},
+				],
+				details: {
+					inputPath: params.inputPath,
+					backend: params.backend ?? "auto-detected",
+					files: result.files,
+					inputTokens: result.inputTokens,
+					outputTokens: result.outputTokens,
+					nodes: result.nodes,
+					edges: result.edges,
+				},
+			};
+		},
+
+		renderCall(params: ExtractParams, theme: Theme) {
+			const optionArgs: Array<{ label: string; value: string }> = [];
+			if (params.backend) optionArgs.push({ label: "backend", value: params.backend });
+			if (params.maxWorkers)
+				optionArgs.push({ label: "max-workers", value: String(params.maxWorkers) });
+			return new ToolCallHeader(
+				{ toolName: "Graphify", action: "extract", mainArg: params.inputPath, optionArgs },
+				theme,
+			);
+		},
+
+		renderResult(
+			result: AgentToolResult<ExtractDetails>,
+			options: ToolRenderResultOptions,
+			theme: Theme,
+		) {
+			const details = result.details as ExtractDetails | undefined;
+			if (!details?.nodes) {
+				const textBlock = result.content.find((c) => c.type === "text");
+				return new Text(
+					theme.fg("error", (textBlock?.type === "text" && textBlock.text) || "Extract failed"),
+					0,
+					0,
+				);
+			}
+			return new ToolBody(
+				{
+					fields: [
+						{ label: "Files", value: String(details.files), showCollapsed: true },
+						{ label: "Backend", value: details.backend, showCollapsed: true },
+						{
+							label: "Tokens",
+							value: `${details.inputTokens} in / ${details.outputTokens} out`,
+							showCollapsed: true,
+						},
+						{
+							label: "Graph",
+							value: `${details.nodes} nodes | ${details.edges} edges`,
+							showCollapsed: false,
+						},
+					],
+					footer: new ToolFooter(theme, {
+						items: [{ label: "status", value: "extracted" }],
+						separator: " | ",
+					}),
+					includeSpacerBeforeFooter: true,
+				},
+				options,
+				theme,
+			);
+		},
+	});
+}
+
+// ---------------------------------------------------------------------------
+// graphify_export_callflow
+// ---------------------------------------------------------------------------
+
+const exportCallflowParameters = Type.Object({
+	graphPath: Type.Optional(
+		Type.String({ description: "Path to graph.json (default: graphify-out/graph.json)" }),
+	),
+	outputPath: Type.Optional(
+		Type.String({
+			description: "Output path for callflow HTML (default: graphify-out/callflow.html)",
+		}),
+	),
+});
+
+type ExportCallflowParams = Static<typeof exportCallflowParameters>;
+
+interface ExportCallflowDetails {
+	outputPath: string;
+}
+
+export function createExportCallflowTool(
+	pi: ExtensionAPI,
+	_config: ResolvedConfig,
+	_statusbarState: StatusbarState,
+) {
+	return defineTool({
+		name: "graphify_export_callflow",
+		label: "Graphify Export Callflow",
+		description:
+			"Generate a self-contained Mermaid architecture/call-flow HTML page from graphify-out/graph.json. Includes interactive zoom/pan diagrams grouped by community, call detail tables, and graph report highlights.",
+		parameters: exportCallflowParameters,
+		promptSnippet:
+			"Use graphify_export_callflow to visualize architecture and call flows from the knowledge graph.",
+		promptGuidelines: [
+			"graphify_export_callflow requires an existing graph.json.",
+			"The output is a self-contained HTML file with Mermaid diagrams — open it in any browser.",
+		],
+
+		async execute(
+			_toolCallId: string,
+			params: ExportCallflowParams,
+			signal: AbortSignal,
+			onUpdate: AgentToolUpdateCallback<ExportCallflowDetails> | undefined,
+			ctx: ExtensionContext,
+		): Promise<AgentToolResult<ExportCallflowDetails>> {
+			const exec = createExec(pi, ctx.cwd);
+			const python = await detectPython(exec, _config.pythonPath, ctx.cwd, signal);
+			await ensureInstalled(exec, python, ctx.cwd, signal);
+
+			onUpdate?.({
+				content: [{ type: "text", text: "Generating callflow HTML..." }],
+				details: {} as ExportCallflowDetails,
+			});
+
+			const outputPath = await exportCallflowHtml(exec, python, ctx.cwd, {
+				graphPath: params.graphPath,
+				outputPath: params.outputPath,
+			});
+
+			return {
+				content: [{ type: "text", text: `Callflow HTML generated: ${outputPath}` }],
+				details: { outputPath },
+			};
+		},
+
+		renderCall(params: ExportCallflowParams, theme: Theme) {
+			const mainArg = params.graphPath ?? "graphify-out/graph.json";
+			return new ToolCallHeader(
+				{ toolName: "Graphify", action: "export callflow-html", mainArg, showColon: true },
+				theme,
+			);
+		},
+
+		renderResult(
+			result: AgentToolResult<ExportCallflowDetails>,
+			options: ToolRenderResultOptions,
+			theme: Theme,
+		) {
+			const details = result.details as ExportCallflowDetails | undefined;
+			return new ToolBody(
+				{
+					fields: [
+						{ label: "Output", value: details?.outputPath ?? "unknown", showCollapsed: false },
+					],
+					footer: new ToolFooter(theme, {
+						items: [{ label: "format", value: "HTML + Mermaid" }],
+						separator: " | ",
+					}),
+					includeSpacerBeforeFooter: true,
+				},
+				options,
+				theme,
+			);
+		},
+	});
+}
+
+// ---------------------------------------------------------------------------
+// graphify_upgrade
+// ---------------------------------------------------------------------------
+
+const upgradeParameters = Type.Object({
+	action: Type.Optional(
+		Type.Union([Type.Literal("check"), Type.Literal("install")], {
+			description:
+				"'check' to see if a new version is available (default), 'install' to upgrade to latest. This updates the graphifyy Python CLI tool via uv — NOT the graphify knowledge graph.",
+			default: "check",
+		}),
+	),
+});
+
+type UpgradeParams = Static<typeof upgradeParameters>;
+
+interface UpgradeDetails {
+	action: string;
+	installedVersion: string;
+	latestVersion: string;
+	updateAvailable: boolean;
+	previousVersion?: string;
+	upgraded?: boolean;
+}
+
+export function createUpgradeTool(
+	_pi: ExtensionAPI,
+	_config: ResolvedConfig,
+	_statusbarState: StatusbarState,
+) {
+	return defineTool({
+		name: "graphify_upgrade",
+		label: "Graphify Upgrade",
+		description:
+			"Check for and install updates to the graphifyy Python CLI tool (the graphify extraction engine) using uv. Use 'check' to see the current and latest versions, or 'install' to upgrade. This updates the Python package — it does NOT modify the knowledge graph or pi-graphify extension.",
+		parameters: upgradeParameters,
+		promptSnippet:
+			"Use graphify_upgrade to check or install the latest version of the graphify CLI tool.",
+		promptGuidelines: [
+			"Use action='check' to see if a new version is available before installing.",
+			"Use action='install' to actually upgrade graphifyy via uv tool upgrade.",
+			"This tool updates the graphifyy Python package — not the knowledge graph data.",
+		],
+
+		async execute(
+			_toolCallId: string,
+			params: UpgradeParams,
+			signal: AbortSignal,
+			onUpdate: AgentToolUpdateCallback<UpgradeDetails> | undefined,
+			_ctx: ExtensionContext,
+		): Promise<AgentToolResult<UpgradeDetails>> {
+			const exec = createExec(_pi, _ctx.cwd);
+			const action = params.action ?? "check";
+
+			if (action === "check") {
+				onUpdate?.({
+					content: [{ type: "text", text: "Checking for graphify updates..." }],
+					details: {} as UpgradeDetails,
+				});
+
+				const check = await checkUpgrade(exec, signal);
+
+				return {
+					content: [
+						{
+							type: "text",
+							text: check.updateAvailable
+								? `Update available: graphifyy ${check.installedVersion} → ${check.latestVersion}`
+								: `graphifyy is up to date (v${check.installedVersion})`,
+						},
+					],
+					details: {
+						action: "check",
+						installedVersion: check.installedVersion,
+						latestVersion: check.latestVersion,
+						updateAvailable: check.updateAvailable,
+					},
+				};
+			}
+
+			// action === 'install'
+			onUpdate?.({
+				content: [{ type: "text", text: "Upgrading graphifyy via uv..." }],
+				details: {} as UpgradeDetails,
+			});
+
+			const result = await runUpgrade(exec, signal);
+
+			return {
+				content: [
+					{
+						type: "text",
+						text: result.upgraded
+							? `Upgraded graphifyy: ${result.previousVersion} → ${result.newVersion}`
+							: `graphifyy is already up to date (v${result.newVersion})`,
+					},
+				],
+				details: {
+					action: "install",
+					installedVersion: result.newVersion,
+					latestVersion: result.newVersion,
+					updateAvailable: false,
+					previousVersion: result.previousVersion,
+					upgraded: result.upgraded,
+				},
+			};
+		},
+
+		renderCall(params: UpgradeParams, theme: Theme) {
+			const action = params.action ?? "check";
+			return new ToolCallHeader(
+				{
+					toolName: "Graphify",
+					action: "upgrade",
+					mainArg: action,
+					showColon: true,
+				},
+				theme,
+			);
+		},
+
+		renderResult(
+			result: AgentToolResult<UpgradeDetails>,
+			options: ToolRenderResultOptions,
+			theme: Theme,
+		) {
+			const details = result.details as UpgradeDetails | undefined;
+			if (!details) {
+				const textBlock = result.content.find((c) => c.type === "text");
+				return new Text(
+					theme.fg("error", (textBlock?.type === "text" && textBlock.text) || "Upgrade failed"),
+					0,
+					0,
+				);
+			}
+
+			if (details.action === "check") {
+				const versionLine = details.updateAvailable
+					? `${details.installedVersion} → ${details.latestVersion}`
+					: `v${details.installedVersion} (latest)`;
+
+				return new ToolBody(
+					{
+						fields: [
+							{ label: "graphifyy", value: versionLine, showCollapsed: false },
+							{
+								label: "status",
+								value: details.updateAvailable ? "update available" : "up to date",
+								showCollapsed: false,
+							},
+						],
+					},
+					options,
+					theme,
+				);
+			}
+
+			// install action
+			return new ToolBody(
+				{
+					fields: [
+						{
+							label: "graphifyy",
+							value: details.upgraded
+								? `${details.previousVersion} → ${details.installedVersion}`
+								: `v${details.installedVersion} (already latest)`,
+							showCollapsed: false,
+						},
+					],
+					footer: details.upgraded
+						? new ToolFooter(theme, {
+								items: [{ label: "status", value: "upgraded" }],
+								separator: " | ",
+							})
+						: undefined,
+					includeSpacerBeforeFooter: true,
+				},
+				options,
+				theme,
+			);
+		},
+	});
+}
+
+// ---------------------------------------------------------------------------
 // Re-export all creators
 // ---------------------------------------------------------------------------
 
-export function createAllTools(pi: ExtensionAPI, config: ResolvedConfig) {
+export function createAllTools(
+	pi: ExtensionAPI,
+	config: ResolvedConfig,
+	statusbarState: StatusbarState,
+) {
 	return [
-		createBuildTool(pi, config),
-		createQueryTool(pi, config),
-		createPathTool(pi, config),
-		createExplainTool(pi, config),
-		createAddTool(pi, config),
-		createUpdateTool(pi, config),
-		createWatchTool(pi, config),
-		createClusterTool(pi, config),
+		createBuildTool(pi, config, statusbarState),
+		createQueryTool(pi, config, statusbarState),
+		createPathTool(pi, config, statusbarState),
+		createExplainTool(pi, config, statusbarState),
+		createAddTool(pi, config, statusbarState),
+		createUpdateTool(pi, config, statusbarState),
+		createWatchTool(pi, config, statusbarState),
+		createClusterTool(pi, config, statusbarState),
+		createExtractTool(pi, config, statusbarState),
+		createExportCallflowTool(pi, config, statusbarState),
+		createUpgradeTool(pi, config, statusbarState),
 	];
 }

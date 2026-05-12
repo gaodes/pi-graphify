@@ -1,15 +1,28 @@
 {
-  "version": 1,
-  "updatedAt": "2025-05-06",
-  "primary": {
-    "name": "graphify",
-    "type": "git",
-    "url": "https://github.com/safishamsi/graphify",
-    "repo": "https://github.com/safishamsi/graphify",
-    "license": "MIT",
-    "relationship": "inspiration",
-    "upstreamVersion": "v7"
-  },
-  "inspirations": [],
-  "localEnhancements": []
+	"version": 1,
+	"updatedAt": "2026-05-11",
+	"primary": {
+		"name": "graphify",
+		"type": "git",
+		"url": "https://github.com/safishamsi/graphify",
+		"repo": "https://github.com/safishamsi/graphify",
+		"license": "MIT",
+		"relationship": "inspiration",
+		"upstreamVersion": "0.7.13"
+	},
+	"inspirations": [],
+	"localEnhancements": [
+		{
+			"date": "2026-05-11",
+			"description": "Wrapped graphify CLI with Pi extension tools and commands"
+		},
+		{
+			"date": "2026-05-11",
+			"description": "Added graphify_extract tool for headless CI extraction with backend selection"
+		},
+		{
+			"date": "2026-05-11",
+			"description": "Added graphify_export_callflow tool for Mermaid architecture HTML generation"
+		}
+	]
 }

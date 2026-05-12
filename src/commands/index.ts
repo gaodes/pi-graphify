@@ -63,6 +63,16 @@ const SUBCOMMANDS: AutocompleteItem[] = [
 		label: "hook",
 		description: "Manage git hooks (install/uninstall/status)",
 	},
+	{
+		value: "extract",
+		label: "extract",
+		description: "Headless LLM extraction for CI (claude, kimi, openai, gemini, ollama, bedrock)",
+	},
+	{
+		value: "uninstall",
+		label: "uninstall",
+		description: "Remove graphify from all platforms (add --purge to also delete graphify-out/)",
+	},
 ];
 
 const BUILD_FLAGS: AutocompleteItem[] = [
@@ -76,6 +86,7 @@ const BUILD_FLAGS: AutocompleteItem[] = [
 	{ value: "--svg", label: "--svg", description: "Export graph.svg" },
 	{ value: "--graphml", label: "--graphml", description: "Export for Gephi / yEd" },
 	{ value: "--neo4j", label: "--neo4j", description: "Generate cypher.txt for Neo4j" },
+	{ value: "--callflow", label: "--callflow", description: "Generate callflow architecture HTML" },
 	{
 		value: "--update",
 		label: "--update",
@@ -191,6 +202,52 @@ function getCompletions(argumentPrefix: string): AutocompleteItem[] {
 			const partial = parts.slice(1).join(" ").toLowerCase();
 			return hookActions.filter((h) => h.label.startsWith(partial || h.label));
 		}
+		case "extract": {
+			const extractBackends: AutocompleteItem[] = [
+				{ value: "--backend claude", label: "--backend claude", description: "Anthropic Claude" },
+				{ value: "--backend kimi", label: "--backend kimi", description: "Kimi AI" },
+				{ value: "--backend openai", label: "--backend openai", description: "OpenAI" },
+				{ value: "--backend gemini", label: "--backend gemini", description: "Google Gemini" },
+				{ value: "--backend ollama", label: "--backend ollama", description: "Ollama (local)" },
+				{ value: "--backend bedrock", label: "--backend bedrock", description: "AWS Bedrock" },
+			];
+			const partial = parts.slice(1).join(" ").toLowerCase();
+			if (partial.startsWith("--backend ")) {
+				return extractBackends.filter((b) =>
+					b.value.slice("--backend ".length).startsWith(partial.slice("--backend ".length)),
+				);
+			}
+			if (partial.startsWith("--")) {
+				return [
+					...extractBackends,
+					{ value: "--max-workers", label: "--max-workers N", description: "Max parallel workers" },
+					{
+						value: "--token-budget",
+						label: "--token-budget N",
+						description: "Max tokens per call",
+					},
+					{
+						value: "--api-timeout",
+						label: "--api-timeout N",
+						description: "HTTP timeout in seconds",
+					},
+				].filter((f) => f.value.startsWith(partial));
+			}
+			return [
+				{
+					value: `extract ${parts.slice(1).join(" ") || "."}`,
+					label: "<path>",
+					description: "Directory to extract",
+				},
+				...extractBackends,
+			];
+		}
+		case "uninstall": {
+			return [
+				{ value: "uninstall", label: "uninstall", description: "Remove from all platforms" },
+				{ value: "uninstall --purge", label: "--purge", description: "Also delete graphify-out/" },
+			];
+		}
 		default: {
 			if (parts[parts.length - 1]?.startsWith("--")) {
 				return BUILD_FLAGS.filter((f) => f.value.startsWith(parts[parts.length - 1] ?? ""));
@@ -214,7 +271,9 @@ interface ParsedArgs {
 		| "update"
 		| "watch"
 		| "cluster"
-		| "hook";
+		| "hook"
+		| "extract"
+		| "uninstall";
 	positionals: string[];
 	flags: Record<string, string | boolean>;
 }
@@ -230,7 +289,18 @@ function parseArgs(raw: string): ParsedArgs {
 	if (tokens.length > 0) {
 		const first = tokens[0].toLowerCase();
 		if (
-			["query", "path", "explain", "add", "update", "watch", "cluster", "hook"].includes(first) &&
+			[
+				"query",
+				"path",
+				"explain",
+				"add",
+				"update",
+				"watch",
+				"cluster",
+				"hook",
+				"extract",
+				"uninstall",
+			].includes(first) &&
 			!first.startsWith("-")
 		) {
 			subcommand = first as ParsedArgs["subcommand"];
@@ -243,8 +313,20 @@ function parseArgs(raw: string): ParsedArgs {
 		if (token === "--mode" && tokens[i + 1]) {
 			flags.mode = tokens[i + 1];
 			i += 2;
+		} else if (token === "--backend" && tokens[i + 1]) {
+			flags.backend = tokens[i + 1];
+			i += 2;
 		} else if (token === "--budget" && tokens[i + 1]) {
 			flags.budget = tokens[i + 1];
+			i += 2;
+		} else if (token === "--max-workers" && tokens[i + 1]) {
+			flags.maxWorkers = tokens[i + 1];
+			i += 2;
+		} else if (token === "--token-budget" && tokens[i + 1]) {
+			flags.tokenBudget = tokens[i + 1];
+			i += 2;
+		} else if (token === "--api-timeout" && tokens[i + 1]) {
+			flags.apiTimeout = tokens[i + 1];
 			i += 2;
 		} else if (token === "--author" && tokens[i + 1]) {
 			flags.author = tokens[i + 1];
@@ -255,6 +337,9 @@ function parseArgs(raw: string): ParsedArgs {
 		} else if (token === "--debounce" && tokens[i + 1]) {
 			flags.debounce = tokens[i + 1];
 			i += 2;
+		} else if (token === "--purge") {
+			flags.purge = true;
+			i++;
 		} else if (token.startsWith("--")) {
 			flags[token.slice(2)] = true;
 			i++;
@@ -345,6 +430,7 @@ print(f'Re-clustered: {len(communities)} communities')
 		...(flags.svg === true ? { svg: true } : {}),
 		...(flags.graphml === true ? { graphml: true } : {}),
 		...(flags.neo4j === true ? { neo4j: true } : {}),
+		...(flags.callflow === true ? { callflow: true } : {}),
 	};
 
 	// Full build — send a message to the agent so it uses the tool with explicit params
@@ -507,6 +593,55 @@ async function handleHook(
 	await ctx.ui.notify(result);
 }
 
+async function handleExtract(
+	pi: ExtensionAPI,
+	_ctx: ExtensionCommandContext,
+	_config: ResolvedConfig,
+	positionals: string[],
+	flags: Record<string, string | boolean>,
+) {
+	const inputPath = positionals[0] ?? ".";
+	const backend = typeof flags.backend === "string" ? flags.backend : undefined;
+	const maxWorkers = typeof flags.maxWorkers === "string" ? Number(flags.maxWorkers) : undefined;
+	const tokenBudget = typeof flags.tokenBudget === "string" ? Number(flags.tokenBudget) : undefined;
+	const apiTimeout = typeof flags.apiTimeout === "string" ? Number(flags.apiTimeout) : undefined;
+
+	const toolArgs: Record<string, unknown> = { inputPath };
+	if (backend) toolArgs.backend = backend;
+	if (maxWorkers) toolArgs.maxWorkers = maxWorkers;
+	if (tokenBudget) toolArgs.tokenBudget = tokenBudget;
+	if (apiTimeout) toolArgs.apiTimeout = apiTimeout;
+
+	pi.sendUserMessage(
+		`Use the graphify_extract tool with these params: ${JSON.stringify(toolArgs)}. Report the extraction results.`,
+	);
+}
+
+async function handleUninstall(
+	pi: ExtensionAPI,
+	ctx: ExtensionCommandContext,
+	flags: Record<string, string | boolean>,
+) {
+	const exec = createExec(pi, ctx.cwd);
+	const purge = flags.purge === true;
+
+	try {
+		const result = await exec(`graphify uninstall --yes${purge ? " --purge" : ""}`, {
+			cwd: ctx.cwd,
+		});
+		await ctx.ui.notify(
+			result.exitCode === 0
+				? `Graphify uninstalled.${purge ? " graphify-out/ purged." : ""}`
+				: `Uninstall failed: ${result.stderr || result.stdout}`,
+		);
+	} catch (err) {
+		await ctx.ui.notify(
+			`Uninstall error: ${err instanceof Error ? err.message : String(err)}`,
+			"error",
+		);
+	}
+}
+
 // ---------------------------------------------------------------------------
 // Command registration
 // ---------------------------------------------------------------------------
@@ -553,6 +688,12 @@ export default function (pi: ExtensionAPI) {
 						break;
 					case "hook":
 						await handleHook(pi, ctx, config, parsed.positionals);
+						break;
+					case "extract":
+						await handleExtract(pi, ctx, config, parsed.positionals, parsed.flags);
+						break;
+					case "uninstall":
+						await handleUninstall(pi, ctx, parsed.flags);
 						break;
 				}
 			} catch (err) {

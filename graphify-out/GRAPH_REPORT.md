@@ -1,7 +1,7 @@
 # Graph Report - pi-graphify  (2026-05-09)
 
 ## Corpus Check
-- 9 files · ~18,202 words
+- 9 files · ~18,232 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `0dc0ae98`
+- Built from commit: `d6f382e9`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -38,11 +38,11 @@
 10. `handleQuery()` - 6 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `handleCluster()` --calls--> `detectPython()`  [INFERRED]
+- `handlePath()` --calls--> `detectPython()`  [INFERRED]
   commands/index.ts → lib/runner.ts
 - `handleHook()` --calls--> `detectPython()`  [INFERRED]
   commands/index.ts → lib/runner.ts
-- `handleCluster()` --calls--> `ensureInstalled()`  [INFERRED]
+- `handlePath()` --calls--> `ensureInstalled()`  [INFERRED]
   commands/index.ts → lib/runner.ts
 - `handleHook()` --calls--> `ensureInstalled()`  [INFERRED]
   commands/index.ts → lib/runner.ts
@@ -65,7 +65,7 @@ Nodes (9): createAddTool(), createAllTools(), createBuildTool(), createClusterTo
 
 ### Community 3 - "Community 3"
 Cohesion: 0.46
-Nodes (8): createExec(), handleBuild(), handleExplain(), handlePath(), handleQuery(), detectPython(), ensureInstalled(), findPath()
+Nodes (8): createExec(), handleBuild(), handleCluster(), handleExplain(), handleQuery(), clusterOnly(), detectPython(), ensureInstalled()
 
 ### Community 4 - "Community 4"
 Cohesion: 0.43

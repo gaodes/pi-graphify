@@ -351,7 +351,7 @@
       "source_file": "lib/runner.ts",
       "source_location": "L555",
       "id": "lib_runner_findpath",
-      "community": 3,
+      "community": 8,
       "norm_label": "findpath()"
     },
     {
@@ -396,7 +396,7 @@
       "source_file": "lib/runner.ts",
       "source_location": "L805",
       "id": "lib_runner_clusteronly",
-      "community": 8,
+      "community": 3,
       "norm_label": "clusteronly()"
     },
     {
@@ -567,7 +567,7 @@
       "source_file": "commands/index.ts",
       "source_location": "L383",
       "id": "commands_index_handlepath",
-      "community": 3,
+      "community": 8,
       "norm_label": "handlepath()"
     },
     {
@@ -612,7 +612,7 @@
       "source_file": "commands/index.ts",
       "source_location": "L467",
       "id": "commands_index_handlecluster",
-      "community": 8,
+      "community": 3,
       "norm_label": "handlecluster()"
     },
     {
@@ -2377,5 +2377,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "0dc0ae9840b94b4de3924c5fda09b4bd3e678456"
+  "built_at_commit": "d6f382e968a5ba2f830076470a7e3b5579b21c05"
 }
