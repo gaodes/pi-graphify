@@ -2532,9 +2532,9 @@
       "source_file": "src/statusbar.ts",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_statusbar_ts",
-      "target": "src_config_ts",
-      "confidence_score": 1.0
+      "target": "src_config_ts"
     },
     {
       "relation": "contains",
@@ -2542,9 +2542,9 @@
       "source_file": "src/config.ts",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_config_ts",
-      "target": "src_config_autocontextconfig",
-      "confidence_score": 1.0
+      "target": "src_config_autocontextconfig"
     },
     {
       "relation": "contains",
@@ -2552,9 +2552,9 @@
       "source_file": "src/config.ts",
       "source_location": "L18",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_config_ts",
-      "target": "src_config_resolvedautocontextconfig",
-      "confidence_score": 1.0
+      "target": "src_config_resolvedautocontextconfig"
     },
     {
       "relation": "contains",
@@ -2562,9 +2562,9 @@
       "source_file": "src/config.ts",
       "source_location": "L27",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_config_ts",
-      "target": "src_config_rawconfig",
-      "confidence_score": 1.0
+      "target": "src_config_rawconfig"
     },
     {
       "relation": "contains",
@@ -2572,9 +2572,9 @@
       "source_file": "src/config.ts",
       "source_location": "L35",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_config_ts",
-      "target": "src_config_resolvedconfig",
-      "confidence_score": 1.0
+      "target": "src_config_resolvedconfig"
     },
     {
       "relation": "contains",
@@ -2582,9 +2582,9 @@
       "source_file": "src/config.ts",
       "source_location": "L43",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_config_ts",
-      "target": "src_config_default_auto_context_config",
-      "confidence_score": 1.0
+      "target": "src_config_default_auto_context_config"
     },
     {
       "relation": "contains",
@@ -2592,9 +2592,9 @@
       "source_file": "src/config.ts",
       "source_location": "L52",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_config_ts",
-      "target": "src_config_default_config",
-      "confidence_score": 1.0
+      "target": "src_config_default_config"
     },
     {
       "relation": "contains",
@@ -2602,9 +2602,9 @@
       "source_file": "src/config.ts",
       "source_location": "L72",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_config_ts",
-      "target": "src_config_readjsonfile",
-      "confidence_score": 1.0
+      "target": "src_config_readjsonfile"
     },
     {
       "relation": "contains",
@@ -2612,9 +2612,9 @@
       "source_file": "src/config.ts",
       "source_location": "L80",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_config_ts",
-      "target": "src_config_sanitizepositiveint",
-      "confidence_score": 1.0
+      "target": "src_config_sanitizepositiveint"
     },
     {
       "relation": "contains",
@@ -2622,9 +2622,9 @@
       "source_file": "src/config.ts",
       "source_location": "L86",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_config_ts",
-      "target": "src_config_resolveautocontext",
-      "confidence_score": 1.0
+      "target": "src_config_resolveautocontext"
     },
     {
       "relation": "contains",
@@ -2632,9 +2632,9 @@
       "source_file": "src/config.ts",
       "source_location": "L101",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_config_ts",
-      "target": "src_config_resolveconfig",
-      "confidence_score": 1.0
+      "target": "src_config_resolveconfig"
     },
     {
       "relation": "contains",
@@ -2642,9 +2642,9 @@
       "source_file": "src/config.ts",
       "source_location": "L119",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_config_ts",
-      "target": "src_config_loadconfig",
-      "confidence_score": 1.0
+      "target": "src_config_loadconfig"
     },
     {
       "relation": "contains",
@@ -2652,9 +2652,9 @@
       "source_file": "src/config.ts",
       "source_location": "L135",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_config_ts",
-      "target": "src_config_default_statusbar_config",
-      "confidence_score": 1.0
+      "target": "src_config_default_statusbar_config"
     },
     {
       "relation": "contains",
@@ -2662,9 +2662,9 @@
       "source_file": "src/config.ts",
       "source_location": "L149",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_config_ts",
-      "target": "src_config_default_extension_settings",
-      "confidence_score": 1.0
+      "target": "src_config_default_extension_settings"
     },
     {
       "relation": "contains",
@@ -2672,9 +2672,9 @@
       "source_file": "src/config.ts",
       "source_location": "L165",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_config_ts",
-      "target": "src_config_ensureprimesettings",
-      "confidence_score": 1.0
+      "target": "src_config_ensureprimesettings"
     },
     {
       "relation": "imports_from",
@@ -2683,9 +2683,9 @@
       "source_file": "src/tools/index.ts",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_index_ts",
-      "target": "src_config_ts",
-      "confidence_score": 1.0
+      "target": "src_config_ts"
     },
     {
       "relation": "imports_from",
@@ -2694,9 +2694,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L13",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "src_config_ts",
-      "confidence_score": 1.0
+      "target": "src_config_ts"
     },
     {
       "relation": "imports_from",
@@ -2705,9 +2705,9 @@
       "source_file": "src/commands/index.ts",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_commands_index_ts",
-      "target": "src_config_ts",
-      "confidence_score": 1.0
+      "target": "src_config_ts"
     },
     {
       "relation": "imports",
@@ -2716,9 +2716,9 @@
       "source_file": "src/statusbar.ts",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_statusbar_ts",
-      "target": "src_config_resolvedconfig",
-      "confidence_score": 1.0
+      "target": "src_config_resolvedconfig"
     },
     {
       "relation": "imports",
@@ -2727,9 +2727,9 @@
       "source_file": "src/tools/index.ts",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_index_ts",
-      "target": "src_config_resolvedconfig",
-      "confidence_score": 1.0
+      "target": "src_config_resolvedconfig"
     },
     {
       "relation": "imports",
@@ -2738,9 +2738,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L13",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "src_config_resolvedconfig",
-      "confidence_score": 1.0
+      "target": "src_config_resolvedconfig"
     },
     {
       "relation": "imports",
@@ -2749,9 +2749,9 @@
       "source_file": "src/commands/index.ts",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_commands_index_ts",
-      "target": "src_config_resolvedconfig",
-      "confidence_score": 1.0
+      "target": "src_config_resolvedconfig"
     },
     {
       "relation": "calls",
@@ -2781,9 +2781,9 @@
       "source_file": "src/config.ts",
       "source_location": "L93",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_config_resolveautocontext",
-      "target": "src_config_sanitizepositiveint",
-      "confidence_score": 1.0
+      "target": "src_config_sanitizepositiveint"
     },
     {
       "relation": "calls",
@@ -2792,9 +2792,9 @@
       "source_file": "src/config.ts",
       "source_location": "L113",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_config_resolveconfig",
-      "target": "src_config_resolveautocontext",
-      "confidence_score": 1.0
+      "target": "src_config_resolveautocontext"
     },
     {
       "relation": "calls",
@@ -2824,9 +2824,9 @@
       "source_file": "src/tools/index.ts",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_index_ts",
-      "target": "src_config_loadconfig",
-      "confidence_score": 1.0
+      "target": "src_config_loadconfig"
     },
     {
       "relation": "imports",
@@ -2835,9 +2835,9 @@
       "source_file": "src/commands/index.ts",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_commands_index_ts",
-      "target": "src_config_loadconfig",
-      "confidence_score": 1.0
+      "target": "src_config_loadconfig"
     },
     {
       "relation": "contains",
@@ -2878,9 +2878,9 @@
       "source_file": "src/tools/index.ts",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_index_ts",
-      "target": "src_config_ensureprimesettings",
-      "confidence_score": 1.0
+      "target": "src_config_ensureprimesettings"
     },
     {
       "relation": "imports",
@@ -2889,9 +2889,9 @@
       "source_file": "src/commands/index.ts",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_commands_index_ts",
-      "target": "src_config_ensureprimesettings",
-      "confidence_score": 1.0
+      "target": "src_config_ensureprimesettings"
     },
     {
       "relation": "contains",
@@ -2931,9 +2931,9 @@
       "source_file": "src/statusbar.ts",
       "source_location": "L40",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_statusbar_ts",
-      "target": "src_statusbar_makestatusbarstate",
-      "confidence_score": 1.0
+      "target": "src_statusbar_makestatusbarstate"
     },
     {
       "relation": "contains",
@@ -2941,9 +2941,9 @@
       "source_file": "src/statusbar.ts",
       "source_location": "L46",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_statusbar_ts",
-      "target": "src_statusbar_emitstatusbarevent",
-      "confidence_score": 1.0
+      "target": "src_statusbar_emitstatusbarevent"
     },
     {
       "relation": "contains",
@@ -2951,9 +2951,9 @@
       "source_file": "src/statusbar.ts",
       "source_location": "L59",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_statusbar_ts",
-      "target": "src_statusbar_getdefaultplacement",
-      "confidence_score": 1.0
+      "target": "src_statusbar_getdefaultplacement"
     },
     {
       "relation": "contains",
@@ -2961,9 +2961,9 @@
       "source_file": "src/statusbar.ts",
       "source_location": "L63",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_statusbar_ts",
-      "target": "src_statusbar_resolvestatusbarconfig",
-      "confidence_score": 1.0
+      "target": "src_statusbar_resolvestatusbarconfig"
     },
     {
       "relation": "contains",
@@ -2971,9 +2971,9 @@
       "source_file": "src/statusbar.ts",
       "source_location": "L85",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_statusbar_ts",
-      "target": "src_statusbar_shouldattemptupdate",
-      "confidence_score": 1.0
+      "target": "src_statusbar_shouldattemptupdate"
     },
     {
       "relation": "contains",
@@ -2981,9 +2981,9 @@
       "source_file": "src/statusbar.ts",
       "source_location": "L105",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_statusbar_ts",
-      "target": "src_statusbar_registergraphifystatusbar",
-      "confidence_score": 1.0
+      "target": "src_statusbar_registergraphifystatusbar"
     },
     {
       "relation": "contains",
@@ -2991,9 +2991,9 @@
       "source_file": "src/statusbar.ts",
       "source_location": "L147",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_statusbar_ts",
-      "target": "src_statusbar_unregistergraphifystatusbar",
-      "confidence_score": 1.0
+      "target": "src_statusbar_unregistergraphifystatusbar"
     },
     {
       "relation": "contains",
@@ -3001,9 +3001,9 @@
       "source_file": "src/statusbar.ts",
       "source_location": "L151",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_statusbar_ts",
-      "target": "src_statusbar_updategraphifystatusbar",
-      "confidence_score": 1.0
+      "target": "src_statusbar_updategraphifystatusbar"
     },
     {
       "relation": "imports_from",
@@ -3012,9 +3012,9 @@
       "source_file": "src/tools/index.ts",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_index_ts",
-      "target": "src_statusbar_ts",
-      "confidence_score": 1.0
+      "target": "src_statusbar_ts"
     },
     {
       "relation": "imports_from",
@@ -3023,9 +3023,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L31",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "src_statusbar_ts",
-      "confidence_score": 1.0
+      "target": "src_statusbar_ts"
     },
     {
       "relation": "contains",
@@ -3161,9 +3161,9 @@
       "source_file": "src/tools/index.ts",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_index_ts",
-      "target": "src_statusbar_registergraphifystatusbar",
-      "confidence_score": 1.0
+      "target": "src_statusbar_registergraphifystatusbar"
     },
     {
       "relation": "contains",
@@ -3193,9 +3193,9 @@
       "source_file": "src/tools/index.ts",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_index_ts",
-      "target": "src_statusbar_unregistergraphifystatusbar",
-      "confidence_score": 1.0
+      "target": "src_statusbar_unregistergraphifystatusbar"
     },
     {
       "relation": "contains",
@@ -3225,9 +3225,9 @@
       "source_file": "src/tools/index.ts",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_index_ts",
-      "target": "src_statusbar_updategraphifystatusbar",
-      "confidence_score": 1.0
+      "target": "src_statusbar_updategraphifystatusbar"
     },
     {
       "relation": "imports",
@@ -3236,9 +3236,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L31",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "src_statusbar_updategraphifystatusbar",
-      "confidence_score": 1.0
+      "target": "src_statusbar_updategraphifystatusbar"
     },
     {
       "relation": "contains",
@@ -3268,9 +3268,9 @@
       "source_file": "src/tools/index.test.ts",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_index_test_ts",
-      "target": "src_tools_index_ts",
-      "confidence_score": 1.0
+      "target": "src_tools_index_ts"
     },
     {
       "relation": "contains",
@@ -3278,9 +3278,9 @@
       "source_file": "src/tools/index.test.ts",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_index_test_ts",
-      "target": "tools_index_test_mockensureprimesettings_mockloadconfig_mockregistergraphifystatusbar_mockupdategraphifystatusbar_mockunregistergraphifystatusbar_mockcreatealltools",
-      "confidence_score": 1.0
+      "target": "tools_index_test_mockensureprimesettings_mockloadconfig_mockregistergraphifystatusbar_mockupdategraphifystatusbar_mockunregistergraphifystatusbar_mockcreatealltools"
     },
     {
       "relation": "contains",
@@ -3288,9 +3288,9 @@
       "source_file": "src/tools/index.test.ts",
       "source_location": "L39",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_index_test_ts",
-      "target": "tools_index_test_hookhandler",
-      "confidence_score": 1.0
+      "target": "tools_index_test_hookhandler"
     },
     {
       "relation": "contains",
@@ -3298,9 +3298,9 @@
       "source_file": "src/tools/index.test.ts",
       "source_location": "L41",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_index_test_ts",
-      "target": "tools_index_test_createpistub",
-      "confidence_score": 1.0
+      "target": "tools_index_test_createpistub"
     },
     {
       "relation": "contains",
@@ -3308,9 +3308,9 @@
       "source_file": "src/tools/index.test.ts",
       "source_location": "L52",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_index_test_ts",
-      "target": "tools_index_test_createtempgraphproject",
-      "confidence_score": 1.0
+      "target": "tools_index_test_createtempgraphproject"
     },
     {
       "relation": "contains",
@@ -3318,9 +3318,9 @@
       "source_file": "src/tools/index.test.ts",
       "source_location": "L61",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_index_test_ts",
-      "target": "tools_index_test_baseconfig",
-      "confidence_score": 1.0
+      "target": "tools_index_test_baseconfig"
     },
     {
       "relation": "contains",
@@ -3328,9 +3328,9 @@
       "source_file": "src/tools/index.test.ts",
       "source_location": "L182",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_index_test_ts",
-      "target": "tools_index_test_root",
-      "confidence_score": 1.0
+      "target": "tools_index_test_root"
     },
     {
       "relation": "contains",
@@ -3338,9 +3338,9 @@
       "source_file": "src/tools/index.test.ts",
       "source_location": "L184",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_index_test_ts",
-      "target": "tools_index_test_pi_handlers",
-      "confidence_score": 1.0
+      "target": "tools_index_test_pi_handlers"
     },
     {
       "relation": "contains",
@@ -3348,9 +3348,9 @@
       "source_file": "src/tools/index.test.ts",
       "source_location": "L167",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_index_test_ts",
-      "target": "tools_index_test_disabledsession",
-      "confidence_score": 1.0
+      "target": "tools_index_test_disabledsession"
     },
     {
       "relation": "contains",
@@ -3358,9 +3358,9 @@
       "source_file": "src/tools/graphify.integration.test.ts",
       "source_location": "L66",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_integration_test_ts",
-      "target": "tools_graphify_integration_test_creategraphifybashmock",
-      "confidence_score": 1.0
+      "target": "tools_graphify_integration_test_creategraphifybashmock"
     },
     {
       "relation": "contains",
@@ -3368,9 +3368,9 @@
       "source_file": "src/tools/graphify.integration.test.ts",
       "source_location": "L233",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_integration_test_ts",
-      "target": "tools_graphify_integration_test_createsession",
-      "confidence_score": 1.0
+      "target": "tools_graphify_integration_test_createsession"
     },
     {
       "relation": "calls",
@@ -3410,9 +3410,9 @@
       "source_file": "src/tools/index.ts",
       "source_location": "L12",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_index_ts",
-      "target": "src_tools_graphify_tools_ts",
-      "confidence_score": 1.0
+      "target": "src_tools_graphify_tools_ts"
     },
     {
       "relation": "imports",
@@ -3421,9 +3421,9 @@
       "source_file": "src/tools/index.ts",
       "source_location": "L12",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_index_ts",
-      "target": "tools_graphify_tools_createalltools",
-      "confidence_score": 1.0
+      "target": "tools_graphify_tools_createalltools"
     },
     {
       "relation": "contains",
@@ -3431,9 +3431,9 @@
       "source_file": "src/tools/index.ts",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_index_ts",
-      "target": "tools_index_auto_context_tool_names",
-      "confidence_score": 1.0
+      "target": "tools_index_auto_context_tool_names"
     },
     {
       "relation": "contains",
@@ -3441,9 +3441,9 @@
       "source_file": "src/tools/index.ts",
       "source_location": "L16",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_index_ts",
-      "target": "tools_index_graphcontextstate",
-      "confidence_score": 1.0
+      "target": "tools_index_graphcontextstate"
     },
     {
       "relation": "contains",
@@ -3451,9 +3451,9 @@
       "source_file": "src/tools/index.ts",
       "source_location": "L28",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_index_ts",
-      "target": "tools_index_beforeagentstartevent",
-      "confidence_score": 1.0
+      "target": "tools_index_beforeagentstartevent"
     },
     {
       "relation": "contains",
@@ -3461,9 +3461,9 @@
       "source_file": "src/tools/index.ts",
       "source_location": "L32",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_index_ts",
-      "target": "tools_index_toolresultcontent",
-      "confidence_score": 1.0
+      "target": "tools_index_toolresultcontent"
     },
     {
       "relation": "contains",
@@ -3471,9 +3471,9 @@
       "source_file": "src/tools/index.ts",
       "source_location": "L37",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_index_ts",
-      "target": "tools_index_toolresultevent",
-      "confidence_score": 1.0
+      "target": "tools_index_toolresultevent"
     },
     {
       "relation": "contains",
@@ -3481,9 +3481,9 @@
       "source_file": "src/tools/index.ts",
       "source_location": "L43",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_index_ts",
-      "target": "tools_index_toolsextensionstate",
-      "confidence_score": 1.0
+      "target": "tools_index_toolsextensionstate"
     },
     {
       "relation": "contains",
@@ -3491,9 +3491,9 @@
       "source_file": "src/tools/index.ts",
       "source_location": "L48",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_index_ts",
-      "target": "tools_index_syncgraphcontextprojectstate",
-      "confidence_score": 1.0
+      "target": "tools_index_syncgraphcontextprojectstate"
     },
     {
       "relation": "contains",
@@ -3501,9 +3501,9 @@
       "source_file": "src/tools/index.ts",
       "source_location": "L60",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_index_ts",
-      "target": "tools_index_resetgraphcontextsessionstate",
-      "confidence_score": 1.0
+      "target": "tools_index_resetgraphcontextsessionstate"
     },
     {
       "relation": "contains",
@@ -3511,9 +3511,9 @@
       "source_file": "src/tools/index.ts",
       "source_location": "L73",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_index_ts",
-      "target": "tools_index_createtoolsextensionstate",
-      "confidence_score": 1.0
+      "target": "tools_index_createtoolsextensionstate"
     },
     {
       "relation": "contains",
@@ -3521,9 +3521,9 @@
       "source_file": "src/tools/index.ts",
       "source_location": "L94",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_index_ts",
-      "target": "tools_index_buildgraphifysystemprompt",
-      "confidence_score": 1.0
+      "target": "tools_index_buildgraphifysystemprompt"
     },
     {
       "relation": "contains",
@@ -3531,9 +3531,9 @@
       "source_file": "src/tools/index.ts",
       "source_location": "L104",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_index_ts",
-      "target": "tools_index_extractaugmentcachekey",
-      "confidence_score": 1.0
+      "target": "tools_index_extractaugmentcachekey"
     },
     {
       "relation": "contains",
@@ -3541,9 +3541,9 @@
       "source_file": "src/tools/index.ts",
       "source_location": "L121",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_index_ts",
-      "target": "tools_index_buildgraphifyaugmentcontext",
-      "confidence_score": 1.0
+      "target": "tools_index_buildgraphifyaugmentcontext"
     },
     {
       "relation": "contains",
@@ -3551,9 +3551,9 @@
       "source_file": "src/tools/index.ts",
       "source_location": "L150",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_index_ts",
-      "target": "tools_index_config",
-      "confidence_score": 1.0
+      "target": "tools_index_config"
     },
     {
       "relation": "contains",
@@ -3561,9 +3561,9 @@
       "source_file": "src/tools/index.ts",
       "source_location": "L153",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_index_ts",
-      "target": "tools_index_state",
-      "confidence_score": 1.0
+      "target": "tools_index_state"
     },
     {
       "relation": "contains",
@@ -3571,9 +3571,9 @@
       "source_file": "src/tools/index.ts",
       "source_location": "L193",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_index_ts",
-      "target": "tools_index_event",
-      "confidence_score": 1.0
+      "target": "tools_index_event"
     },
     {
       "relation": "contains",
@@ -3581,9 +3581,9 @@
       "source_file": "src/tools/index.ts",
       "source_location": "L201",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_index_ts",
-      "target": "tools_index_cachekey",
-      "confidence_score": 1.0
+      "target": "tools_index_cachekey"
     },
     {
       "relation": "contains",
@@ -3591,9 +3591,9 @@
       "source_file": "src/tools/index.ts",
       "source_location": "L205",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_index_ts",
-      "target": "tools_index_augmenttext",
-      "confidence_score": 1.0
+      "target": "tools_index_augmenttext"
     },
     {
       "relation": "calls",
@@ -3602,9 +3602,9 @@
       "source_file": "src/tools/index.ts",
       "source_location": "L65",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_index_resetgraphcontextsessionstate",
-      "target": "tools_index_syncgraphcontextprojectstate",
-      "confidence_score": 1.0
+      "target": "tools_index_syncgraphcontextprojectstate"
     },
     {
       "relation": "calls",
@@ -3613,9 +3613,9 @@
       "source_file": "src/tools/index.ts",
       "source_location": "L86",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_index_createtoolsextensionstate",
-      "target": "tools_index_syncgraphcontextprojectstate",
-      "confidence_score": 1.0
+      "target": "tools_index_syncgraphcontextprojectstate"
     },
     {
       "relation": "contains",
@@ -3634,9 +3634,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "src_lib_runner_ts",
-      "confidence_score": 1.0
+      "target": "src_lib_runner_ts"
     },
     {
       "relation": "imports",
@@ -3645,9 +3645,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "lib_runner_execfn",
-      "confidence_score": 1.0
+      "target": "lib_runner_execfn"
     },
     {
       "relation": "imports",
@@ -3656,9 +3656,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "lib_runner_addurl",
-      "confidence_score": 1.0
+      "target": "lib_runner_addurl"
     },
     {
       "relation": "imports",
@@ -3667,9 +3667,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "lib_runner_buildgraph",
-      "confidence_score": 1.0
+      "target": "lib_runner_buildgraph"
     },
     {
       "relation": "imports",
@@ -3678,9 +3678,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "lib_runner_checkupgrade",
-      "confidence_score": 1.0
+      "target": "lib_runner_checkupgrade"
     },
     {
       "relation": "imports",
@@ -3689,9 +3689,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "lib_runner_clusteronly",
-      "confidence_score": 1.0
+      "target": "lib_runner_clusteronly"
     },
     {
       "relation": "imports",
@@ -3700,9 +3700,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "lib_runner_detectpython",
-      "confidence_score": 1.0
+      "target": "lib_runner_detectpython"
     },
     {
       "relation": "imports",
@@ -3711,9 +3711,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "lib_runner_ensureinstalled",
-      "confidence_score": 1.0
+      "target": "lib_runner_ensureinstalled"
     },
     {
       "relation": "imports",
@@ -3722,9 +3722,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "lib_runner_explainnode",
-      "confidence_score": 1.0
+      "target": "lib_runner_explainnode"
     },
     {
       "relation": "imports",
@@ -3733,9 +3733,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "lib_runner_exportcallflowhtml",
-      "confidence_score": 1.0
+      "target": "lib_runner_exportcallflowhtml"
     },
     {
       "relation": "imports",
@@ -3744,9 +3744,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "lib_runner_findpath",
-      "confidence_score": 1.0
+      "target": "lib_runner_findpath"
     },
     {
       "relation": "imports",
@@ -3755,9 +3755,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "lib_runner_querygraph",
-      "confidence_score": 1.0
+      "target": "lib_runner_querygraph"
     },
     {
       "relation": "imports",
@@ -3766,9 +3766,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "lib_runner_runextract",
-      "confidence_score": 1.0
+      "target": "lib_runner_runextract"
     },
     {
       "relation": "imports",
@@ -3777,9 +3777,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "lib_runner_runupgrade",
-      "confidence_score": 1.0
+      "target": "lib_runner_runupgrade"
     },
     {
       "relation": "imports",
@@ -3788,9 +3788,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "lib_runner_startwatch",
-      "confidence_score": 1.0
+      "target": "lib_runner_startwatch"
     },
     {
       "relation": "imports",
@@ -3799,9 +3799,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "lib_runner_updategraph",
-      "confidence_score": 1.0
+      "target": "lib_runner_updategraph"
     },
     {
       "relation": "contains",
@@ -3809,9 +3809,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L37",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "tools_graphify_tools_createexec",
-      "confidence_score": 1.0
+      "target": "tools_graphify_tools_createexec"
     },
     {
       "relation": "contains",
@@ -3819,9 +3819,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L55",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "tools_graphify_tools_buildparameters",
-      "confidence_score": 1.0
+      "target": "tools_graphify_tools_buildparameters"
     },
     {
       "relation": "contains",
@@ -3829,9 +3829,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L69",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "tools_graphify_tools_buildparams",
-      "confidence_score": 1.0
+      "target": "tools_graphify_tools_buildparams"
     },
     {
       "relation": "contains",
@@ -3839,9 +3839,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L71",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "tools_graphify_tools_builddetails",
-      "confidence_score": 1.0
+      "target": "tools_graphify_tools_builddetails"
     },
     {
       "relation": "contains",
@@ -3849,9 +3849,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L79",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "tools_graphify_tools_createbuildtool",
-      "confidence_score": 1.0
+      "target": "tools_graphify_tools_createbuildtool"
     },
     {
       "relation": "contains",
@@ -3859,9 +3859,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L211",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "tools_graphify_tools_queryparameters",
-      "confidence_score": 1.0
+      "target": "tools_graphify_tools_queryparameters"
     },
     {
       "relation": "contains",
@@ -3869,9 +3869,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L223",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "tools_graphify_tools_queryparams",
-      "confidence_score": 1.0
+      "target": "tools_graphify_tools_queryparams"
     },
     {
       "relation": "contains",
@@ -3879,9 +3879,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L225",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "tools_graphify_tools_querydetails",
-      "confidence_score": 1.0
+      "target": "tools_graphify_tools_querydetails"
     },
     {
       "relation": "contains",
@@ -3889,9 +3889,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L231",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "tools_graphify_tools_createquerytool",
-      "confidence_score": 1.0
+      "target": "tools_graphify_tools_createquerytool"
     },
     {
       "relation": "contains",
@@ -3899,9 +3899,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L351",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "tools_graphify_tools_pathparameters",
-      "confidence_score": 1.0
+      "target": "tools_graphify_tools_pathparameters"
     },
     {
       "relation": "contains",
@@ -3909,9 +3909,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L356",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "tools_graphify_tools_pathparams",
-      "confidence_score": 1.0
+      "target": "tools_graphify_tools_pathparams"
     },
     {
       "relation": "contains",
@@ -3919,9 +3919,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L358",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "tools_graphify_tools_pathdetails",
-      "confidence_score": 1.0
+      "target": "tools_graphify_tools_pathdetails"
     },
     {
       "relation": "contains",
@@ -3929,9 +3929,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L364",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "tools_graphify_tools_createpathtool",
-      "confidence_score": 1.0
+      "target": "tools_graphify_tools_createpathtool"
     },
     {
       "relation": "contains",
@@ -3939,9 +3939,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L451",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "tools_graphify_tools_explainparameters",
-      "confidence_score": 1.0
+      "target": "tools_graphify_tools_explainparameters"
     },
     {
       "relation": "contains",
@@ -3949,9 +3949,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L455",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "tools_graphify_tools_explainparams",
-      "confidence_score": 1.0
+      "target": "tools_graphify_tools_explainparams"
     },
     {
       "relation": "contains",
@@ -3959,9 +3959,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L457",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "tools_graphify_tools_explaindetails",
-      "confidence_score": 1.0
+      "target": "tools_graphify_tools_explaindetails"
     },
     {
       "relation": "contains",
@@ -3969,9 +3969,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L462",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "tools_graphify_tools_createexplaintool",
-      "confidence_score": 1.0
+      "target": "tools_graphify_tools_createexplaintool"
     },
     {
       "relation": "contains",
@@ -3979,9 +3979,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L544",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "tools_graphify_tools_addparameters",
-      "confidence_score": 1.0
+      "target": "tools_graphify_tools_addparameters"
     },
     {
       "relation": "contains",
@@ -3989,9 +3989,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L550",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "tools_graphify_tools_addparams",
-      "confidence_score": 1.0
+      "target": "tools_graphify_tools_addparams"
     },
     {
       "relation": "contains",
@@ -3999,9 +3999,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L552",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "tools_graphify_tools_adddetails",
-      "confidence_score": 1.0
+      "target": "tools_graphify_tools_adddetails"
     },
     {
       "relation": "contains",
@@ -4009,9 +4009,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L557",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "tools_graphify_tools_createaddtool",
-      "confidence_score": 1.0
+      "target": "tools_graphify_tools_createaddtool"
     },
     {
       "relation": "contains",
@@ -4019,9 +4019,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L672",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "tools_graphify_tools_updateparameters",
-      "confidence_score": 1.0
+      "target": "tools_graphify_tools_updateparameters"
     },
     {
       "relation": "contains",
@@ -4029,9 +4029,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L678",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "tools_graphify_tools_updateparams",
-      "confidence_score": 1.0
+      "target": "tools_graphify_tools_updateparams"
     },
     {
       "relation": "contains",
@@ -4039,9 +4039,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L680",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "tools_graphify_tools_updatedetails",
-      "confidence_score": 1.0
+      "target": "tools_graphify_tools_updatedetails"
     },
     {
       "relation": "contains",
@@ -4049,9 +4049,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L687",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "tools_graphify_tools_createupdatetool",
-      "confidence_score": 1.0
+      "target": "tools_graphify_tools_createupdatetool"
     },
     {
       "relation": "contains",
@@ -4059,9 +4059,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L817",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "tools_graphify_tools_watchparameters",
-      "confidence_score": 1.0
+      "target": "tools_graphify_tools_watchparameters"
     },
     {
       "relation": "contains",
@@ -4069,9 +4069,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L827",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "tools_graphify_tools_watchparams",
-      "confidence_score": 1.0
+      "target": "tools_graphify_tools_watchparams"
     },
     {
       "relation": "contains",
@@ -4079,9 +4079,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L829",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "tools_graphify_tools_watchdetails",
-      "confidence_score": 1.0
+      "target": "tools_graphify_tools_watchdetails"
     },
     {
       "relation": "contains",
@@ -4089,9 +4089,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L834",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "tools_graphify_tools_createwatchtool",
-      "confidence_score": 1.0
+      "target": "tools_graphify_tools_createwatchtool"
     },
     {
       "relation": "contains",
@@ -4099,9 +4099,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L916",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "tools_graphify_tools_clusterparameters",
-      "confidence_score": 1.0
+      "target": "tools_graphify_tools_clusterparameters"
     },
     {
       "relation": "contains",
@@ -4109,9 +4109,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L918",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "tools_graphify_tools_clusterparams",
-      "confidence_score": 1.0
+      "target": "tools_graphify_tools_clusterparams"
     },
     {
       "relation": "contains",
@@ -4119,9 +4119,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L920",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "tools_graphify_tools_clusterdetails",
-      "confidence_score": 1.0
+      "target": "tools_graphify_tools_clusterdetails"
     },
     {
       "relation": "contains",
@@ -4129,9 +4129,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L924",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "tools_graphify_tools_createclustertool",
-      "confidence_score": 1.0
+      "target": "tools_graphify_tools_createclustertool"
     },
     {
       "relation": "contains",
@@ -4139,9 +4139,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L999",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "tools_graphify_tools_extractparameters",
-      "confidence_score": 1.0
+      "target": "tools_graphify_tools_extractparameters"
     },
     {
       "relation": "contains",
@@ -4149,9 +4149,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L1031",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "tools_graphify_tools_extractparams",
-      "confidence_score": 1.0
+      "target": "tools_graphify_tools_extractparams"
     },
     {
       "relation": "contains",
@@ -4159,9 +4159,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L1033",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "tools_graphify_tools_extractdetails",
-      "confidence_score": 1.0
+      "target": "tools_graphify_tools_extractdetails"
     },
     {
       "relation": "contains",
@@ -4169,9 +4169,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L1043",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "tools_graphify_tools_createextracttool",
-      "confidence_score": 1.0
+      "target": "tools_graphify_tools_createextracttool"
     },
     {
       "relation": "contains",
@@ -4179,9 +4179,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L1167",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "tools_graphify_tools_exportcallflowparameters",
-      "confidence_score": 1.0
+      "target": "tools_graphify_tools_exportcallflowparameters"
     },
     {
       "relation": "contains",
@@ -4189,9 +4189,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L1178",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "tools_graphify_tools_exportcallflowparams",
-      "confidence_score": 1.0
+      "target": "tools_graphify_tools_exportcallflowparams"
     },
     {
       "relation": "contains",
@@ -4199,9 +4199,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L1180",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "tools_graphify_tools_exportcallflowdetails",
-      "confidence_score": 1.0
+      "target": "tools_graphify_tools_exportcallflowdetails"
     },
     {
       "relation": "contains",
@@ -4209,9 +4209,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L1184",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "tools_graphify_tools_createexportcallflowtool",
-      "confidence_score": 1.0
+      "target": "tools_graphify_tools_createexportcallflowtool"
     },
     {
       "relation": "contains",
@@ -4219,9 +4219,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L1265",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "tools_graphify_tools_upgradeparameters",
-      "confidence_score": 1.0
+      "target": "tools_graphify_tools_upgradeparameters"
     },
     {
       "relation": "contains",
@@ -4229,9 +4229,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L1275",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "tools_graphify_tools_upgradeparams",
-      "confidence_score": 1.0
+      "target": "tools_graphify_tools_upgradeparams"
     },
     {
       "relation": "contains",
@@ -4239,9 +4239,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L1277",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "tools_graphify_tools_upgradedetails",
-      "confidence_score": 1.0
+      "target": "tools_graphify_tools_upgradedetails"
     },
     {
       "relation": "contains",
@@ -4249,9 +4249,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L1286",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "tools_graphify_tools_createupgradetool",
-      "confidence_score": 1.0
+      "target": "tools_graphify_tools_createupgradetool"
     },
     {
       "relation": "contains",
@@ -4259,9 +4259,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L1449",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_tools_graphify_tools_ts",
-      "target": "tools_graphify_tools_createalltools",
-      "confidence_score": 1.0
+      "target": "tools_graphify_tools_createalltools"
     },
     {
       "relation": "contains",
@@ -4448,9 +4448,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L1463",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_graphify_tools_createalltools",
-      "target": "tools_graphify_tools_createextracttool",
-      "confidence_score": 1.0
+      "target": "tools_graphify_tools_createextracttool"
     },
     {
       "relation": "calls",
@@ -4459,9 +4459,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L1464",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_graphify_tools_createalltools",
-      "target": "tools_graphify_tools_createexportcallflowtool",
-      "confidence_score": 1.0
+      "target": "tools_graphify_tools_createexportcallflowtool"
     },
     {
       "relation": "calls",
@@ -4470,9 +4470,9 @@
       "source_file": "src/tools/graphify-tools.ts",
       "source_location": "L1465",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_graphify_tools_createalltools",
-      "target": "tools_graphify_tools_createupgradetool",
-      "confidence_score": 1.0
+      "target": "tools_graphify_tools_createupgradetool"
     },
     {
       "relation": "imports",
@@ -4502,9 +4502,9 @@
       "source_file": "src/lib/runner.test.ts",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_lib_runner_test_ts",
-      "target": "lib_runner_detectfiles",
-      "confidence_score": 1.0
+      "target": "lib_runner_detectfiles"
     },
     {
       "relation": "imports",
@@ -4513,9 +4513,9 @@
       "source_file": "src/lib/runner.test.ts",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_lib_runner_test_ts",
-      "target": "lib_runner_detectpython",
-      "confidence_score": 1.0
+      "target": "lib_runner_detectpython"
     },
     {
       "relation": "imports",
@@ -4524,9 +4524,9 @@
       "source_file": "src/lib/runner.test.ts",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_lib_runner_test_ts",
-      "target": "lib_runner_ensuregraphifygitignore",
-      "confidence_score": 1.0
+      "target": "lib_runner_ensuregraphifygitignore"
     },
     {
       "relation": "imports",
@@ -4535,9 +4535,9 @@
       "source_file": "src/lib/runner.test.ts",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_lib_runner_test_ts",
-      "target": "lib_runner_ensureinstalled",
-      "confidence_score": 1.0
+      "target": "lib_runner_ensureinstalled"
     },
     {
       "relation": "contains",
@@ -4545,9 +4545,9 @@
       "source_file": "src/lib/runner.test.ts",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_lib_runner_test_ts",
-      "target": "lib_runner_test_createmockexec",
-      "confidence_score": 1.0
+      "target": "lib_runner_test_createmockexec"
     },
     {
       "relation": "contains",
@@ -4565,9 +4565,9 @@
       "source_file": "src/lib/runner.ts",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_lib_runner_ts",
-      "target": "lib_runner_execoptions",
-      "confidence_score": 1.0
+      "target": "lib_runner_execoptions"
     },
     {
       "relation": "contains",
@@ -4575,9 +4575,9 @@
       "source_file": "src/lib/runner.ts",
       "source_location": "L19",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_lib_runner_ts",
-      "target": "lib_runner_execresult",
-      "confidence_score": 1.0
+      "target": "lib_runner_execresult"
     },
     {
       "relation": "contains",
@@ -4585,9 +4585,9 @@
       "source_file": "src/lib/runner.ts",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_lib_runner_ts",
-      "target": "lib_runner_execfn",
-      "confidence_score": 1.0
+      "target": "lib_runner_execfn"
     },
     {
       "relation": "contains",
@@ -4595,9 +4595,9 @@
       "source_file": "src/lib/runner.ts",
       "source_location": "L27",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_lib_runner_ts",
-      "target": "lib_runner_graphify_gitignore_required",
-      "confidence_score": 1.0
+      "target": "lib_runner_graphify_gitignore_required"
     },
     {
       "relation": "contains",
@@ -4605,9 +4605,9 @@
       "source_file": "src/lib/runner.ts",
       "source_location": "L34",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_lib_runner_ts",
-      "target": "lib_runner_graphify_gitignore_legacy",
-      "confidence_score": 1.0
+      "target": "lib_runner_graphify_gitignore_legacy"
     },
     {
       "relation": "contains",
@@ -4615,9 +4615,9 @@
       "source_file": "src/lib/runner.ts",
       "source_location": "L41",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_lib_runner_ts",
-      "target": "lib_runner_detectpython",
-      "confidence_score": 1.0
+      "target": "lib_runner_detectpython"
     },
     {
       "relation": "contains",
@@ -4625,9 +4625,9 @@
       "source_file": "src/lib/runner.ts",
       "source_location": "L68",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_lib_runner_ts",
-      "target": "lib_runner_ensureinstalled",
-      "confidence_score": 1.0
+      "target": "lib_runner_ensureinstalled"
     },
     {
       "relation": "contains",
@@ -4635,9 +4635,9 @@
       "source_file": "src/lib/runner.ts",
       "source_location": "L100",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_lib_runner_ts",
-      "target": "lib_runner_detectresult",
-      "confidence_score": 1.0
+      "target": "lib_runner_detectresult"
     },
     {
       "relation": "contains",
@@ -4645,9 +4645,9 @@
       "source_file": "src/lib/runner.ts",
       "source_location": "L107",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_lib_runner_ts",
-      "target": "lib_runner_detectfiles",
-      "confidence_score": 1.0
+      "target": "lib_runner_detectfiles"
     },
     {
       "relation": "contains",
@@ -4655,9 +4655,9 @@
       "source_file": "src/lib/runner.ts",
       "source_location": "L128",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_lib_runner_ts",
-      "target": "lib_runner_buildoptions",
-      "confidence_score": 1.0
+      "target": "lib_runner_buildoptions"
     },
     {
       "relation": "contains",
@@ -4665,9 +4665,9 @@
       "source_file": "src/lib/runner.ts",
       "source_location": "L139",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_lib_runner_ts",
-      "target": "lib_runner_buildgraph",
-      "confidence_score": 1.0
+      "target": "lib_runner_buildgraph"
     },
     {
       "relation": "contains",
@@ -4675,9 +4675,9 @@
       "source_file": "src/lib/runner.ts",
       "source_location": "L448",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_lib_runner_ts",
-      "target": "lib_runner_queryoptions",
-      "confidence_score": 1.0
+      "target": "lib_runner_queryoptions"
     },
     {
       "relation": "contains",
@@ -4685,9 +4685,9 @@
       "source_file": "src/lib/runner.ts",
       "source_location": "L454",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_lib_runner_ts",
-      "target": "lib_runner_querygraph",
-      "confidence_score": 1.0
+      "target": "lib_runner_querygraph"
     },
     {
       "relation": "contains",
@@ -4695,9 +4695,9 @@
       "source_file": "src/lib/runner.ts",
       "source_location": "L555",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_lib_runner_ts",
-      "target": "lib_runner_findpath",
-      "confidence_score": 1.0
+      "target": "lib_runner_findpath"
     },
     {
       "relation": "contains",
@@ -4705,9 +4705,9 @@
       "source_file": "src/lib/runner.ts",
       "source_location": "L624",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_lib_runner_ts",
-      "target": "lib_runner_explainnode",
-      "confidence_score": 1.0
+      "target": "lib_runner_explainnode"
     },
     {
       "relation": "contains",
@@ -4715,9 +4715,9 @@
       "source_file": "src/lib/runner.ts",
       "source_location": "L684",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_lib_runner_ts",
-      "target": "lib_runner_addoptions",
-      "confidence_score": 1.0
+      "target": "lib_runner_addoptions"
     },
     {
       "relation": "contains",
@@ -4725,9 +4725,9 @@
       "source_file": "src/lib/runner.ts",
       "source_location": "L690",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_lib_runner_ts",
-      "target": "lib_runner_addurl",
-      "confidence_score": 1.0
+      "target": "lib_runner_addurl"
     },
     {
       "relation": "contains",
@@ -4735,9 +4735,9 @@
       "source_file": "src/lib/runner.ts",
       "source_location": "L732",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_lib_runner_ts",
-      "target": "lib_runner_updategraph",
-      "confidence_score": 1.0
+      "target": "lib_runner_updategraph"
     },
     {
       "relation": "contains",
@@ -4745,9 +4745,9 @@
       "source_file": "src/lib/runner.ts",
       "source_location": "L783",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_lib_runner_ts",
-      "target": "lib_runner_startwatch",
-      "confidence_score": 1.0
+      "target": "lib_runner_startwatch"
     },
     {
       "relation": "contains",
@@ -4755,9 +4755,9 @@
       "source_file": "src/lib/runner.ts",
       "source_location": "L805",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_lib_runner_ts",
-      "target": "lib_runner_clusteronly",
-      "confidence_score": 1.0
+      "target": "lib_runner_clusteronly"
     },
     {
       "relation": "contains",
@@ -4765,9 +4765,9 @@
       "source_file": "src/lib/runner.ts",
       "source_location": "L842",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_lib_runner_ts",
-      "target": "lib_runner_extractoptions",
-      "confidence_score": 1.0
+      "target": "lib_runner_extractoptions"
     },
     {
       "relation": "contains",
@@ -4775,9 +4775,9 @@
       "source_file": "src/lib/runner.ts",
       "source_location": "L854",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_lib_runner_ts",
-      "target": "lib_runner_extractresult",
-      "confidence_score": 1.0
+      "target": "lib_runner_extractresult"
     },
     {
       "relation": "contains",
@@ -4785,9 +4785,9 @@
       "source_file": "src/lib/runner.ts",
       "source_location": "L862",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_lib_runner_ts",
-      "target": "lib_runner_runextract",
-      "confidence_score": 1.0
+      "target": "lib_runner_runextract"
     },
     {
       "relation": "contains",
@@ -4795,9 +4795,9 @@
       "source_file": "src/lib/runner.ts",
       "source_location": "L918",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_lib_runner_ts",
-      "target": "lib_runner_exportcallflowhtml",
-      "confidence_score": 1.0
+      "target": "lib_runner_exportcallflowhtml"
     },
     {
       "relation": "contains",
@@ -4805,9 +4805,9 @@
       "source_file": "src/lib/runner.ts",
       "source_location": "L946",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_lib_runner_ts",
-      "target": "lib_runner_generatetree",
-      "confidence_score": 1.0
+      "target": "lib_runner_generatetree"
     },
     {
       "relation": "contains",
@@ -4815,9 +4815,9 @@
       "source_file": "src/lib/runner.ts",
       "source_location": "L970",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_lib_runner_ts",
-      "target": "lib_runner_hookaction",
-      "confidence_score": 1.0
+      "target": "lib_runner_hookaction"
     },
     {
       "relation": "contains",
@@ -4825,9 +4825,9 @@
       "source_file": "src/lib/runner.ts",
       "source_location": "L988",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_lib_runner_ts",
-      "target": "lib_runner_pushneo4j",
-      "confidence_score": 1.0
+      "target": "lib_runner_pushneo4j"
     },
     {
       "relation": "contains",
@@ -4835,9 +4835,9 @@
       "source_file": "src/lib/runner.ts",
       "source_location": "L1027",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_lib_runner_ts",
-      "target": "lib_runner_saveresult",
-      "confidence_score": 1.0
+      "target": "lib_runner_saveresult"
     },
     {
       "relation": "contains",
@@ -4845,9 +4845,9 @@
       "source_file": "src/lib/runner.ts",
       "source_location": "L1050",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_lib_runner_ts",
-      "target": "lib_runner_clonerepo",
-      "confidence_score": 1.0
+      "target": "lib_runner_clonerepo"
     },
     {
       "relation": "contains",
@@ -4855,9 +4855,9 @@
       "source_file": "src/lib/runner.ts",
       "source_location": "L1071",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_lib_runner_ts",
-      "target": "lib_runner_mergegraphs",
-      "confidence_score": 1.0
+      "target": "lib_runner_mergegraphs"
     },
     {
       "relation": "contains",
@@ -4865,9 +4865,9 @@
       "source_file": "src/lib/runner.ts",
       "source_location": "L1094",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_lib_runner_ts",
-      "target": "lib_runner_upgradecheckresult",
-      "confidence_score": 1.0
+      "target": "lib_runner_upgradecheckresult"
     },
     {
       "relation": "contains",
@@ -4875,9 +4875,9 @@
       "source_file": "src/lib/runner.ts",
       "source_location": "L1100",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_lib_runner_ts",
-      "target": "lib_runner_upgraderunresult",
-      "confidence_score": 1.0
+      "target": "lib_runner_upgraderunresult"
     },
     {
       "relation": "contains",
@@ -4885,9 +4885,9 @@
       "source_file": "src/lib/runner.ts",
       "source_location": "L1107",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_lib_runner_ts",
-      "target": "lib_runner_checkupgrade",
-      "confidence_score": 1.0
+      "target": "lib_runner_checkupgrade"
     },
     {
       "relation": "contains",
@@ -4895,9 +4895,9 @@
       "source_file": "src/lib/runner.ts",
       "source_location": "L1147",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_lib_runner_ts",
-      "target": "lib_runner_runupgrade",
-      "confidence_score": 1.0
+      "target": "lib_runner_runupgrade"
     },
     {
       "relation": "contains",
@@ -4905,9 +4905,9 @@
       "source_file": "src/lib/runner.ts",
       "source_location": "L1180",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_lib_runner_ts",
-      "target": "lib_runner_ensuregraphifygitignore",
-      "confidence_score": 1.0
+      "target": "lib_runner_ensuregraphifygitignore"
     },
     {
       "relation": "contains",
@@ -4915,9 +4915,9 @@
       "source_file": "src/lib/runner.ts",
       "source_location": "L1217",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_lib_runner_ts",
-      "target": "lib_runner_escapeshell",
-      "confidence_score": 1.0
+      "target": "lib_runner_escapeshell"
     },
     {
       "relation": "imports_from",
@@ -4926,9 +4926,9 @@
       "source_file": "src/commands/index.ts",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_commands_index_ts",
-      "target": "src_lib_runner_ts",
-      "confidence_score": 1.0
+      "target": "src_lib_runner_ts"
     },
     {
       "relation": "imports",
@@ -4937,9 +4937,9 @@
       "source_file": "src/commands/index.ts",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_commands_index_ts",
-      "target": "lib_runner_execfn",
-      "confidence_score": 1.0
+      "target": "lib_runner_execfn"
     },
     {
       "relation": "imports",
@@ -4948,9 +4948,9 @@
       "source_file": "src/commands/index.ts",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_commands_index_ts",
-      "target": "lib_runner_detectpython",
-      "confidence_score": 1.0
+      "target": "lib_runner_detectpython"
     },
     {
       "relation": "calls",
@@ -5068,9 +5068,9 @@
       "source_file": "src/commands/index.ts",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_commands_index_ts",
-      "target": "lib_runner_ensureinstalled",
-      "confidence_score": 1.0
+      "target": "lib_runner_ensureinstalled"
     },
     {
       "relation": "calls",
@@ -5296,9 +5296,9 @@
       "source_file": "src/commands/index.ts",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_commands_index_ts",
-      "target": "lib_runner_querygraph",
-      "confidence_score": 1.0
+      "target": "lib_runner_querygraph"
     },
     {
       "relation": "calls",
@@ -5350,9 +5350,9 @@
       "source_file": "src/commands/index.ts",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_commands_index_ts",
-      "target": "lib_runner_findpath",
-      "confidence_score": 1.0
+      "target": "lib_runner_findpath"
     },
     {
       "relation": "calls",
@@ -5415,9 +5415,9 @@
       "source_file": "src/commands/index.ts",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_commands_index_ts",
-      "target": "lib_runner_explainnode",
-      "confidence_score": 1.0
+      "target": "lib_runner_explainnode"
     },
     {
       "relation": "calls",
@@ -5512,9 +5512,9 @@
       "source_file": "src/commands/index.ts",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_commands_index_ts",
-      "target": "lib_runner_updategraph",
-      "confidence_score": 1.0
+      "target": "lib_runner_updategraph"
     },
     {
       "relation": "calls",
@@ -5598,9 +5598,9 @@
       "source_file": "src/commands/index.ts",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_commands_index_ts",
-      "target": "lib_runner_clusteronly",
-      "confidence_score": 1.0
+      "target": "lib_runner_clusteronly"
     },
     {
       "relation": "calls",
@@ -5652,9 +5652,9 @@
       "source_file": "src/lib/runner.ts",
       "source_location": "L871",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "lib_runner_runextract",
-      "target": "lib_runner_escapeshell",
-      "confidence_score": 1.0
+      "target": "lib_runner_escapeshell"
     },
     {
       "relation": "calls",
@@ -5663,9 +5663,9 @@
       "source_file": "src/lib/runner.ts",
       "source_location": "L927",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "lib_runner_exportcallflowhtml",
-      "target": "lib_runner_escapeshell",
-      "confidence_score": 1.0
+      "target": "lib_runner_escapeshell"
     },
     {
       "relation": "calls",
@@ -5695,9 +5695,9 @@
       "source_file": "src/commands/index.ts",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_commands_index_ts",
-      "target": "lib_runner_hookaction",
-      "confidence_score": 1.0
+      "target": "lib_runner_hookaction"
     },
     {
       "relation": "calls",
@@ -5822,9 +5822,9 @@
       "source_file": "src/lib/runner.ts",
       "source_location": "L1148",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "lib_runner_runupgrade",
-      "target": "lib_runner_checkupgrade",
-      "confidence_score": 1.0
+      "target": "lib_runner_checkupgrade"
     },
     {
       "relation": "imports",
@@ -5863,9 +5863,9 @@
       "source_file": "src/commands/graphify.command.integration.test.ts",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_commands_graphify_command_integration_test_ts",
-      "target": "commands_graphify_command_integration_test_createbashmock",
-      "confidence_score": 1.0
+      "target": "commands_graphify_command_integration_test_createbashmock"
     },
     {
       "relation": "contains",
@@ -5873,9 +5873,9 @@
       "source_file": "src/commands/graphify.command.integration.test.ts",
       "source_location": "L23",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_commands_graphify_command_integration_test_ts",
-      "target": "commands_graphify_command_integration_test_textofcontent",
-      "confidence_score": 1.0
+      "target": "commands_graphify_command_integration_test_textofcontent"
     },
     {
       "relation": "contains",
@@ -5883,9 +5883,9 @@
       "source_file": "src/commands/graphify.command.integration.test.ts",
       "source_location": "L35",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_commands_graphify_command_integration_test_ts",
-      "target": "commands_graphify_command_integration_test_createsession",
-      "confidence_score": 1.0
+      "target": "commands_graphify_command_integration_test_createsession"
     },
     {
       "relation": "calls",
@@ -5934,9 +5934,9 @@
       "source_file": "src/commands/index.ts",
       "source_location": "L20",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_commands_index_ts",
-      "target": "commands_index_subcommands",
-      "confidence_score": 1.0
+      "target": "commands_index_subcommands"
     },
     {
       "relation": "contains",
@@ -5944,9 +5944,9 @@
       "source_file": "src/commands/index.ts",
       "source_location": "L78",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_commands_index_ts",
-      "target": "commands_index_build_flags",
-      "confidence_score": 1.0
+      "target": "commands_index_build_flags"
     },
     {
       "relation": "contains",
@@ -5954,9 +5954,9 @@
       "source_file": "src/commands/index.ts",
       "source_location": "L102",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_commands_index_ts",
-      "target": "commands_index_query_flags",
-      "confidence_score": 1.0
+      "target": "commands_index_query_flags"
     },
     {
       "relation": "contains",
@@ -5964,9 +5964,9 @@
       "source_file": "src/commands/index.ts",
       "source_location": "L111",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_commands_index_ts",
-      "target": "commands_index_getcompletions",
-      "confidence_score": 1.0
+      "target": "commands_index_getcompletions"
     },
     {
       "relation": "contains",
@@ -5974,9 +5974,9 @@
       "source_file": "src/commands/index.ts",
       "source_location": "L264",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_commands_index_ts",
-      "target": "commands_index_parsedargs",
-      "confidence_score": 1.0
+      "target": "commands_index_parsedargs"
     },
     {
       "relation": "contains",
@@ -5984,9 +5984,9 @@
       "source_file": "src/commands/index.ts",
       "source_location": "L281",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_commands_index_ts",
-      "target": "commands_index_parseargs",
-      "confidence_score": 1.0
+      "target": "commands_index_parseargs"
     },
     {
       "relation": "contains",
@@ -5994,9 +5994,9 @@
       "source_file": "src/commands/index.ts",
       "source_location": "L359",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_commands_index_ts",
-      "target": "commands_index_createexec",
-      "confidence_score": 1.0
+      "target": "commands_index_createexec"
     },
     {
       "relation": "contains",
@@ -6004,9 +6004,9 @@
       "source_file": "src/commands/index.ts",
       "source_location": "L377",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_commands_index_ts",
-      "target": "commands_index_handlebuild",
-      "confidence_score": 1.0
+      "target": "commands_index_handlebuild"
     },
     {
       "relation": "contains",
@@ -6014,9 +6014,9 @@
       "source_file": "src/commands/index.ts",
       "source_location": "L442",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_commands_index_ts",
-      "target": "commands_index_handlequery",
-      "confidence_score": 1.0
+      "target": "commands_index_handlequery"
     },
     {
       "relation": "contains",
@@ -6024,9 +6024,9 @@
       "source_file": "src/commands/index.ts",
       "source_location": "L469",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_commands_index_ts",
-      "target": "commands_index_handlepath",
-      "confidence_score": 1.0
+      "target": "commands_index_handlepath"
     },
     {
       "relation": "contains",
@@ -6034,9 +6034,9 @@
       "source_file": "src/commands/index.ts",
       "source_location": "L489",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_commands_index_ts",
-      "target": "commands_index_handleexplain",
-      "confidence_score": 1.0
+      "target": "commands_index_handleexplain"
     },
     {
       "relation": "contains",
@@ -6044,9 +6044,9 @@
       "source_file": "src/commands/index.ts",
       "source_location": "L512",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_commands_index_ts",
-      "target": "commands_index_handleadd",
-      "confidence_score": 1.0
+      "target": "commands_index_handleadd"
     },
     {
       "relation": "contains",
@@ -6054,9 +6054,9 @@
       "source_file": "src/commands/index.ts",
       "source_location": "L532",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_commands_index_ts",
-      "target": "commands_index_handleupdate",
-      "confidence_score": 1.0
+      "target": "commands_index_handleupdate"
     },
     {
       "relation": "contains",
@@ -6064,9 +6064,9 @@
       "source_file": "src/commands/index.ts",
       "source_location": "L539",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_commands_index_ts",
-      "target": "commands_index_handlewatch",
-      "confidence_score": 1.0
+      "target": "commands_index_handlewatch"
     },
     {
       "relation": "contains",
@@ -6074,9 +6074,9 @@
       "source_file": "src/commands/index.ts",
       "source_location": "L553",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_commands_index_ts",
-      "target": "commands_index_handlecluster",
-      "confidence_score": 1.0
+      "target": "commands_index_handlecluster"
     },
     {
       "relation": "contains",
@@ -6084,9 +6084,9 @@
       "source_file": "src/commands/index.ts",
       "source_location": "L571",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_commands_index_ts",
-      "target": "commands_index_handlehook",
-      "confidence_score": 1.0
+      "target": "commands_index_handlehook"
     },
     {
       "relation": "contains",
@@ -6094,9 +6094,9 @@
       "source_file": "src/commands/index.ts",
       "source_location": "L596",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_commands_index_ts",
-      "target": "commands_index_handleextract",
-      "confidence_score": 1.0
+      "target": "commands_index_handleextract"
     },
     {
       "relation": "contains",
@@ -6104,9 +6104,9 @@
       "source_file": "src/commands/index.ts",
       "source_location": "L620",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_commands_index_ts",
-      "target": "commands_index_handleuninstall",
-      "confidence_score": 1.0
+      "target": "commands_index_handleuninstall"
     },
     {
       "relation": "contains",
@@ -6114,9 +6114,9 @@
       "source_file": "src/commands/index.ts",
       "source_location": "L652",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_commands_index_ts",
-      "target": "commands_index_config",
-      "confidence_score": 1.0
+      "target": "commands_index_config"
     },
     {
       "relation": "contains",
@@ -6124,9 +6124,9 @@
       "source_file": "src/commands/index.ts",
       "source_location": "L657",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_commands_index_ts",
-      "target": "commands_index_getargumentcompletions",
-      "confidence_score": 1.0
+      "target": "commands_index_getargumentcompletions"
     },
     {
       "relation": "contains",
@@ -6134,9 +6134,9 @@
       "source_file": "src/commands/index.ts",
       "source_location": "L660",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_commands_index_ts",
-      "target": "commands_index_handler",
-      "confidence_score": 1.0
+      "target": "commands_index_handler"
     },
     {
       "relation": "calls",
@@ -6253,9 +6253,9 @@
       "source_file": "src/commands/index.ts",
       "source_location": "L625",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "commands_index_handleuninstall",
-      "target": "commands_index_createexec",
-      "confidence_score": 1.0
+      "target": "commands_index_createexec"
     },
     {
       "relation": "contains",
@@ -6463,9 +6463,9 @@
       "source_file": "src/commands/index.ts",
       "source_location": "L693",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "commands_index_handler",
-      "target": "commands_index_handleextract",
-      "confidence_score": 1.0
+      "target": "commands_index_handleextract"
     },
     {
       "relation": "calls",
@@ -6474,9 +6474,9 @@
       "source_file": "src/commands/index.ts",
       "source_location": "L696",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "commands_index_handler",
-      "target": "commands_index_handleuninstall",
-      "confidence_score": 1.0
+      "target": "commands_index_handleuninstall"
     },
     {
       "relation": "contains",
@@ -6504,9 +6504,9 @@
       "source_file": "CHANGELOG.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "changelog_md",
-      "target": "pi_graphify_changelog_changelog",
-      "confidence_score": 1.0
+      "target": "pi_graphify_changelog_changelog"
     },
     {
       "relation": "contains",
@@ -6514,9 +6514,9 @@
       "source_file": "CHANGELOG.md",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pi_graphify_changelog_changelog",
-      "target": "pi_graphify_changelog_unreleased",
-      "confidence_score": 1.0
+      "target": "pi_graphify_changelog_unreleased"
     },
     {
       "relation": "contains",
@@ -6524,9 +6524,9 @@
       "source_file": "CHANGELOG.md",
       "source_location": "L31",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pi_graphify_changelog_changelog",
-      "target": "pi_graphify_changelog_0_1_2_2026_05_09",
-      "confidence_score": 1.0
+      "target": "pi_graphify_changelog_0_1_2_2026_05_09"
     },
     {
       "relation": "contains",
@@ -6534,9 +6534,9 @@
       "source_file": "CHANGELOG.md",
       "source_location": "L39",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pi_graphify_changelog_changelog",
-      "target": "pi_graphify_changelog_0_1_1_2026_05_09",
-      "confidence_score": 1.0
+      "target": "pi_graphify_changelog_0_1_1_2026_05_09"
     },
     {
       "relation": "contains",
@@ -6544,9 +6544,9 @@
       "source_file": "CHANGELOG.md",
       "source_location": "L71",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pi_graphify_changelog_changelog",
-      "target": "pi_graphify_changelog_0_1_0_2025_05_06",
-      "confidence_score": 1.0
+      "target": "pi_graphify_changelog_0_1_0_2025_05_06"
     },
     {
       "relation": "contains",
@@ -6554,9 +6554,9 @@
       "source_file": "CHANGELOG.md",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pi_graphify_changelog_unreleased",
-      "target": "pi_graphify_changelog_added",
-      "confidence_score": 1.0
+      "target": "pi_graphify_changelog_added"
     },
     {
       "relation": "contains",
@@ -6564,9 +6564,9 @@
       "source_file": "CHANGELOG.md",
       "source_location": "L26",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pi_graphify_changelog_unreleased",
-      "target": "pi_graphify_changelog_changed",
-      "confidence_score": 1.0
+      "target": "pi_graphify_changelog_changed"
     },
     {
       "relation": "contains",
@@ -6574,9 +6574,9 @@
       "source_file": "CHANGELOG.md",
       "source_location": "L33",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pi_graphify_changelog_0_1_2_2026_05_09",
-      "target": "pi_graphify_changelog_changed_33",
-      "confidence_score": 1.0
+      "target": "pi_graphify_changelog_changed_33"
     },
     {
       "relation": "contains",
@@ -6584,9 +6584,9 @@
       "source_file": "CHANGELOG.md",
       "source_location": "L41",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pi_graphify_changelog_0_1_1_2026_05_09",
-      "target": "pi_graphify_changelog_added_41",
-      "confidence_score": 1.0
+      "target": "pi_graphify_changelog_added_41"
     },
     {
       "relation": "contains",
@@ -6594,9 +6594,9 @@
       "source_file": "CHANGELOG.md",
       "source_location": "L56",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pi_graphify_changelog_0_1_1_2026_05_09",
-      "target": "pi_graphify_changelog_fixed",
-      "confidence_score": 1.0
+      "target": "pi_graphify_changelog_fixed"
     },
     {
       "relation": "contains",
@@ -6604,9 +6604,9 @@
       "source_file": "CHANGELOG.md",
       "source_location": "L73",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pi_graphify_changelog_0_1_0_2025_05_06",
-      "target": "pi_graphify_changelog_added_73",
-      "confidence_score": 1.0
+      "target": "pi_graphify_changelog_added_73"
     },
     {
       "relation": "contains",
@@ -6614,9 +6614,9 @@
       "source_file": "README.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_md",
-      "target": "pi_graphify_readme_gaodes_pi_graphify",
-      "confidence_score": 1.0
+      "target": "pi_graphify_readme_gaodes_pi_graphify"
     },
     {
       "relation": "contains",
@@ -6624,9 +6624,9 @@
       "source_file": "README.md",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pi_graphify_readme_gaodes_pi_graphify",
-      "target": "pi_graphify_readme_tools",
-      "confidence_score": 1.0
+      "target": "pi_graphify_readme_tools"
     },
     {
       "relation": "contains",
@@ -6634,9 +6634,9 @@
       "source_file": "README.md",
       "source_location": "L27",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pi_graphify_readme_gaodes_pi_graphify",
-      "target": "pi_graphify_readme_commands",
-      "confidence_score": 1.0
+      "target": "pi_graphify_readme_commands"
     },
     {
       "relation": "contains",
@@ -6644,9 +6644,9 @@
       "source_file": "README.md",
       "source_location": "L74",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pi_graphify_readme_gaodes_pi_graphify",
-      "target": "pi_graphify_readme_prerequisites",
-      "confidence_score": 1.0
+      "target": "pi_graphify_readme_prerequisites"
     },
     {
       "relation": "contains",
@@ -6654,9 +6654,9 @@
       "source_file": "README.md",
       "source_location": "L79",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pi_graphify_readme_gaodes_pi_graphify",
-      "target": "pi_graphify_readme_install",
-      "confidence_score": 1.0
+      "target": "pi_graphify_readme_install"
     },
     {
       "relation": "contains",
@@ -6664,9 +6664,9 @@
       "source_file": "README.md",
       "source_location": "L85",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pi_graphify_readme_gaodes_pi_graphify",
-      "target": "pi_graphify_readme_configuration",
-      "confidence_score": 1.0
+      "target": "pi_graphify_readme_configuration"
     },
     {
       "relation": "contains",
@@ -6674,9 +6674,9 @@
       "source_file": "README.md",
       "source_location": "L114",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pi_graphify_readme_gaodes_pi_graphify",
-      "target": "pi_graphify_readme_git_tracking_policy",
-      "confidence_score": 1.0
+      "target": "pi_graphify_readme_git_tracking_policy"
     },
     {
       "relation": "contains",
@@ -6684,9 +6684,9 @@
       "source_file": "README.md",
       "source_location": "L127",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pi_graphify_readme_gaodes_pi_graphify",
-      "target": "pi_graphify_readme_source",
-      "confidence_score": 1.0
+      "target": "pi_graphify_readme_source"
     },
     {
       "relation": "contains",
@@ -6694,9 +6694,9 @@
       "source_file": "README.md",
       "source_location": "L33",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pi_graphify_readme_commands",
-      "target": "pi_graphify_readme_subcommands_and_flags",
-      "confidence_score": 1.0
+      "target": "pi_graphify_readme_subcommands_and_flags"
     },
     {
       "relation": "contains",
@@ -6704,9 +6704,9 @@
       "source_file": "README.md",
       "source_location": "L35",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pi_graphify_readme_subcommands_and_flags",
-      "target": "pi_graphify_readme_codeblock_1",
-      "confidence_score": 1.0
+      "target": "pi_graphify_readme_codeblock_1"
     },
     {
       "relation": "contains",
@@ -6714,9 +6714,9 @@
       "source_file": "README.md",
       "source_location": "L81",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pi_graphify_readme_install",
-      "target": "pi_graphify_readme_codeblock_2",
-      "confidence_score": 1.0
+      "target": "pi_graphify_readme_codeblock_2"
     },
     {
       "relation": "contains",
@@ -6724,9 +6724,9 @@
       "source_file": "README.md",
       "source_location": "L102",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pi_graphify_readme_configuration",
-      "target": "pi_graphify_readme_auto_context_behavior",
-      "confidence_score": 1.0
+      "target": "pi_graphify_readme_auto_context_behavior"
     },
     {
       "relation": "contains",
@@ -6734,9 +6734,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_md",
-      "target": "pi_graphify_agents_pi_graphify",
-      "confidence_score": 1.0
+      "target": "pi_graphify_agents_pi_graphify"
     },
     {
       "relation": "contains",
@@ -6744,9 +6744,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L79",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_md",
-      "target": "pi_graphify_agents_gitnexus_code_intelligence",
-      "confidence_score": 1.0
+      "target": "pi_graphify_agents_gitnexus_code_intelligence"
     },
     {
       "relation": "contains",
@@ -6754,9 +6754,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pi_graphify_agents_pi_graphify",
-      "target": "pi_graphify_agents_architecture",
-      "confidence_score": 1.0
+      "target": "pi_graphify_agents_architecture"
     },
     {
       "relation": "contains",
@@ -6764,9 +6764,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L16",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pi_graphify_agents_pi_graphify",
-      "target": "pi_graphify_agents_tools_11",
-      "confidence_score": 1.0
+      "target": "pi_graphify_agents_tools_11"
     },
     {
       "relation": "contains",
@@ -6774,9 +6774,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L32",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pi_graphify_agents_pi_graphify",
-      "target": "pi_graphify_agents_commands",
-      "confidence_score": 1.0
+      "target": "pi_graphify_agents_commands"
     },
     {
       "relation": "contains",
@@ -6784,9 +6784,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L39",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pi_graphify_agents_pi_graphify",
-      "target": "pi_graphify_agents_runner_functions_not_yet_exposed_as_tools",
-      "confidence_score": 1.0
+      "target": "pi_graphify_agents_runner_functions_not_yet_exposed_as_tools"
     },
     {
       "relation": "contains",
@@ -6794,9 +6794,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L49",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pi_graphify_agents_pi_graphify",
-      "target": "pi_graphify_agents_cli_coverage_gaps",
-      "confidence_score": 1.0
+      "target": "pi_graphify_agents_cli_coverage_gaps"
     },
     {
       "relation": "contains",
@@ -6804,9 +6804,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L63",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pi_graphify_agents_pi_graphify",
-      "target": "pi_graphify_agents_deviation_notes",
-      "confidence_score": 1.0
+      "target": "pi_graphify_agents_deviation_notes"
     },
     {
       "relation": "contains",
@@ -6814,9 +6814,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L69",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pi_graphify_agents_pi_graphify",
-      "target": "pi_graphify_agents_dependencies",
-      "confidence_score": 1.0
+      "target": "pi_graphify_agents_dependencies"
     },
     {
       "relation": "contains",
@@ -6824,9 +6824,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L74",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pi_graphify_agents_pi_graphify",
-      "target": "pi_graphify_agents_config",
-      "confidence_score": 1.0
+      "target": "pi_graphify_agents_config"
     },
     {
       "relation": "contains",
@@ -6834,9 +6834,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L85",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pi_graphify_agents_gitnexus_code_intelligence",
-      "target": "pi_graphify_agents_always_do",
-      "confidence_score": 1.0
+      "target": "pi_graphify_agents_always_do"
     },
     {
       "relation": "contains",
@@ -6844,9 +6844,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L93",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pi_graphify_agents_gitnexus_code_intelligence",
-      "target": "pi_graphify_agents_never_do",
-      "confidence_score": 1.0
+      "target": "pi_graphify_agents_never_do"
     },
     {
       "relation": "contains",
@@ -6854,9 +6854,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L100",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pi_graphify_agents_gitnexus_code_intelligence",
-      "target": "pi_graphify_agents_resources",
-      "confidence_score": 1.0
+      "target": "pi_graphify_agents_resources"
     },
     {
       "relation": "contains",
@@ -6864,9 +6864,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L109",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pi_graphify_agents_gitnexus_code_intelligence",
-      "target": "pi_graphify_agents_cli",
-      "confidence_score": 1.0
+      "target": "pi_graphify_agents_cli"
     },
     {
       "relation": "contains",
@@ -6874,9 +6874,9 @@
       "source_file": "CLAUDE.md",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "claude_md",
-      "target": "pi_graphify_claude_gitnexus_code_intelligence",
-      "confidence_score": 1.0
+      "target": "pi_graphify_claude_gitnexus_code_intelligence"
     },
     {
       "relation": "contains",
@@ -6884,9 +6884,9 @@
       "source_file": "CLAUDE.md",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pi_graphify_claude_gitnexus_code_intelligence",
-      "target": "pi_graphify_claude_always_do",
-      "confidence_score": 1.0
+      "target": "pi_graphify_claude_always_do"
     },
     {
       "relation": "contains",
@@ -6894,9 +6894,9 @@
       "source_file": "CLAUDE.md",
       "source_location": "L16",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pi_graphify_claude_gitnexus_code_intelligence",
-      "target": "pi_graphify_claude_never_do",
-      "confidence_score": 1.0
+      "target": "pi_graphify_claude_never_do"
     },
     {
       "relation": "contains",
@@ -6904,9 +6904,9 @@
       "source_file": "CLAUDE.md",
       "source_location": "L23",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pi_graphify_claude_gitnexus_code_intelligence",
-      "target": "pi_graphify_claude_resources",
-      "confidence_score": 1.0
+      "target": "pi_graphify_claude_resources"
     },
     {
       "relation": "contains",
@@ -6914,9 +6914,9 @@
       "source_file": "CLAUDE.md",
       "source_location": "L32",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pi_graphify_claude_gitnexus_code_intelligence",
-      "target": "pi_graphify_claude_cli",
-      "confidence_score": 1.0
+      "target": "pi_graphify_claude_cli"
     },
     {
       "relation": "contains",
@@ -6924,9 +6924,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "skills_graphify_skill_md",
-      "target": "graphify_skill_graphify",
-      "confidence_score": 1.0
+      "target": "graphify_skill_graphify"
     },
     {
       "relation": "contains",
@@ -6934,9 +6934,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_graphify",
-      "target": "graphify_skill_extension_tools_vs_this_skill",
-      "confidence_score": 1.0
+      "target": "graphify_skill_extension_tools_vs_this_skill"
     },
     {
       "relation": "contains",
@@ -6944,9 +6944,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L35",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_graphify",
-      "target": "graphify_skill_usage",
-      "confidence_score": 1.0
+      "target": "graphify_skill_usage"
     },
     {
       "relation": "contains",
@@ -6954,9 +6954,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L72",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_graphify",
-      "target": "graphify_skill_what_graphify_is_for",
-      "confidence_score": 1.0
+      "target": "graphify_skill_what_graphify_is_for"
     },
     {
       "relation": "contains",
@@ -6964,9 +6964,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L81",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_graphify",
-      "target": "graphify_skill_what_you_must_do_when_invoked",
-      "confidence_score": 1.0
+      "target": "graphify_skill_what_you_must_do_when_invoked"
     },
     {
       "relation": "contains",
@@ -6974,9 +6974,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L751",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_graphify",
-      "target": "graphify_skill_for_update_incremental_re_extraction",
-      "confidence_score": 1.0
+      "target": "graphify_skill_for_update_incremental_re_extraction"
     },
     {
       "relation": "contains",
@@ -6984,9 +6984,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L855",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_graphify",
-      "target": "graphify_skill_for_cluster_only",
-      "confidence_score": 1.0
+      "target": "graphify_skill_for_cluster_only"
     },
     {
       "relation": "contains",
@@ -6994,9 +6994,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L861",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_graphify",
-      "target": "graphify_skill_for_query_path_explain_add_watch",
-      "confidence_score": 1.0
+      "target": "graphify_skill_for_query_path_explain_add_watch"
     },
     {
       "relation": "contains",
@@ -7004,9 +7004,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L875",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_graphify",
-      "target": "graphify_skill_honesty_rules",
-      "confidence_score": 1.0
+      "target": "graphify_skill_honesty_rules"
     },
     {
       "relation": "contains",
@@ -7014,9 +7014,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L37",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_usage",
-      "target": "graphify_skill_graphify_command_surface_implemented_in_this_extension",
-      "confidence_score": 1.0
+      "target": "graphify_skill_graphify_command_surface_implemented_in_this_extension"
     },
     {
       "relation": "contains",
@@ -7024,9 +7024,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L64",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_usage",
-      "target": "graphify_skill_advanced_orchestration_options_skill_level_not_graphify_flags",
-      "confidence_score": 1.0
+      "target": "graphify_skill_advanced_orchestration_options_skill_level_not_graphify_flags"
     },
     {
       "relation": "contains",
@@ -7034,9 +7034,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L39",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_graphify_command_surface_implemented_in_this_extension",
-      "target": "graphify_skill_codeblock_1",
-      "confidence_score": 1.0
+      "target": "graphify_skill_codeblock_1"
     },
     {
       "relation": "contains",
@@ -7044,9 +7044,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L85",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_what_you_must_do_when_invoked",
-      "target": "graphify_skill_quick_operations_use_extension_tools",
-      "confidence_score": 1.0
+      "target": "graphify_skill_quick_operations_use_extension_tools"
     },
     {
       "relation": "contains",
@@ -7054,9 +7054,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L100",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_what_you_must_do_when_invoked",
-      "target": "graphify_skill_full_pipeline_follow_these_steps",
-      "confidence_score": 1.0
+      "target": "graphify_skill_full_pipeline_follow_these_steps"
     },
     {
       "relation": "contains",
@@ -7064,9 +7064,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L104",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_full_pipeline_follow_these_steps",
-      "target": "graphify_skill_step_1_ensure_graphify_is_installed",
-      "confidence_score": 1.0
+      "target": "graphify_skill_step_1_ensure_graphify_is_installed"
     },
     {
       "relation": "contains",
@@ -7074,9 +7074,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L127",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_full_pipeline_follow_these_steps",
-      "target": "graphify_skill_step_2_detect_files",
-      "confidence_score": 1.0
+      "target": "graphify_skill_step_2_detect_files"
     },
     {
       "relation": "contains",
@@ -7084,9 +7084,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L158",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_full_pipeline_follow_these_steps",
-      "target": "graphify_skill_step_2_5_transcribe_video_audio_files_only_if_video_files_detected",
-      "confidence_score": 1.0
+      "target": "graphify_skill_step_2_5_transcribe_video_audio_files_only_if_video_files_detected"
     },
     {
       "relation": "contains",
@@ -7094,9 +7094,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L202",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_full_pipeline_follow_these_steps",
-      "target": "graphify_skill_step_3_extract_entities_and_relationships",
-      "confidence_score": 1.0
+      "target": "graphify_skill_step_3_extract_entities_and_relationships"
     },
     {
       "relation": "contains",
@@ -7104,9 +7104,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L406",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_full_pipeline_follow_these_steps",
-      "target": "graphify_skill_step_4_build_graph_cluster_analyze_generate_outputs",
-      "confidence_score": 1.0
+      "target": "graphify_skill_step_4_build_graph_cluster_analyze_generate_outputs"
     },
     {
       "relation": "contains",
@@ -7114,9 +7114,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L456",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_full_pipeline_follow_these_steps",
-      "target": "graphify_skill_step_5_label_communities",
-      "confidence_score": 1.0
+      "target": "graphify_skill_step_5_label_communities"
     },
     {
       "relation": "contains",
@@ -7124,9 +7124,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L496",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_full_pipeline_follow_these_steps",
-      "target": "graphify_skill_step_6_generate_obsidian_vault_opt_in_html",
-      "confidence_score": 1.0
+      "target": "graphify_skill_step_6_generate_obsidian_vault_opt_in_html"
     },
     {
       "relation": "contains",
@@ -7134,9 +7134,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L556",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_full_pipeline_follow_these_steps",
-      "target": "graphify_skill_step_7_export_formats_optional_only_if_flagged",
-      "confidence_score": 1.0
+      "target": "graphify_skill_step_7_export_formats_optional_only_if_flagged"
     },
     {
       "relation": "contains",
@@ -7144,9 +7144,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L659",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_full_pipeline_follow_these_steps",
-      "target": "graphify_skill_step_8_token_reduction_benchmark_only_if_total_words_5000",
-      "confidence_score": 1.0
+      "target": "graphify_skill_step_8_token_reduction_benchmark_only_if_total_words_5000"
     },
     {
       "relation": "contains",
@@ -7154,9 +7154,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L679",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_full_pipeline_follow_these_steps",
-      "target": "graphify_skill_step_9_save_manifest_update_cost_tracker_clean_up_and_report",
-      "confidence_score": 1.0
+      "target": "graphify_skill_step_9_save_manifest_update_cost_tracker_clean_up_and_report"
     },
     {
       "relation": "contains",
@@ -7164,9 +7164,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L106",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_step_1_ensure_graphify_is_installed",
-      "target": "graphify_skill_codeblock_2",
-      "confidence_score": 1.0
+      "target": "graphify_skill_codeblock_2"
     },
     {
       "relation": "contains",
@@ -7174,9 +7174,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L129",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_step_2_detect_files",
-      "target": "graphify_skill_codeblock_3",
-      "confidence_score": 1.0
+      "target": "graphify_skill_codeblock_3"
     },
     {
       "relation": "contains",
@@ -7184,9 +7184,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L141",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_step_2_detect_files",
-      "target": "graphify_skill_codeblock_4",
-      "confidence_score": 1.0
+      "target": "graphify_skill_codeblock_4"
     },
     {
       "relation": "contains",
@@ -7194,9 +7194,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L179",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_step_2_5_transcribe_video_audio_files_only_if_video_files_detected",
-      "target": "graphify_skill_codeblock_5",
-      "confidence_score": 1.0
+      "target": "graphify_skill_codeblock_5"
     },
     {
       "relation": "contains",
@@ -7204,9 +7204,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L212",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_step_3_extract_entities_and_relationships",
-      "target": "graphify_skill_part_a_structural_extraction_for_code_files",
-      "confidence_score": 1.0
+      "target": "graphify_skill_part_a_structural_extraction_for_code_files"
     },
     {
       "relation": "contains",
@@ -7214,9 +7214,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L238",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_step_3_extract_entities_and_relationships",
-      "target": "graphify_skill_part_b_semantic_extraction_parallel_subagents",
-      "confidence_score": 1.0
+      "target": "graphify_skill_part_b_semantic_extraction_parallel_subagents"
     },
     {
       "relation": "contains",
@@ -7224,9 +7224,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L372",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_step_3_extract_entities_and_relationships",
-      "target": "graphify_skill_part_c_merge_ast_semantic_into_final_extraction",
-      "confidence_score": 1.0
+      "target": "graphify_skill_part_c_merge_ast_semantic_into_final_extraction"
     },
     {
       "relation": "contains",
@@ -7234,9 +7234,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L216",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_part_a_structural_extraction_for_code_files",
-      "target": "graphify_skill_codeblock_6",
-      "confidence_score": 1.0
+      "target": "graphify_skill_codeblock_6"
     },
     {
       "relation": "contains",
@@ -7244,9 +7244,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L250",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_part_b_semantic_extraction_parallel_subagents",
-      "target": "graphify_skill_codeblock_7",
-      "confidence_score": 1.0
+      "target": "graphify_skill_codeblock_7"
     },
     {
       "relation": "contains",
@@ -7254,9 +7254,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L304",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_part_b_semantic_extraction_parallel_subagents",
-      "target": "graphify_skill_codeblock_8",
-      "confidence_score": 1.0
+      "target": "graphify_skill_codeblock_8"
     },
     {
       "relation": "contains",
@@ -7264,9 +7264,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L328",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_part_b_semantic_extraction_parallel_subagents",
-      "target": "graphify_skill_codeblock_9",
-      "confidence_score": 1.0
+      "target": "graphify_skill_codeblock_9"
     },
     {
       "relation": "contains",
@@ -7274,9 +7274,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L341",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_part_b_semantic_extraction_parallel_subagents",
-      "target": "graphify_skill_codeblock_10",
-      "confidence_score": 1.0
+      "target": "graphify_skill_codeblock_10"
     },
     {
       "relation": "contains",
@@ -7284,9 +7284,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L374",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_part_c_merge_ast_semantic_into_final_extraction",
-      "target": "graphify_skill_codeblock_11",
-      "confidence_score": 1.0
+      "target": "graphify_skill_codeblock_11"
     },
     {
       "relation": "contains",
@@ -7294,9 +7294,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L408",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_step_4_build_graph_cluster_analyze_generate_outputs",
-      "target": "graphify_skill_codeblock_12",
-      "confidence_score": 1.0
+      "target": "graphify_skill_codeblock_12"
     },
     {
       "relation": "contains",
@@ -7304,9 +7304,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L462",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_step_5_label_communities",
-      "target": "graphify_skill_codeblock_13",
-      "confidence_score": 1.0
+      "target": "graphify_skill_codeblock_13"
     },
     {
       "relation": "contains",
@@ -7314,9 +7314,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L502",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_step_6_generate_obsidian_vault_opt_in_html",
-      "target": "graphify_skill_codeblock_14",
-      "confidence_score": 1.0
+      "target": "graphify_skill_codeblock_14"
     },
     {
       "relation": "contains",
@@ -7324,9 +7324,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L533",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_step_6_generate_obsidian_vault_opt_in_html",
-      "target": "graphify_skill_codeblock_15",
-      "confidence_score": 1.0
+      "target": "graphify_skill_codeblock_15"
     },
     {
       "relation": "contains",
@@ -7334,9 +7334,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L558",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_step_7_export_formats_optional_only_if_flagged",
-      "target": "graphify_skill_neo4j_export_only_if_neo4j_or_neo4j_push_flag",
-      "confidence_score": 1.0
+      "target": "graphify_skill_neo4j_export_only_if_neo4j_or_neo4j_push_flag"
     },
     {
       "relation": "contains",
@@ -7344,9 +7344,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L597",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_step_7_export_formats_optional_only_if_flagged",
-      "target": "graphify_skill_svg_export_only_if_svg_flag",
-      "confidence_score": 1.0
+      "target": "graphify_skill_svg_export_only_if_svg_flag"
     },
     {
       "relation": "contains",
@@ -7354,9 +7354,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L619",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_step_7_export_formats_optional_only_if_flagged",
-      "target": "graphify_skill_graphml_export_only_if_graphml_flag",
-      "confidence_score": 1.0
+      "target": "graphify_skill_graphml_export_only_if_graphml_flag"
     },
     {
       "relation": "contains",
@@ -7364,9 +7364,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L639",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_step_7_export_formats_optional_only_if_flagged",
-      "target": "graphify_skill_mcp_server_only_if_mcp_flag",
-      "confidence_score": 1.0
+      "target": "graphify_skill_mcp_server_only_if_mcp_flag"
     },
     {
       "relation": "contains",
@@ -7374,9 +7374,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L562",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_neo4j_export_only_if_neo4j_or_neo4j_push_flag",
-      "target": "graphify_skill_codeblock_16",
-      "confidence_score": 1.0
+      "target": "graphify_skill_codeblock_16"
     },
     {
       "relation": "contains",
@@ -7384,9 +7384,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L577",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_neo4j_export_only_if_neo4j_or_neo4j_push_flag",
-      "target": "graphify_skill_codeblock_17",
-      "confidence_score": 1.0
+      "target": "graphify_skill_codeblock_17"
     },
     {
       "relation": "contains",
@@ -7394,9 +7394,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L599",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_svg_export_only_if_svg_flag",
-      "target": "graphify_skill_codeblock_18",
-      "confidence_score": 1.0
+      "target": "graphify_skill_codeblock_18"
     },
     {
       "relation": "contains",
@@ -7404,9 +7404,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L621",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_graphml_export_only_if_graphml_flag",
-      "target": "graphify_skill_codeblock_19",
-      "confidence_score": 1.0
+      "target": "graphify_skill_codeblock_19"
     },
     {
       "relation": "contains",
@@ -7414,9 +7414,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L641",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_mcp_server_only_if_mcp_flag",
-      "target": "graphify_skill_codeblock_20",
-      "confidence_score": 1.0
+      "target": "graphify_skill_codeblock_20"
     },
     {
       "relation": "contains",
@@ -7424,9 +7424,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L648",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_mcp_server_only_if_mcp_flag",
-      "target": "graphify_skill_codeblock_21",
-      "confidence_score": 1.0
+      "target": "graphify_skill_codeblock_21"
     },
     {
       "relation": "contains",
@@ -7434,9 +7434,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L663",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_step_8_token_reduction_benchmark_only_if_total_words_5000",
-      "target": "graphify_skill_codeblock_22",
-      "confidence_score": 1.0
+      "target": "graphify_skill_codeblock_22"
     },
     {
       "relation": "contains",
@@ -7444,9 +7444,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L681",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_step_9_save_manifest_update_cost_tracker_clean_up_and_report",
-      "target": "graphify_skill_codeblock_23",
-      "confidence_score": 1.0
+      "target": "graphify_skill_codeblock_23"
     },
     {
       "relation": "contains",
@@ -7454,9 +7454,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L721",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_step_9_save_manifest_update_cost_tracker_clean_up_and_report",
-      "target": "graphify_skill_codeblock_24",
-      "confidence_score": 1.0
+      "target": "graphify_skill_codeblock_24"
     },
     {
       "relation": "contains",
@@ -7464,9 +7464,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L759",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_for_update_incremental_re_extraction",
-      "target": "graphify_skill_codeblock_25",
-      "confidence_score": 1.0
+      "target": "graphify_skill_codeblock_25"
     },
     {
       "relation": "contains",
@@ -7474,9 +7474,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L778",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_for_update_incremental_re_extraction",
-      "target": "graphify_skill_codeblock_26",
-      "confidence_score": 1.0
+      "target": "graphify_skill_codeblock_26"
     },
     {
       "relation": "contains",
@@ -7484,9 +7484,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L798",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_for_update_incremental_re_extraction",
-      "target": "graphify_skill_codeblock_27",
-      "confidence_score": 1.0
+      "target": "graphify_skill_codeblock_27"
     },
     {
       "relation": "contains",
@@ -7494,9 +7494,9 @@
       "source_file": "skills/graphify/SKILL.md",
       "source_location": "L825",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "graphify_skill_for_update_incremental_re_extraction",
-      "target": "graphify_skill_codeblock_28",
-      "confidence_score": 1.0
+      "target": "graphify_skill_codeblock_28"
     },
     {
       "relation": "imports_from",
@@ -7522,5 +7522,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "e8348c6b15a1d4bb1b89aa9aa3b02335937496a5"
+  "built_at_commit": "30a7701fb16a0626f57b1fca06a8333be3d4fef8"
 }
