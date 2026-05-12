@@ -93,18 +93,15 @@ Key: `pi-graphify` in `prime-settings.json` (legacy `graphify` key auto-migrates
 | `outputDir`                        | `string`  | `"graphify-out"`  | Output directory name                                            |
 | `statusbar`                        | `object`  | built-in defaults | Optional pi-statusbar widget settings                            |
 | `autoContext.enabled`              | `boolean` | `true`            | Enable Graphify auto-context hooks                               |
-| `autoContext.augmentSearchResults` | `boolean` | `true`            | Append Graphify context to search/read tool results              |
-| `autoContext.includeReport`        | `boolean` | `true`            | Include `GRAPH_REPORT.md` excerpt in auto-context                |
-| `autoContext.includeWiki`          | `boolean` | `true`            | Include `wiki/index.md` hint when available                      |
-| `autoContext.reportMaxChars`       | `number`  | `6000`            | Max characters to append from `GRAPH_REPORT.md` per augmentation |
+| `autoContext.augmentSearchResults` | `boolean` | `true`            | Append Graphify hint to search tool results                      |
 | `autoContext.queryBudget`          | `number`  | `1200`            | Budget hint for `graphify_query` follow-up usage                 |
 
 ### Auto-context behavior
 
-When `graphify-out/graph.json` exists in the current project, pi-graphify now:
+When `graphify-out/graph.json` exists in the current project, pi-graphify:
 
-- injects a concise `[Graphify active]` system-prompt hint on `before_agent_start`
-- optionally augments `grep`, `ffgrep`, `find`, `fffind`, `read`, and `bash` tool results with Graphify context
+- injects a concise `[Graphify active]` system-prompt hint on `before_agent_start` (once per session)
+- appends a short `[Graphify]` hint to `grep`, `ffgrep`, `find`, and `fffind` tool results, suggesting `graphify_query` for structural questions
 
 Notes:
 
