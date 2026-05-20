@@ -86,15 +86,15 @@ pi install @gaodes/pi-graphify
 
 Key: `pi-graphify` in `prime-settings.json` (legacy `graphify` key auto-migrates on load).
 
-| Setting                            | Type      | Default           | Description                                                      |
-| ---------------------------------- | --------- | ----------------- | ---------------------------------------------------------------- |
-| `enabled`                          | `boolean` | `true`            | Enable/disable the extension                                     |
-| `pythonPath`                       | `string`  | `"python3"`       | Path to Python interpreter                                       |
-| `outputDir`                        | `string`  | `"graphify-out"`  | Output directory name                                            |
-| `statusbar`                        | `object`  | built-in defaults | Optional pi-statusbar widget settings                            |
-| `autoContext.enabled`              | `boolean` | `true`            | Enable Graphify auto-context hooks                               |
-| `autoContext.augmentSearchResults` | `boolean` | `true`            | Append Graphify hint to search tool results                      |
-| `autoContext.queryBudget`          | `number`  | `1200`            | Budget hint for `graphify_query` follow-up usage                 |
+| Setting                            | Type      | Default           | Description                                      |
+| ---------------------------------- | --------- | ----------------- | ------------------------------------------------ |
+| `enabled`                          | `boolean` | `true`            | Enable/disable the extension                     |
+| `pythonPath`                       | `string`  | `"python3"`       | Path to Python interpreter                       |
+| `outputDir`                        | `string`  | `"graphify-out"`  | Output directory name                            |
+| `statusbar`                        | `object`  | built-in defaults | Optional pi-statusbar widget settings            |
+| `autoContext.enabled`              | `boolean` | `true`            | Enable Graphify auto-context hooks               |
+| `autoContext.augmentSearchResults` | `boolean` | `true`            | Append Graphify hint to search tool results      |
+| `autoContext.queryBudget`          | `number`  | `1200`            | Budget hint for `graphify_query` follow-up usage |
 
 ### Auto-context behavior
 
@@ -110,16 +110,27 @@ Notes:
 
 ## Git tracking policy
 
-On build initialization, the extension ensures `.gitignore` exists and applies Graphify-specific rules:
+The extension's `.gitignore` ignores the entire `graphify-out/` directory. Graph output is regenerated on each build and should not be committed to the repository.
 
-- keeps `graphify-out/` **tracked**
-- ignores only:
-  - `graphify-out/cache/`
-  - `graphify-out/.graphify_python`
-  - `graphify-out/.graphify_root`
-  - `graphify-out/cost.json`
+If you want to track graph output for documentation purposes, override in your project's `.gitignore`:
 
-If a legacy `graphify-out/` ignore entry exists, it is removed automatically.
+```
+!graphify-out/
+!graphify-out/graph.json
+```
+
+> **Note:** Earlier versions of pi-graphify tracked `graphify-out/` files and selectively ignored cache/temp entries. As of v0.1.6, the entire directory is ignored for cleaner repository state.
+
+## Reliability
+
+All child-process invocations (Python CLI, inline scripts) run through a **bounded exec adapter** that caps stdout/stderr at 1 MiB by default. This prevents V8 heap exhaustion when graph operations produce multi-MB output — the root cause of the exit-code 32102 (OOM) crash in earlier versions.
+
+Key safety features:
+
+- **Output budgets**: 256 KiB for queries, 1 MiB for general operations, 2 MiB for JSON parsing
+- **Large-graph guard**: graphs exceeding 10 MiB bypass the inline Python rebuild and fall back to the CLI directly
+- **Signal-death handling**: child processes killed by signals are reported as failures (exit code 1), not silent successes
+- **LRU cache bounding**: auto-context augmentation caches cap at 256 entries
 
 ## Source
 

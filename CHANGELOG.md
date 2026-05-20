@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **OOM crash prevention**: Pi process (exit code 32102) crashed during graph operations due to unbounded child-process output accumulation in Node.js memory. All exec calls now cap stdout/stderr at 1 MiB by default, preventing multi-MB graph data from exhausting V8 heap.
 - **Signal death handling**: Child process signal deaths (null exit code) now map to exit code 1 instead of 0, preventing silent success on crashes.
 - **Large-graph update guard**: `graphify_update` now checks if `graph.json` exceeds 10 MiB before running the memory-heavy inline Python rebuild pipeline. Large graphs fall back to the `graphify update` CLI command directly.
-- **Safe shell/Python quoting**: Replaced the incomplete `escapeShell()` function with `pythonLiteral()` (JSON.stringify) for Python inline strings and `shellQuote()` for shell arguments. Handles backslashes, newlines, and special characters correctly.
+- **Safe shell/Python quoting**: Replaced the incomplete `escapeShell()` function with `pythonLiteral()` (single-quoted Python literals safe in shell double-quote context) and `shellQuote()` for shell arguments. Handles backslashes, single/double quotes, dollar signs, backticks, and newlines correctly.
 - **Bounded auto-context caches**: Tool-result augmentation caches (`augmentedCache`, `emptyCache`) now cap at 256 entries with LRU eviction, preventing unbounded Set growth in long sessions.
 - **Shared bounded exec adapter**: Consolidated duplicated `createExec()` implementations into a single `createBoundedExec()` adapter with output size limits and signal-death handling.
 
