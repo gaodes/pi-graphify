@@ -11,7 +11,6 @@ import { Text } from "@earendil-works/pi-tui";
 import { ToolBody, ToolCallHeader, ToolFooter } from "@gaodes/pi-utils-ui";
 import { type Static, Type } from "typebox";
 import type { ResolvedConfig } from "../config";
-import type { ExecFn } from "../lib/runner";
 import {
 	addUrl,
 	buildGraph,
@@ -29,24 +28,11 @@ import {
 	updateGraph,
 } from "../lib/runner";
 import { type StatusbarState, updateGraphifyStatusbar } from "../statusbar.js";
+import { createBoundedExec } from "./exec-adapter";
 
 // ---------------------------------------------------------------------------
-// Shared exec adapter — wraps pi.exec(command, args[], opts) → ExecFn
+// Shared exec adapter (see exec-adapter.ts for the bounded implementation)
 // ---------------------------------------------------------------------------
-
-function createExec(pi: ExtensionAPI, cwd: string): ExecFn {
-	return async (command, options) => {
-		const result = await pi.exec("sh", ["-c", command], {
-			cwd: options?.cwd ?? cwd,
-			signal: options?.signal,
-		});
-		return {
-			stdout: result.stdout,
-			stderr: result.stderr,
-			exitCode: result.code,
-		};
-	};
-}
 
 // ---------------------------------------------------------------------------
 // graphify_build
@@ -100,7 +86,7 @@ export function createBuildTool(
 			onUpdate: AgentToolUpdateCallback<BuildDetails> | undefined,
 			ctx: ExtensionContext,
 		): Promise<AgentToolResult<BuildDetails>> {
-			const exec = createExec(pi, ctx.cwd);
+			const exec = createBoundedExec(pi, ctx.cwd);
 			const python = await detectPython(exec, config.pythonPath, ctx.cwd, signal);
 			await ensureInstalled(exec, python, ctx.cwd, signal);
 
@@ -254,7 +240,7 @@ export function createQueryTool(
 			_onUpdate: AgentToolUpdateCallback<QueryDetails> | undefined,
 			ctx: ExtensionContext,
 		): Promise<AgentToolResult<QueryDetails>> {
-			const exec = createExec(pi, ctx.cwd);
+			const exec = createBoundedExec(pi, ctx.cwd);
 			const python = await detectPython(exec, config.pythonPath, ctx.cwd, signal);
 			await ensureInstalled(exec, python, ctx.cwd, signal);
 
@@ -386,7 +372,7 @@ export function createPathTool(
 			_onUpdate: AgentToolUpdateCallback<PathDetails> | undefined,
 			ctx: ExtensionContext,
 		): Promise<AgentToolResult<PathDetails>> {
-			const exec = createExec(pi, ctx.cwd);
+			const exec = createBoundedExec(pi, ctx.cwd);
 			const python = await detectPython(exec, config.pythonPath, ctx.cwd, signal);
 			await ensureInstalled(exec, python, ctx.cwd, signal);
 
@@ -483,7 +469,7 @@ export function createExplainTool(
 			_onUpdate: AgentToolUpdateCallback<ExplainDetails> | undefined,
 			ctx: ExtensionContext,
 		): Promise<AgentToolResult<ExplainDetails>> {
-			const exec = createExec(pi, ctx.cwd);
+			const exec = createBoundedExec(pi, ctx.cwd);
 			const python = await detectPython(exec, config.pythonPath, ctx.cwd, signal);
 			await ensureInstalled(exec, python, ctx.cwd, signal);
 
@@ -578,7 +564,7 @@ export function createAddTool(
 			onUpdate: AgentToolUpdateCallback<AddDetails> | undefined,
 			ctx: ExtensionContext,
 		): Promise<AgentToolResult<AddDetails>> {
-			const exec = createExec(pi, ctx.cwd);
+			const exec = createBoundedExec(pi, ctx.cwd);
 			const python = await detectPython(exec, config.pythonPath, ctx.cwd, signal);
 			await ensureInstalled(exec, python, ctx.cwd, signal);
 
@@ -709,7 +695,7 @@ export function createUpdateTool(
 			onUpdate: AgentToolUpdateCallback<UpdateDetails> | undefined,
 			ctx: ExtensionContext,
 		): Promise<AgentToolResult<UpdateDetails>> {
-			const exec = createExec(pi, ctx.cwd);
+			const exec = createBoundedExec(pi, ctx.cwd);
 			const python = await detectPython(exec, config.pythonPath, ctx.cwd, signal);
 			await ensureInstalled(exec, python, ctx.cwd, signal);
 
@@ -856,7 +842,7 @@ export function createWatchTool(
 			onUpdate: AgentToolUpdateCallback<WatchDetails> | undefined,
 			ctx: ExtensionContext,
 		): Promise<AgentToolResult<WatchDetails>> {
-			const exec = createExec(pi, ctx.cwd);
+			const exec = createBoundedExec(pi, ctx.cwd);
 			const python = await detectPython(exec, config.pythonPath, ctx.cwd, signal);
 			await ensureInstalled(exec, python, ctx.cwd, signal);
 
@@ -946,7 +932,7 @@ export function createClusterTool(
 			_onUpdate: AgentToolUpdateCallback<ClusterDetails> | undefined,
 			ctx: ExtensionContext,
 		): Promise<AgentToolResult<ClusterDetails>> {
-			const exec = createExec(pi, ctx.cwd);
+			const exec = createBoundedExec(pi, ctx.cwd);
 			const python = await detectPython(exec, config.pythonPath, ctx.cwd, signal);
 			await ensureInstalled(exec, python, ctx.cwd, signal);
 
@@ -1066,7 +1052,7 @@ export function createExtractTool(
 			onUpdate: AgentToolUpdateCallback<ExtractDetails> | undefined,
 			ctx: ExtensionContext,
 		): Promise<AgentToolResult<ExtractDetails>> {
-			const exec = createExec(pi, ctx.cwd);
+			const exec = createBoundedExec(pi, ctx.cwd);
 			const python = await detectPython(exec, config.pythonPath, ctx.cwd, signal);
 			await ensureInstalled(exec, python, ctx.cwd, signal);
 
@@ -1206,7 +1192,7 @@ export function createExportCallflowTool(
 			onUpdate: AgentToolUpdateCallback<ExportCallflowDetails> | undefined,
 			ctx: ExtensionContext,
 		): Promise<AgentToolResult<ExportCallflowDetails>> {
-			const exec = createExec(pi, ctx.cwd);
+			const exec = createBoundedExec(pi, ctx.cwd);
 			const python = await detectPython(exec, _config.pythonPath, ctx.cwd, signal);
 			await ensureInstalled(exec, python, ctx.cwd, signal);
 
@@ -1309,7 +1295,7 @@ export function createUpgradeTool(
 			onUpdate: AgentToolUpdateCallback<UpgradeDetails> | undefined,
 			_ctx: ExtensionContext,
 		): Promise<AgentToolResult<UpgradeDetails>> {
-			const exec = createExec(_pi, _ctx.cwd);
+			const exec = createBoundedExec(_pi, _ctx.cwd);
 			const action = params.action ?? "check";
 
 			if (action === "check") {

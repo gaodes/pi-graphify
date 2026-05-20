@@ -13,6 +13,18 @@ import { createAllTools } from "./graphify-tools";
 
 const AUTO_CONTEXT_TOOL_NAMES = new Set(["grep", "ffgrep", "find", "fffind"]);
 
+/** Maximum entries for augmentation caches to prevent unbounded memory growth. */
+const MAX_AUGMENT_CACHE_KEYS = 256;
+
+/** Add a key to a bounded Set, evicting the oldest entry when full. */
+function addBoundedSet(set: Set<string>, key: string, max: number): void {
+	if (set.size >= max) {
+		const oldest = set.keys().next().value;
+		if (oldest !== undefined) set.delete(oldest);
+	}
+	set.add(key);
+}
+
 type GraphContextState = {
 	graphExists: boolean;
 	graphPath: string;
@@ -190,11 +202,11 @@ export default function (pi: ExtensionAPI) {
 
 		const augmentText = buildGraphifyAugmentContext(state.graphContextState, config);
 		if (!augmentText) {
-			state.graphContextState.emptyCache.add(cacheKey);
+			addBoundedSet(state.graphContextState.emptyCache, cacheKey, MAX_AUGMENT_CACHE_KEYS);
 			return;
 		}
 
-		state.graphContextState.augmentedCache.add(cacheKey);
+		addBoundedSet(state.graphContextState.augmentedCache, cacheKey, MAX_AUGMENT_CACHE_KEYS);
 		state.graphContextState.augmentHits += 1;
 
 		return {

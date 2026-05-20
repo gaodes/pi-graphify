@@ -8,13 +8,21 @@
  * The exec adapter in the tools/commands layer wraps this to accept a single shell string.
  */
 
-import { readFile, writeFile } from "node:fs/promises";
+import { readFile, stat, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 
 export interface ExecOptions {
 	cwd?: string;
 	signal?: AbortSignal;
+	maxOutputBytes?: number;
 }
+
+// Output budget constants (bytes)
+export const DEFAULT_EXEC_OUTPUT_BYTES = 1_048_576; // 1 MiB
+export const JSON_EXEC_OUTPUT_BYTES = 2_097_152; // 2 MiB
+export const QUERY_EXEC_OUTPUT_BYTES = 262_144; // 256 KiB
+export const LARGE_GRAPH_JSON_BYTES = 10 * 1024 * 1024; // 10 MiB
+export const OUTPUT_LIMIT_EXIT_CODE = 125;
 
 export interface ExecResult {
 	stdout: string;
@@ -47,13 +55,22 @@ export async function detectPython(
 	const cacheResult = await exec("cat graphify-out/.graphify_python 2>/dev/null || true", {
 		cwd,
 		signal,
+		maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES,
 	});
 	if (cacheResult.stdout.trim()) return cacheResult.stdout.trim();
 
-	const whichResult = await exec("which graphify 2>/dev/null || true", { cwd, signal });
+	const whichResult = await exec("which graphify 2>/dev/null || true", {
+		cwd,
+		signal,
+		maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES,
+	});
 	if (whichResult.stdout.trim()) {
 		const binPath = whichResult.stdout.trim();
-		const shebang = await exec(`head -1 '${binPath}' | tr -d '#!'`, { cwd, signal });
+		const shebang = await exec(`head -1 '${binPath}' | tr -d '#!'`, {
+			cwd,
+			signal,
+			maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES,
+		});
 		let python = shebang.stdout.trim().replace(/^#!\s*/, "");
 		if (!python || !/^[a-zA-Z0-9/_.-]+$/.test(python)) {
 			python = configPython;
@@ -74,17 +91,19 @@ export async function ensureInstalled(
 	const check = await exec(`${python} -c "import graphify" 2>/dev/null; echo $?`, {
 		cwd,
 		signal,
+		maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES,
 	});
 	if (check.stdout.trim() === "0") return;
 
 	await exec(
 		`${python} -m pip install graphifyy -q 2>/dev/null || ${python} -m pip install graphifyy -q --break-system-packages 2>&1 | tail -3`,
-		{ cwd, signal },
+		{ cwd, signal, maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES },
 	);
 
 	const verify = await exec(`${python} -c "import graphify" 2>/dev/null; echo $?`, {
 		cwd,
 		signal,
+		maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES,
 	});
 	if (verify.stdout.trim() !== "0") {
 		throw new Error(
@@ -112,8 +131,8 @@ export async function detectFiles(
 	signal?: AbortSignal,
 ): Promise<DetectResult> {
 	const result = await exec(
-		`${python} -c "import json; from graphify.detect import detect; from pathlib import Path; r=detect(Path('${escapeShell(inputPath)}')); print(json.dumps(r))"`,
-		{ cwd, signal },
+		`${python} -c "import json; from graphify.detect import detect; from pathlib import Path; r=detect(Path(${pythonLiteral(inputPath)})); print(json.dumps(r))"`,
+		{ cwd, signal, maxOutputBytes: JSON_EXEC_OUTPUT_BYTES },
 	);
 	if (result.exitCode !== 0) {
 		throw new Error(`graphify detect failed: ${result.stderr}`);
@@ -155,11 +174,8 @@ export async function buildGraph(
 	await exec(`mkdir -p ${outDir}`, { cwd, signal });
 
 	await exec(
-		`${python} -c "import sys; open('${outDir}/.graphify_python', 'w').write(sys.executable)"`,
-		{
-			cwd,
-			signal,
-		},
+		`${python} -c "import sys; open(${pythonLiteral(`${outDir}/.graphify_python`)}, 'w').write(sys.executable)"`,
+		{ cwd, signal, maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES },
 	);
 
 	onUpdate?.("Detecting files...");
@@ -197,7 +213,7 @@ else:
     Path('.graphify_ast.json').write_text(json.dumps({'nodes':[],'edges':[],'input_tokens':0,'output_tokens':0}))
     print('No code files - skipping AST extraction')
 "`,
-		{ cwd, signal },
+		{ cwd, signal, maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES },
 	);
 
 	if (astResult.exitCode !== 0) {
@@ -220,7 +236,7 @@ else:
 	// Always write semantic placeholder for merge step
 	await exec(
 		`${python} -c "import json; from pathlib import Path; Path('.graphify_semantic.json').write_text(json.dumps({'nodes':[],'edges':[],'hyperedges':[],'input_tokens':0,'output_tokens':0}))"`,
-		{ cwd, signal },
+		{ cwd, signal, maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES },
 	);
 
 	// Merge AST + semantic
@@ -239,7 +255,7 @@ merged = {'nodes': merged_nodes, 'edges': merged_edges, 'hyperedges': sem.get('h
 Path('.graphify_extract.json').write_text(json.dumps(merged, indent=2))
 print(f'Merged: {len(merged_nodes)} nodes, {len(merged_edges)} edges')
 "`,
-		{ cwd, signal },
+		{ cwd, signal, maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES },
 	);
 	if (mergeResult.exitCode !== 0) {
 		throw new Error(`Merge failed: ${mergeResult.stderr}`);
@@ -248,7 +264,6 @@ print(f'Merged: {len(merged_nodes)} nodes, {len(merged_edges)} edges')
 
 	// Build, cluster, analyze
 	onUpdate?.("Building graph and detecting communities...");
-	const escapedPath = escapeShell(inputPath);
 	const buildResult = await exec(
 		`${python} -c "
 import json
@@ -274,7 +289,7 @@ surprises = surprising_connections(G, communities)
 labels = {cid: 'Community ' + str(cid) for cid in communities}
 questions = suggest_questions(G, communities, labels)
 
-report = generate(G, communities, cohesion, labels, gods, surprises, detection, tokens, '${escapedPath}', suggested_questions=questions)
+report = generate(G, communities, cohesion, labels, gods, surprises, detection, tokens, ${pythonLiteral(inputPath)}, suggested_questions=questions)
 Path('graphify-out/GRAPH_REPORT.md').write_text(report)
 to_json(G, communities, 'graphify-out/graph.json')
 
@@ -282,7 +297,7 @@ analysis = {'communities': {str(k):v for k,v in communities.items()}, 'cohesion'
 Path('.graphify_analysis.json').write_text(json.dumps(analysis, indent=2))
 print(f'Graph: {G.number_of_nodes()} nodes, {G.number_of_edges()} edges, {len(communities)} communities')
 "`,
-		{ cwd, signal },
+		{ cwd, signal, maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES },
 	);
 
 	if (buildResult.exitCode !== 0) {
@@ -314,7 +329,7 @@ else:
     to_html(G, communities, 'graphify-out/graph.html', community_labels=labels or None)
     print('graph.html written')
 "`,
-			{ cwd, signal },
+			{ cwd, signal, maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES },
 		);
 	}
 
@@ -341,7 +356,7 @@ n = to_obsidian(G, communities, 'graphify-out/obsidian', community_labels=labels
 print(f'Obsidian vault: {n} notes')
 to_canvas(G, communities, 'graphify-out/obsidian/graph.canvas', community_labels=labels or None)
 "`,
-			{ cwd, signal },
+			{ cwd, signal, maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES },
 		);
 	}
 
@@ -361,7 +376,7 @@ labels = {int(k):v for k,v in labels_raw.items()}
 to_svg(G, communities, 'graphify-out/graph.svg', community_labels=labels or None)
 print('graph.svg written')
 "`,
-			{ cwd, signal },
+			{ cwd, signal, maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES },
 		);
 	}
 
@@ -379,7 +394,7 @@ communities = {int(k):v for k,v in analysis['communities'].items()}
 to_graphml(G, communities, 'graphify-out/graph.graphml')
 print('graph.graphml written')
 "`,
-			{ cwd, signal },
+			{ cwd, signal, maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES },
 		);
 	}
 
@@ -394,7 +409,7 @@ G = build_from_json(json.loads(Path('.graphify_extract.json').read_text()))
 to_cypher(G, 'graphify-out/cypher.txt')
 print('cypher.txt written')
 "`,
-			{ cwd, signal },
+			{ cwd, signal, maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES },
 		);
 	}
 
@@ -424,13 +439,13 @@ cost['total_input_tokens'] += input_tok
 cost['total_output_tokens'] += output_tok
 cost_path.write_text(json.dumps(cost, indent=2))
 "`,
-		{ cwd, signal },
+		{ cwd, signal, maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES },
 	);
 
 	// Clean up temp files
 	await exec(
 		`rm -f .graphify_detect.json .graphify_extract.json .graphify_ast.json .graphify_semantic.json .graphify_analysis.json .graphify_labels.json`,
-		{ cwd, signal },
+		{ cwd, signal, maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES },
 	);
 
 	const match = buildResult.stdout.match(/Graph: (\d+) nodes, (\d+) edges, (\d+) communities/);
@@ -459,7 +474,8 @@ export async function queryGraph(
 	signal?: AbortSignal,
 ): Promise<string> {
 	const { question, mode, budget = 2000 } = options;
-	const escapedQuestion = escapeShell(question);
+
+	const maxBytes = Math.min(Math.max(budget * 4 + 4096, 16_384), QUERY_EXEC_OUTPUT_BYTES);
 
 	const result = await exec(
 		`${python} -c "
@@ -474,8 +490,8 @@ if not Path('graphify-out/graph.json').exists():
 data = json.loads(Path('graphify-out/graph.json').read_text())
 G = json_graph.node_link_graph(data, edges='links')
 
-question = '${escapedQuestion}'
-mode = '${mode}'
+question = ${pythonLiteral(question)}
+mode = ${pythonLiteral(mode)}
 terms = [t.lower() for t in question.split() if len(t) > 3]
 
 scored = []
@@ -538,7 +554,7 @@ if len(output) > ${budget * 4}:
     output = output[:${budget * 4}] + f'\\n... (truncated)'
 print(output)
 "`,
-		{ cwd, signal },
+		{ cwd, signal, maxOutputBytes: maxBytes },
 	);
 
 	if (result.exitCode !== 0) {
@@ -560,9 +576,6 @@ export async function findPath(
 	toConcept: string,
 	signal?: AbortSignal,
 ): Promise<string> {
-	const escapedFrom = JSON.stringify(fromConcept).replace(/'/g, "'\\''");
-	const escapedTo = JSON.stringify(toConcept).replace(/'/g, "'\\''");
-
 	const result = await exec(
 		`${python} -c "
 import json, sys
@@ -577,8 +590,8 @@ if not Path('graphify-out/graph.json').exists():
 data = json.loads(Path('graphify-out/graph.json').read_text())
 G = json_graph.node_link_graph(data, edges='links')
 
-a_term = '${escapedFrom}'
-b_term = '${escapedTo}'
+a_term = ${pythonLiteral(fromConcept)}
+b_term = ${pythonLiteral(toConcept)}
 
 def find_node(term):
     term = term.lower()
@@ -607,7 +620,7 @@ try:
 except nx.NetworkXNoPath:
     print(f'No path found between {a_term!r} and {b_term!r}')
 "`,
-		{ cwd, signal },
+		{ cwd, signal, maxOutputBytes: QUERY_EXEC_OUTPUT_BYTES },
 	);
 
 	if (result.exitCode !== 0 && !result.stdout.trim()) {
@@ -628,8 +641,6 @@ export async function explainNode(
 	concept: string,
 	signal?: AbortSignal,
 ): Promise<string> {
-	const escapedConcept = escapeShell(concept);
-
 	const result = await exec(
 		`${python} -c "
 import json, sys
@@ -643,7 +654,7 @@ if not Path('graphify-out/graph.json').exists():
 data = json.loads(Path('graphify-out/graph.json').read_text())
 G = json_graph.node_link_graph(data, edges='links')
 
-term = '${escapedConcept}'
+term = ${pythonLiteral(concept)}
 term_lower = term.lower()
 
 scored = sorted([(sum(1 for w in term_lower.split() if w in G.nodes[n].get('label','').lower()), n) for n in G.nodes()], reverse=True)
@@ -667,7 +678,7 @@ for neighbor in G.neighbors(nid):
     src_file = G.nodes[neighbor].get('source_file', '')
     print(f'  --{rel}--> {nlabel} [{conf}] ({src_file})')
 "`,
-		{ cwd, signal },
+		{ cwd, signal, maxOutputBytes: QUERY_EXEC_OUTPUT_BYTES },
 	);
 
 	if (result.exitCode !== 0 && !result.stdout.trim()) {
@@ -695,9 +706,8 @@ export async function addUrl(
 	signal?: AbortSignal,
 ): Promise<string> {
 	const { url, author, contributor } = options;
-	const escapedUrl = escapeShell(url);
-	const authorKwarg = author ? `, author='${escapeShell(author)}'` : "";
-	const contributorKwarg = contributor ? `, contributor='${escapeShell(contributor)}'` : "";
+	const authorKwarg = author ? `, author=${pythonLiteral(author)}` : "";
+	const contributorKwarg = contributor ? `, contributor=${pythonLiteral(contributor)}` : "";
 
 	const result = await exec(
 		`${python} -c "
@@ -706,7 +716,7 @@ from graphify.ingest import ingest
 from pathlib import Path
 
 try:
-    out = ingest('${escapedUrl}', Path('./raw')${authorKwarg}${contributorKwarg})
+    out = ingest(${pythonLiteral(url)}, Path('./raw')${authorKwarg}${contributorKwarg})
     print(f'Saved to {out}')
 except ValueError as e:
     print(f'error: {e}', file=sys.stderr)
@@ -715,7 +725,7 @@ except RuntimeError as e:
     print(f'error: {e}', file=sys.stderr)
     sys.exit(1)
 "`,
-		{ cwd, signal },
+		{ cwd, signal, maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES },
 	);
 
 	if (result.exitCode !== 0) {
@@ -739,17 +749,16 @@ export async function updateGraph(
 ): Promise<{ newFiles: number; nodes: number; edges: number }> {
 	onUpdate?.("Checking for changes...");
 
-	const escapedPath = escapeShell(inputPath);
 	const result = await exec(
 		`${python} -c "
 import json
 from graphify.detect import detect_incremental
 from pathlib import Path
 
-r = detect_incremental(Path('${escapedPath}'))
+r = detect_incremental(Path(${pythonLiteral(inputPath)}))
 print(json.dumps(r, indent=2))
 "`,
-		{ cwd, signal },
+		{ cwd, signal, maxOutputBytes: JSON_EXEC_OUTPUT_BYTES },
 	);
 
 	if (result.exitCode !== 0) {
@@ -766,6 +775,43 @@ print(json.dumps(r, indent=2))
 	}
 
 	onUpdate?.(`${incremental.new_total} files changed — re-extracting...`);
+
+	// Large-graph guard: if graph.json exceeds 10 MiB, skip the memory-heavy
+	// inline Python rebuild and fall back to the graphify CLI directly.
+	const graphJsonPath = join(cwd, "graphify-out", "graph.json");
+	try {
+		const graphStat = await stat(graphJsonPath);
+		if (graphStat.size > LARGE_GRAPH_JSON_BYTES) {
+			onUpdate?.(
+				`Large graph detected (${(graphStat.size / 1024 / 1024).toFixed(1)} MiB) — using CLI fallback for update.`,
+			);
+			const cliResult = await exec(`${python} -m graphify update ${shellQuote(inputPath)}`, {
+				cwd,
+				signal,
+				maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES,
+			});
+			if (cliResult.exitCode !== 0) {
+				throw new Error(`Graphify CLI update failed: ${cliResult.stderr || cliResult.stdout}`);
+			}
+			// Parse node/edge counts best-effort from CLI output
+			const nodeMatch = cliResult.stdout.match(/(\d+)\s+nodes?/i);
+			const edgeMatch = cliResult.stdout.match(/(\d+)\s+edges?/i);
+			return {
+				newFiles: incremental.new_total,
+				nodes: nodeMatch ? Number.parseInt(nodeMatch[1], 10) : 0,
+				edges: edgeMatch ? Number.parseInt(edgeMatch[1], 10) : 0,
+			};
+		}
+	} catch (err: unknown) {
+		const code =
+			typeof err === "object" && err !== null && "code" in err
+				? (err as { code?: string }).code
+				: undefined;
+		if (code !== "ENOENT") {
+			throw err;
+		}
+		// ENOENT is fine — graph.json doesn't exist yet, proceed with normal build
+	}
 
 	const buildResult = await buildGraph(exec, python, cwd, { inputPath }, signal, onUpdate);
 
@@ -790,11 +836,14 @@ export async function startWatch(
 	onUpdate?: (message: string) => void,
 ): Promise<string> {
 	onUpdate?.(`Watching ${inputPath} for changes...`);
-	const escapedPath = escapeShell(inputPath);
-	const result = await exec(`${python} -m graphify.watch '${escapedPath}' --debounce ${debounce}`, {
-		cwd,
-		signal,
-	});
+	const result = await exec(
+		`${python} -m graphify.watch ${shellQuote(inputPath)} --debounce ${debounce}`,
+		{
+			cwd,
+			signal,
+			maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES,
+		},
+	);
 	return result.stdout.trim() || result.stderr.trim();
 }
 
@@ -824,7 +873,7 @@ communities = cluster(G)
 to_json(G, communities, 'graphify-out/graph.json')
 print(f'Re-clustered: {len(communities)} communities')
 "`,
-		{ cwd, signal },
+		{ cwd, signal, maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES },
 	);
 
 	if (result.exitCode !== 0) {
@@ -868,9 +917,8 @@ export async function runExtract(
 	onUpdate?: (message: string) => void,
 ): Promise<ExtractResult> {
 	const { inputPath, backend, maxWorkers, tokenBudget, maxConcurrency, apiTimeout } = options;
-	const escapedPath = escapeShell(inputPath);
 
-	let cmd = `${python} -m graphify extract '${escapedPath}'`;
+	let cmd = `${python} -m graphify extract ${shellQuote(inputPath)}`;
 	if (backend) cmd += ` --backend ${backend}`;
 	if (maxWorkers) cmd += ` --max-workers ${maxWorkers}`;
 	if (tokenBudget) cmd += ` --token-budget ${tokenBudget}`;
@@ -879,7 +927,7 @@ export async function runExtract(
 
 	onUpdate?.(`Running headless extraction with backend: ${backend ?? "auto-detected"}...`);
 
-	const result = await exec(cmd, { cwd, signal });
+	const result = await exec(cmd, { cwd, signal, maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES });
 
 	if (result.exitCode !== 0) {
 		throw new Error(`Extract failed: ${result.stderr || result.stdout}`);
@@ -896,7 +944,7 @@ export async function runExtract(
 
 	const extractedRaw = await exec(
 		`${python} -c "import json; from pathlib import Path; p=Path('.graphify_extract.json'); print(p.read_text() if p.exists() else '{"nodes":[],"edges":[]}')"`,
-		{ cwd, signal },
+		{ cwd, signal, maxOutputBytes: JSON_EXEC_OUTPUT_BYTES },
 	);
 	const extracted = JSON.parse(extractedRaw.stdout);
 
@@ -924,12 +972,9 @@ export async function exportCallflowHtml(
 ): Promise<string> {
 	const graphPath = options?.graphPath ?? "graphify-out/graph.json";
 	const outputPath = options?.outputPath ?? "graphify-out/callflow.html";
-	const escapedGraph = escapeShell(graphPath);
-	const escapedOutput = escapeShell(outputPath);
-
 	const result = await exec(
-		`${python} -m graphify export callflow-html --graph '${escapedGraph}' --output '${escapedOutput}'`,
-		{ cwd, signal },
+		`${python} -m graphify export callflow-html --graph ${shellQuote(graphPath)} --output ${shellQuote(outputPath)}`,
+		{ cwd, signal, maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES },
 	);
 
 	if (result.exitCode !== 0) {
@@ -952,11 +997,11 @@ export async function generateTree(
 ): Promise<string> {
 	const graphPath = options?.graphPath ?? "graphify-out/graph.json";
 	const outputPath = options?.outputPath ?? "graphify-out/GRAPH_TREE.html";
-	let cmd = `${python} -m graphify tree --graph '${escapeShell(graphPath)}' --output '${escapeShell(outputPath)}'`;
-	if (options?.root) cmd += ` --root '${escapeShell(options.root)}'`;
-	if (options?.label) cmd += ` --label '${escapeShell(options.label)}'`;
+	let cmd = `${python} -m graphify tree --graph ${shellQuote(graphPath)} --output ${shellQuote(outputPath)}`;
+	if (options?.root) cmd += ` --root ${shellQuote(options.root)}`;
+	if (options?.label) cmd += ` --label ${shellQuote(options.label)}`;
 
-	const result = await exec(cmd, { cwd, signal });
+	const result = await exec(cmd, { cwd, signal, maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES });
 	if (result.exitCode !== 0) {
 		throw new Error(`Tree generation failed: ${result.stderr}`);
 	}
@@ -974,7 +1019,11 @@ export async function hookAction(
 	action: "install" | "uninstall" | "status",
 	signal?: AbortSignal,
 ): Promise<string> {
-	const result = await exec(`${python} -m graphify hook ${action}`, { cwd, signal });
+	const result = await exec(`${python} -m graphify hook ${action}`, {
+		cwd,
+		signal,
+		maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES,
+	});
 	if (result.exitCode !== 0 && action !== "status") {
 		throw new Error(`Hook ${action} failed: ${result.stderr}`);
 	}
@@ -995,7 +1044,7 @@ export async function pushNeo4j(
 	signal?: AbortSignal,
 ): Promise<string> {
 	const result = await exec(
-		`NEO4J_URI='${escapeShell(uri)}' NEO4J_USER='${escapeShell(user)}' NEO4J_CREDS='${escapeShell(credentials)}' ${python} -c "
+		`NEO4J_URI=${shellQuote(uri)} NEO4J_USER=${shellQuote(user)} NEO4J_CREDS=${shellQuote(credentials)} ${python} -c "
 import json, os
 from graphify.build import build_from_json
 from graphify.export import push_to_neo4j
@@ -1012,7 +1061,7 @@ else:
 r = push_to_neo4j(G, uri=os.environ['NEO4J_URI'], user=os.environ['NEO4J_USER'], credentials=os.environ['NEO4J_CREDS'])
 print(f'Pushed to Neo4j: {r['nodes']} nodes, {r['edges']} edges')
 "`,
-		{ cwd, signal },
+		{ cwd, signal, maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES },
 	);
 	if (result.exitCode !== 0) {
 		throw new Error(`Neo4j push failed: ${result.stderr || result.stdout}`);
@@ -1031,14 +1080,14 @@ export async function saveResult(
 	options: { question: string; answer: string; type: string; nodes: string[] },
 	signal?: AbortSignal,
 ): Promise<string> {
-	const q = escapeShell(options.question);
-	const a = escapeShell(options.answer);
-	const t = escapeShell(options.type);
-	const nodes = options.nodes.map((n) => `'${escapeShell(n)}'`).join(" ");
+	const q = options.question;
+	const a = options.answer;
+	const t = options.type;
+	const nodes = options.nodes.map((n) => shellQuote(n)).join(" ");
 
 	const result = await exec(
-		`${python} -m graphify save-result --question '${q}' --answer '${a}' --type '${t}' --nodes ${nodes}`,
-		{ cwd, signal },
+		`${python} -m graphify save-result --question ${shellQuote(q)} --answer ${shellQuote(a)} --type ${shellQuote(t)} --nodes ${nodes}`,
+		{ cwd, signal, maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES },
 	);
 	return result.stdout.trim() || result.stderr.trim();
 }
@@ -1054,9 +1103,10 @@ export async function cloneRepo(
 	githubUrl: string,
 	signal?: AbortSignal,
 ): Promise<string> {
-	const result = await exec(`${python} -m graphify clone '${escapeShell(githubUrl)}'`, {
+	const result = await exec(`${python} -m graphify clone ${shellQuote(githubUrl)}`, {
 		cwd,
 		signal,
+		maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES,
 	});
 	if (result.exitCode !== 0) {
 		throw new Error(`Clone failed: ${result.stderr}`);
@@ -1076,11 +1126,11 @@ export async function mergeGraphs(
 	outPath?: string,
 	signal?: AbortSignal,
 ): Promise<string> {
-	const graphArgs = graphs.map((g) => `'${escapeShell(g)}'`).join(" ");
+	const graphArgs = graphs.map((g) => shellQuote(g)).join(" ");
 	let cmd = `${python} -m graphify merge-graphs ${graphArgs}`;
-	if (outPath) cmd += ` --out '${escapeShell(outPath)}'`;
+	if (outPath) cmd += ` --out ${shellQuote(outPath)}`;
 
-	const result = await exec(cmd, { cwd, signal });
+	const result = await exec(cmd, { cwd, signal, maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES });
 	if (result.exitCode !== 0) {
 		throw new Error(`Merge failed: ${result.stderr}`);
 	}
@@ -1110,13 +1160,13 @@ export async function checkUpgrade(
 ): Promise<UpgradeCheckResult> {
 	const installedResult = await exec(
 		"graphify --version 2>/dev/null || uv tool list 2>/dev/null | grep graphifyy | awk '{print $2}'",
-		{ signal },
+		{ signal, maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES },
 	);
 	const installedVersion = installedResult.stdout.trim().replace(/^v/, "");
 
 	const latestResult = await exec(
 		"uv tool upgrade graphifyy --dry-run 2>&1 | grep -oP 'upgraded from v?\\S+ to v?\\K\\S+' || echo ''",
-		{ signal },
+		{ signal, maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES },
 	);
 	const latestLine = latestResult.stdout.trim();
 
@@ -1131,7 +1181,7 @@ export async function checkUpgrade(
 		// Fallback: check PyPI index
 		const pypiResult = await exec(
 			"uv pip index versions graphifyy 2>/dev/null | head -1 | grep -oP 'graphifyy v?\\K\\S+'",
-			{ signal },
+			{ signal, maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES },
 		);
 		const pypiVersion = pypiResult.stdout.trim();
 		if (pypiVersion && pypiVersion !== installedVersion) {
@@ -1155,14 +1205,17 @@ export async function runUpgrade(exec: ExecFn, signal?: AbortSignal): Promise<Up
 		};
 	}
 
-	const result = await exec("uv tool upgrade graphifyy 2>&1", { signal });
+	const result = await exec("uv tool upgrade graphifyy 2>&1", {
+		signal,
+		maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES,
+	});
 	if (result.exitCode !== 0) {
 		throw new Error(`Upgrade failed: ${result.stderr || result.stdout}`);
 	}
 
 	const after = await exec(
 		"graphify --version 2>/dev/null || uv tool list 2>/dev/null | grep graphifyy | awk '{print $2}'",
-		{ signal },
+		{ signal, maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES },
 	);
 	const newVersion = after.stdout.trim().replace(/^v/, "");
 
@@ -1214,6 +1267,18 @@ export async function ensureGraphifyGitignore(cwd: string): Promise<{ updated: b
 	return { updated: true };
 }
 
-function escapeShell(str: string): string {
-	return str.replace(/'/g, "'\\''");
+/** Safe shell argument quoting — wraps in single quotes, escapes internal single quotes. */
+export function shellQuote(value: string): string {
+	return `'${value.replace(/'/g, "'\\''")}'`;
+}
+
+/** Safe Python literal embedding for shell double-quoted -c "..." context. */
+export function pythonLiteral(value: string): string {
+	const escaped = value
+		.replace(/\\/g, "\\\\") // \ → \\ (must be first)
+		.replace(/'/g, "\\'") // ' → \' (Python single-quoted literal)
+		.replace(/"/g, '\\"') // " → \" (prevents ending shell double-quote)
+		.replace(/\$/g, "\\$") // $ → \$ (prevent shell variable expansion)
+		.replace(/`/g, "\\`"); // ` → \` (prevent command substitution)
+	return `'${escaped}'`;
 }

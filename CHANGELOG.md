@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.6] - 2026-05-20
+
+### Fixed
+
+- **OOM crash prevention**: Pi process (exit code 32102) crashed during graph operations due to unbounded child-process output accumulation in Node.js memory. All exec calls now cap stdout/stderr at 1 MiB by default, preventing multi-MB graph data from exhausting V8 heap.
+- **Signal death handling**: Child process signal deaths (null exit code) now map to exit code 1 instead of 0, preventing silent success on crashes.
+- **Large-graph update guard**: `graphify_update` now checks if `graph.json` exceeds 10 MiB before running the memory-heavy inline Python rebuild pipeline. Large graphs fall back to the `graphify update` CLI command directly.
+- **Safe shell/Python quoting**: Replaced the incomplete `escapeShell()` function with `pythonLiteral()` (JSON.stringify) for Python inline strings and `shellQuote()` for shell arguments. Handles backslashes, newlines, and special characters correctly.
+- **Bounded auto-context caches**: Tool-result augmentation caches (`augmentedCache`, `emptyCache`) now cap at 256 entries with LRU eviction, preventing unbounded Set growth in long sessions.
+- **Shared bounded exec adapter**: Consolidated duplicated `createExec()` implementations into a single `createBoundedExec()` adapter with output size limits and signal-death handling.
+
+### Changed
+
+- Added `maxOutputBytes` to `ExecOptions` interface in runner.ts.
+- Added output budget constants: `DEFAULT_EXEC_OUTPUT_BYTES` (1 MiB), `JSON_EXEC_OUTPUT_BYTES` (2 MiB), `QUERY_EXEC_OUTPUT_BYTES` (256 KiB), `LARGE_GRAPH_JSON_BYTES` (10 MiB).
+
 ## [0.1.5] - 2026-05-12
 
 ### Changed
@@ -89,7 +105,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Tools: `graphify_build`, `graphify_query`, `graphify_path`, `graphify_explain`, `graphify_add`, `graphify_update`, `graphify_watch`, `graphify_cluster`.
 - Single `/graphify` command with autocomplete for subcommands and flags (build, query, path, explain, add, update, watch, cluster, hook).
 
-[Unreleased]: https://gitlab.elches.dev/agents/primecodex/packages/pi-graphify/-/compare/v0.1.5...main
+[Unreleased]: https://gitlab.elches.dev/agents/primecodex/packages/pi-graphify/-/compare/v0.1.6...main
+[0.1.6]: https://gitlab.elches.dev/agents/primecodex/packages/pi-graphify/-/compare/v0.1.5...v0.1.6
 [0.1.5]: https://gitlab.elches.dev/agents/primecodex/packages/pi-graphify/-/compare/v0.1.4...v0.1.5
 [0.1.4]: https://gitlab.elches.dev/agents/primecodex/packages/pi-graphify/-/compare/v0.1.3...v0.1.4
 [0.1.3]: https://gitlab.elches.dev/agents/primecodex/packages/pi-graphify/-/compare/v0.1.2...v0.1.3

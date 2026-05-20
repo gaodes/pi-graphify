@@ -1,7 +1,6 @@
 import type { ExtensionAPI, ExtensionCommandContext } from "@earendil-works/pi-coding-agent";
 import type { AutocompleteItem } from "@earendil-works/pi-tui";
 import { ensurePrimeSettings, loadConfig, type ResolvedConfig } from "../config";
-import type { ExecFn } from "../lib/runner";
 import {
 	clusterOnly,
 	detectPython,
@@ -12,6 +11,7 @@ import {
 	queryGraph,
 	updateGraph,
 } from "../lib/runner";
+import { createBoundedExec } from "../tools/exec-adapter";
 
 // ---------------------------------------------------------------------------
 // Autocomplete definitions
@@ -356,20 +356,6 @@ function parseArgs(raw: string): ParsedArgs {
 // Exec adapter for commands
 // ---------------------------------------------------------------------------
 
-function createExec(pi: ExtensionAPI, cwd: string): ExecFn {
-	return async (command, options) => {
-		const result = await pi.exec("sh", ["-c", command], {
-			cwd: options?.cwd ?? cwd,
-			signal: options?.signal,
-		});
-		return {
-			stdout: result.stdout,
-			stderr: result.stderr,
-			exitCode: result.code,
-		};
-	};
-}
-
 // ---------------------------------------------------------------------------
 // Command handlers
 // ---------------------------------------------------------------------------
@@ -382,33 +368,13 @@ async function handleBuild(
 	flags: Record<string, string | boolean>,
 ) {
 	const inputPath = positionals[0] ?? ".";
-	const exec = createExec(pi, ctx.cwd);
+	const exec = createBoundedExec(pi, ctx.cwd);
 	const python = await detectPython(exec, config.pythonPath, ctx.cwd);
 	await ensureInstalled(exec, python, ctx.cwd);
 
 	if (flags["cluster-only"] === true) {
-		const result = await pi.exec(
-			"sh",
-			[
-				"-c",
-				`${python} -c "
-import json
-from networkx.readwrite import json_graph
-from graphify.cluster import cluster, score_all
-from graphify.report import generate
-from graphify.export import to_json
-from pathlib import Path
-
-data = json.loads(Path('graphify-out/graph.json').read_text())
-G = json_graph.node_link_graph(data, edges='links')
-communities = cluster(G)
-to_json(G, communities, 'graphify-out/graph.json')
-print(f'Re-clustered: {len(communities)} communities')
-"`,
-			],
-			{ cwd: ctx.cwd },
-		);
-		await ctx.ui.notify(result.stdout.trim() || "Re-clustered graph.");
+		const result = await clusterOnly(exec, python, ctx.cwd);
+		await ctx.ui.notify(`Re-clustered: ${result.communities} communities`);
 		return;
 	}
 
@@ -452,7 +418,7 @@ async function handleQuery(
 		return;
 	}
 
-	const exec = createExec(pi, ctx.cwd);
+	const exec = createBoundedExec(pi, ctx.cwd);
 	const python = await detectPython(exec, config.pythonPath, ctx.cwd);
 	await ensureInstalled(exec, python, ctx.cwd);
 
@@ -477,7 +443,7 @@ async function handlePath(
 		return;
 	}
 
-	const exec = createExec(pi, ctx.cwd);
+	const exec = createBoundedExec(pi, ctx.cwd);
 	const python = await detectPython(exec, config.pythonPath, ctx.cwd);
 	await ensureInstalled(exec, python, ctx.cwd);
 
@@ -498,7 +464,7 @@ async function handleExplain(
 		return;
 	}
 
-	const exec = createExec(pi, ctx.cwd);
+	const exec = createBoundedExec(pi, ctx.cwd);
 	const python = await detectPython(exec, config.pythonPath, ctx.cwd);
 	await ensureInstalled(exec, python, ctx.cwd);
 
@@ -555,7 +521,7 @@ async function handleCluster(
 	ctx: ExtensionCommandContext,
 	config: ResolvedConfig,
 ) {
-	const exec = createExec(pi, ctx.cwd);
+	const exec = createBoundedExec(pi, ctx.cwd);
 	const python = await detectPython(exec, config.pythonPath, ctx.cwd);
 	await ensureInstalled(exec, python, ctx.cwd);
 
@@ -580,7 +546,7 @@ async function handleHook(
 		return;
 	}
 
-	const exec = createExec(pi, ctx.cwd);
+	const exec = createBoundedExec(pi, ctx.cwd);
 	const python = await detectPython(exec, config.pythonPath, ctx.cwd);
 	await ensureInstalled(exec, python, ctx.cwd);
 
@@ -622,7 +588,7 @@ async function handleUninstall(
 	ctx: ExtensionCommandContext,
 	flags: Record<string, string | boolean>,
 ) {
-	const exec = createExec(pi, ctx.cwd);
+	const exec = createBoundedExec(pi, ctx.cwd);
 	const purge = flags.purge === true;
 
 	try {
