@@ -162,7 +162,7 @@ describe("detectFiles", () => {
 // ---------------------------------------------------------------------------
 
 describe("ensureGraphifyGitignore", () => {
-	it("creates .gitignore with graphify cache exclusions when missing", async () => {
+	it("creates .gitignore with graphify-out/ when missing", async () => {
 		const dir = await mkdtemp(join(tmpdir(), "pi-graphify-test-"));
 
 		try {
@@ -170,23 +170,19 @@ describe("ensureGraphifyGitignore", () => {
 			expect(result.updated).toBe(true);
 
 			const content = await readFile(join(dir, ".gitignore"), "utf-8");
-			expect(content).toContain("graphify-out/cache/");
-			expect(content).toContain("graphify-out/.graphify_python");
-			expect(content).toContain("graphify-out/.graphify_root");
-			expect(content).toContain("graphify-out/cost.json");
-			expect(content).not.toContain("graphify-out/\n");
+			expect(content).toContain("graphify-out/");
 		} finally {
 			await rm(dir, { recursive: true, force: true });
 		}
 	});
 
-	it("removes legacy graphify-out/ ignore and preserves other entries", async () => {
+	it("removes legacy selective entries and replaces with graphify-out/", async () => {
 		const dir = await mkdtemp(join(tmpdir(), "pi-graphify-test-"));
 
 		try {
 			await writeFile(
 				join(dir, ".gitignore"),
-				"node_modules/\ngraphify-out/\ncustom-file.txt\n",
+				"node_modules/\ngraphify-out/cache/\ngraphify-out/.graphify_python\ngraphify-out/.graphify_root\ngraphify-out/cost.json\ncustom-file.txt\n",
 				"utf-8",
 			);
 
@@ -196,22 +192,21 @@ describe("ensureGraphifyGitignore", () => {
 			const content = await readFile(join(dir, ".gitignore"), "utf-8");
 			expect(content).toContain("node_modules/");
 			expect(content).toContain("custom-file.txt");
-			expect(content).toContain("graphify-out/cache/");
-			expect(content).toContain("graphify-out/.graphify_python");
-			expect(content).toContain("graphify-out/.graphify_root");
-			expect(content).toContain("graphify-out/cost.json");
-			expect(content).not.toContain("\ngraphify-out/\n");
+			expect(content).toContain("graphify-out/");
+			expect(content).not.toContain("graphify-out/cache/");
+			expect(content).not.toContain("graphify-out/.graphify_python");
+			expect(content).not.toContain("graphify-out/.graphify_root");
+			expect(content).not.toContain("graphify-out/cost.json");
 		} finally {
 			await rm(dir, { recursive: true, force: true });
 		}
 	});
 
-	it("is idempotent when required entries already exist", async () => {
+	it("is idempotent when graphify-out/ already exists", async () => {
 		const dir = await mkdtemp(join(tmpdir(), "pi-graphify-test-"));
 
 		try {
-			const expected =
-				"node_modules/\ngraphify-out/cache/\ngraphify-out/.graphify_python\ngraphify-out/.graphify_root\ngraphify-out/cost.json\n";
+			const expected = "node_modules/\ngraphify-out/\n";
 			await writeFile(join(dir, ".gitignore"), expected, "utf-8");
 
 			const result = await ensureGraphifyGitignore(dir);

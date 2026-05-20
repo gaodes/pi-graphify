@@ -32,14 +32,15 @@ export interface ExecResult {
 
 export type ExecFn = (command: string, options?: ExecOptions) => Promise<ExecResult>;
 
-const GRAPHIFY_GITIGNORE_REQUIRED = [
+const GRAPHIFY_GITIGNORE_REQUIRED = ["graphify-out/"] as const;
+
+const GRAPHIFY_GITIGNORE_LEGACY = [
 	"graphify-out/cache/",
 	"graphify-out/.graphify_python",
 	"graphify-out/.graphify_root",
 	"graphify-out/cost.json",
+	"/graphify-out/",
 ] as const;
-
-const GRAPHIFY_GITIGNORE_LEGACY = ["graphify-out/", "/graphify-out/"] as const;
 
 // ---------------------------------------------------------------------------
 // Python / graphify detection

@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Safe shell/Python quoting**: Replaced the incomplete `escapeShell()` function with `pythonLiteral()` (single-quoted Python literals safe in shell double-quote context) and `shellQuote()` for shell arguments. Handles backslashes, single/double quotes, dollar signs, backticks, and newlines correctly.
 - **Bounded auto-context caches**: Tool-result augmentation caches (`augmentedCache`, `emptyCache`) now cap at 256 entries with LRU eviction, preventing unbounded Set growth in long sessions.
 - **Shared bounded exec adapter**: Consolidated duplicated `createExec()` implementations into a single `createBoundedExec()` adapter with output size limits and signal-death handling.
+- **Gitignore policy simplified**: `ensureGraphifyGitignore()` now ensures `graphify-out/` (ignore entire directory) instead of selective entries. Removes legacy selective entries (`cache/`, `.graphify_python`, `.graphify_root`, `cost.json`) on sight. Graph output is fully regenerated on each build and should not be tracked.
 
 ### Changed
 
