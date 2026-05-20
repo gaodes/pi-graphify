@@ -35,15 +35,15 @@
 		"@gaodes/pi-utils-ui": "^0.3.0"
 	},
 	"devDependencies": {
+		"@biomejs/biome": "^2.4.3",
 		"@earendil-works/pi-ai": ">=0.69.0",
 		"@earendil-works/pi-coding-agent": ">=0.69.0",
 		"@earendil-works/pi-tui": ">=0.69.0",
+		"@gaodes/pi-test-harness": ">=0.1.0",
 		"@types/node": "^22.0.0",
 		"typebox": ">=1.0.0",
 		"typescript": "^5.0.0",
-		"vitest": "^4.1.5",
-		"@gaodes/pi-test-harness": ">=0.1.0",
-		"@biomejs/biome": "^2.4.3"
+		"vitest": "^4.1.5"
 	},
 	"peerDependencies": {
 		"@earendil-works/pi-ai": ">=0.69.0",
