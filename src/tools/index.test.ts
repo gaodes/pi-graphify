@@ -4,32 +4,15 @@ import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import extension from "./index";
 
-const {
-	mockEnsurePrimeSettings,
-	mockLoadConfig,
-	mockRegisterGraphifyStatusbar,
-	mockUpdateGraphifyStatusbar,
-	mockUnregisterGraphifyStatusbar,
-	mockCreateAllTools,
-} = vi.hoisted(() => ({
+const { mockEnsurePrimeSettings, mockLoadConfig, mockCreateAllTools } = vi.hoisted(() => ({
 	mockEnsurePrimeSettings: vi.fn(),
 	mockLoadConfig: vi.fn(),
-	mockRegisterGraphifyStatusbar: vi.fn(),
-	mockUpdateGraphifyStatusbar: vi.fn(async () => {}),
-	mockUnregisterGraphifyStatusbar: vi.fn(),
 	mockCreateAllTools: vi.fn(() => []),
 }));
 
 vi.mock("../config", () => ({
 	ensurePrimeSettings: mockEnsurePrimeSettings,
 	loadConfig: mockLoadConfig,
-}));
-
-vi.mock("../statusbar.js", () => ({
-	createStatusbarState: () => ({}) as unknown,
-	registerGraphifyStatusbar: mockRegisterGraphifyStatusbar,
-	unregisterGraphifyStatusbar: mockUnregisterGraphifyStatusbar,
-	updateGraphifyStatusbar: mockUpdateGraphifyStatusbar,
 }));
 
 vi.mock("./graphify-tools", () => ({
@@ -63,7 +46,6 @@ function baseConfig(overrides: Record<string, unknown> = {}) {
 		enabled: true,
 		pythonPath: "python3",
 		outputDir: "graphify-out",
-		statusbar: { enabled: true },
 		autoContext: {
 			enabled: true,
 			augmentSearchResults: true,

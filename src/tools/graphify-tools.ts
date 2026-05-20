@@ -27,7 +27,7 @@ import {
 	startWatch,
 	updateGraph,
 } from "../lib/runner";
-import { type StatusbarState, updateGraphifyStatusbar } from "../statusbar.js";
+
 import { createBoundedExec } from "./exec-adapter";
 
 // ---------------------------------------------------------------------------
@@ -62,11 +62,7 @@ interface BuildDetails {
 	outputDir: string;
 }
 
-export function createBuildTool(
-	pi: ExtensionAPI,
-	config: ResolvedConfig,
-	statusbarState: StatusbarState,
-) {
+export function createBuildTool(pi: ExtensionAPI, config: ResolvedConfig) {
 	return defineTool({
 		name: "graphify_build",
 		label: "Graphify Build",
@@ -110,8 +106,6 @@ export function createBuildTool(
 						details: {} as BuildDetails,
 					}),
 			);
-
-			updateGraphifyStatusbar(pi, config, ctx, statusbarState).catch(() => {});
 
 			return {
 				content: [
@@ -214,11 +208,7 @@ interface QueryDetails {
 	result: string;
 }
 
-export function createQueryTool(
-	pi: ExtensionAPI,
-	config: ResolvedConfig,
-	_statusbarState: StatusbarState,
-) {
+export function createQueryTool(pi: ExtensionAPI, config: ResolvedConfig) {
 	return defineTool({
 		name: "graphify_query",
 		label: "Graphify Query",
@@ -347,11 +337,7 @@ interface PathDetails {
 	result: string;
 }
 
-export function createPathTool(
-	pi: ExtensionAPI,
-	config: ResolvedConfig,
-	_statusbarState: StatusbarState,
-) {
+export function createPathTool(pi: ExtensionAPI, config: ResolvedConfig) {
 	return defineTool({
 		name: "graphify_path",
 		label: "Graphify Path",
@@ -445,11 +431,7 @@ interface ExplainDetails {
 	result: string;
 }
 
-export function createExplainTool(
-	pi: ExtensionAPI,
-	config: ResolvedConfig,
-	_statusbarState: StatusbarState,
-) {
+export function createExplainTool(pi: ExtensionAPI, config: ResolvedConfig) {
 	return defineTool({
 		name: "graphify_explain",
 		label: "Graphify Explain",
@@ -540,11 +522,7 @@ interface AddDetails {
 	savedTo: string;
 }
 
-export function createAddTool(
-	pi: ExtensionAPI,
-	config: ResolvedConfig,
-	statusbarState: StatusbarState,
-) {
+export function createAddTool(pi: ExtensionAPI, config: ResolvedConfig) {
 	return defineTool({
 		name: "graphify_add",
 		label: "Graphify Add",
@@ -591,8 +569,6 @@ export function createAddTool(
 			});
 
 			await updateGraph(exec, python, ctx.cwd, "./raw", signal);
-
-			updateGraphifyStatusbar(pi, config, ctx, statusbarState).catch(() => {});
 
 			return {
 				content: [{ type: "text", text: `Added ${params.url} to corpus and updated graph.` }],
@@ -670,11 +646,7 @@ interface UpdateDetails {
 	edges: number;
 }
 
-export function createUpdateTool(
-	pi: ExtensionAPI,
-	config: ResolvedConfig,
-	statusbarState: StatusbarState,
-) {
+export function createUpdateTool(pi: ExtensionAPI, config: ResolvedConfig) {
 	return defineTool({
 		name: "graphify_update",
 		label: "Graphify Update",
@@ -705,8 +677,6 @@ export function createUpdateTool(
 					details: {} as UpdateDetails,
 				}),
 			);
-
-			updateGraphifyStatusbar(pi, config, ctx, statusbarState).catch(() => {});
 
 			if (updateResult.newFiles === 0) {
 				return {
@@ -817,11 +787,7 @@ interface WatchDetails {
 	message: string;
 }
 
-export function createWatchTool(
-	pi: ExtensionAPI,
-	config: ResolvedConfig,
-	_statusbarState: StatusbarState,
-) {
+export function createWatchTool(pi: ExtensionAPI, config: ResolvedConfig) {
 	return defineTool({
 		name: "graphify_watch",
 		label: "Graphify Watch",
@@ -907,11 +873,7 @@ interface ClusterDetails {
 	communities: number;
 }
 
-export function createClusterTool(
-	pi: ExtensionAPI,
-	config: ResolvedConfig,
-	statusbarState: StatusbarState,
-) {
+export function createClusterTool(pi: ExtensionAPI, config: ResolvedConfig) {
 	return defineTool({
 		name: "graphify_cluster",
 		label: "Graphify Cluster",
@@ -937,8 +899,6 @@ export function createClusterTool(
 			await ensureInstalled(exec, python, ctx.cwd, signal);
 
 			const result = await clusterOnly(exec, python, ctx.cwd, signal);
-
-			updateGraphifyStatusbar(pi, config, ctx, statusbarState).catch(() => {});
 
 			return {
 				content: [{ type: "text", text: `Re-clustered: ${result.communities} communities` }],
@@ -1026,11 +986,7 @@ interface ExtractDetails {
 	edges: number;
 }
 
-export function createExtractTool(
-	pi: ExtensionAPI,
-	config: ResolvedConfig,
-	_statusbarState: StatusbarState,
-) {
+export function createExtractTool(pi: ExtensionAPI, config: ResolvedConfig) {
 	return defineTool({
 		name: "graphify_extract",
 		label: "Graphify Extract",
@@ -1167,11 +1123,7 @@ interface ExportCallflowDetails {
 	outputPath: string;
 }
 
-export function createExportCallflowTool(
-	pi: ExtensionAPI,
-	_config: ResolvedConfig,
-	_statusbarState: StatusbarState,
-) {
+export function createExportCallflowTool(pi: ExtensionAPI, _config: ResolvedConfig) {
 	return defineTool({
 		name: "graphify_export_callflow",
 		label: "Graphify Export Callflow",
@@ -1269,11 +1221,7 @@ interface UpgradeDetails {
 	upgraded?: boolean;
 }
 
-export function createUpgradeTool(
-	_pi: ExtensionAPI,
-	_config: ResolvedConfig,
-	_statusbarState: StatusbarState,
-) {
+export function createUpgradeTool(_pi: ExtensionAPI, _config: ResolvedConfig) {
 	return defineTool({
 		name: "graphify_upgrade",
 		label: "Graphify Upgrade",
@@ -1432,22 +1380,18 @@ export function createUpgradeTool(
 // Re-export all creators
 // ---------------------------------------------------------------------------
 
-export function createAllTools(
-	pi: ExtensionAPI,
-	config: ResolvedConfig,
-	statusbarState: StatusbarState,
-) {
+export function createAllTools(pi: ExtensionAPI, config: ResolvedConfig) {
 	return [
-		createBuildTool(pi, config, statusbarState),
-		createQueryTool(pi, config, statusbarState),
-		createPathTool(pi, config, statusbarState),
-		createExplainTool(pi, config, statusbarState),
-		createAddTool(pi, config, statusbarState),
-		createUpdateTool(pi, config, statusbarState),
-		createWatchTool(pi, config, statusbarState),
-		createClusterTool(pi, config, statusbarState),
-		createExtractTool(pi, config, statusbarState),
-		createExportCallflowTool(pi, config, statusbarState),
-		createUpgradeTool(pi, config, statusbarState),
+		createBuildTool(pi, config),
+		createQueryTool(pi, config),
+		createPathTool(pi, config),
+		createExplainTool(pi, config),
+		createAddTool(pi, config),
+		createUpdateTool(pi, config),
+		createWatchTool(pi, config),
+		createClusterTool(pi, config),
+		createExtractTool(pi, config),
+		createExportCallflowTool(pi, config),
+		createUpgradeTool(pi, config),
 	];
 }

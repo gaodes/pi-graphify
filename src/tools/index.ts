@@ -2,13 +2,6 @@ import { existsSync } from "node:fs";
 import { join } from "node:path";
 import type { ExtensionAPI, ExtensionContext } from "@earendil-works/pi-coding-agent";
 import { ensurePrimeSettings, loadConfig, type ResolvedConfig } from "../config";
-import {
-	createStatusbarState,
-	registerGraphifyStatusbar,
-	type StatusbarState,
-	unregisterGraphifyStatusbar,
-	updateGraphifyStatusbar,
-} from "../statusbar.js";
 import { createAllTools } from "./graphify-tools";
 
 const AUTO_CONTEXT_TOOL_NAMES = new Set(["grep", "ffgrep", "find", "fffind"]);
@@ -53,7 +46,6 @@ type ToolResultEvent = {
 };
 
 type ToolsExtensionState = {
-	statusbarState: StatusbarState;
 	graphContextState: GraphContextState;
 };
 
@@ -98,7 +90,6 @@ function createToolsExtensionState(config: ResolvedConfig, cwd: string): ToolsEx
 	syncGraphContextProjectState(graphContextState, config, cwd);
 
 	return {
-		statusbarState: createStatusbarState(),
 		graphContextState,
 	};
 }
@@ -150,19 +141,16 @@ export default function (pi: ExtensionAPI) {
 
 	const state = createToolsExtensionState(config, process.cwd());
 
-	for (const tool of createAllTools(pi, config, state.statusbarState)) {
+	for (const tool of createAllTools(pi, config)) {
 		pi.registerTool(tool);
 	}
 
 	pi.on("session_start", async (_event: unknown, ctx: ExtensionContext) => {
 		resetGraphContextSessionState(state.graphContextState, config, ctx.cwd);
-		registerGraphifyStatusbar(pi, config);
-		await updateGraphifyStatusbar(pi, config, ctx, state.statusbarState);
 	});
 
 	pi.on("before_agent_start", async (_event: unknown, ctx: ExtensionContext) => {
 		syncGraphContextProjectState(state.graphContextState, config, ctx.cwd);
-		await updateGraphifyStatusbar(pi, config, ctx, state.statusbarState);
 
 		if (!config.autoContext.enabled) return;
 		if (!state.graphContextState.graphExists) return;
@@ -217,6 +205,5 @@ export default function (pi: ExtensionAPI) {
 	pi.on("session_shutdown", async () => {
 		state.graphContextState.augmentedCache.clear();
 		state.graphContextState.emptyCache.clear();
-		unregisterGraphifyStatusbar(pi);
 	});
 }
