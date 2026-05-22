@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.7] - 2026-05-22
+
+### Added
+- `graphify_extract`: `claude-cli` backend — routes through Claude Code CLI, no API key required (upstream 0.7.17)
+- `graphify_extract`: `deepseek` backend — requires `DEEPSEEK_API_KEY` env var (upstream 0.8.9)
+- `graphify_extract`: `resolution` parameter — Leiden clustering resolution passed as `--resolution N` (upstream 0.8.10)
+- `graphify_extract`: `excludeHubs` parameter — exclude top-P% hub nodes via `--exclude-hubs P` (upstream 0.8.10)
+- `graphify_extract`: `exclude` parameter — runtime gitignore-style exclusion patterns via `--exclude` (upstream 0.8.14)
+
+### Changed
+- Updated upstream version tracking from graphify 0.7.13 to 0.8.14
+
 ## [0.1.6] - 2026-05-20
 
 ### Fixed

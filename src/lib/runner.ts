@@ -896,6 +896,9 @@ export interface ExtractOptions {
 	tokenBudget?: number;
 	maxConcurrency?: number;
 	apiTimeout?: number;
+	resolution?: number;
+	excludeHubs?: number;
+	exclude?: string[];
 	update?: boolean;
 	global?: boolean;
 	asTag?: string;
@@ -925,6 +928,13 @@ export async function runExtract(
 	if (tokenBudget) cmd += ` --token-budget ${tokenBudget}`;
 	if (maxConcurrency) cmd += ` --max-concurrency ${maxConcurrency}`;
 	if (apiTimeout) cmd += ` --api-timeout ${apiTimeout}`;
+	if (options.resolution != null) cmd += ` --resolution ${options.resolution}`;
+	if (options.excludeHubs != null) cmd += ` --exclude-hubs ${options.excludeHubs}`;
+	if (options.exclude?.length) {
+		for (const pattern of options.exclude) {
+			cmd += ` --exclude ${shellQuote(pattern)}`;
+		}
+	}
 
 	onUpdate?.(`Running headless extraction with backend: ${backend ?? "auto-detected"}...`);
 

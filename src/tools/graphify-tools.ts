@@ -953,10 +953,12 @@ const extractParameters = Type.Object({
 				Type.Literal("gemini"),
 				Type.Literal("ollama"),
 				Type.Literal("bedrock"),
+				Type.Literal("claude-cli"),
+				Type.Literal("deepseek"),
 			],
 			{
 				description:
-					"LLM backend: claude (Anthropic), kimi, openai, gemini, ollama (local), bedrock (AWS). Defaults to auto-detected.",
+					"LLM backend: claude (Anthropic), kimi, openai, gemini, ollama (local), bedrock (AWS), claude-cli (no API key, routes through Claude Code CLI), deepseek (requires DEEPSEEK_API_KEY). Defaults to auto-detected.",
 			},
 		),
 	),
@@ -971,6 +973,24 @@ const extractParameters = Type.Object({
 	),
 	apiTimeout: Type.Optional(
 		Type.Number({ description: "HTTP timeout for API calls in seconds (default: 600)" }),
+	),
+	resolution: Type.Optional(
+		Type.Number({
+			description:
+				"Resolution parameter for Leiden clustering (higher = more, smaller communities). Passed as --resolution N.",
+		}),
+	),
+	excludeHubs: Type.Optional(
+		Type.Number({
+			description:
+				"Exclude top-P% hub nodes from community assignment using majority-vote reattachment (0.0–1.0). Passed as --exclude-hubs P.",
+		}),
+	),
+	exclude: Type.Optional(
+		Type.Array(Type.String(), {
+			description:
+				"Extra gitignore-style exclusion patterns applied at runtime, e.g. ['*.min.js', 'test/']. Each value is passed as a separate --exclude flag.",
+		}),
 	),
 });
 
@@ -991,13 +1011,13 @@ export function createExtractTool(pi: ExtensionAPI, config: ResolvedConfig) {
 		name: "graphify_extract",
 		label: "Graphify Extract",
 		description:
-			"Headless LLM extraction for CI — extracts entities and relationships from a directory using an LLM backend without requiring an IDE. Supports claude, kimi, openai, gemini, ollama, and bedrock backends.",
+			"Headless LLM extraction for CI — extracts entities and relationships from a directory using an LLM backend without requiring an IDE. Supports claude, kimi, openai, gemini, ollama, bedrock, claude-cli, and deepseek backends.",
 		parameters: extractParameters,
 		promptSnippet:
 			"Use graphify_extract for headless extraction in CI pipelines or when you want pure LLM-based graph building without interactive mode.",
 		promptGuidelines: [
 			"graphify_extract runs in headless mode — no IDE interaction needed.",
-			"Specify the backend explicitly for reproducibility: claude, kimi, openai, gemini, ollama, or bedrock.",
+			"Specify the backend explicitly for reproducibility: claude, kimi, openai, gemini, ollama, bedrock, claude-cli, or deepseek.",
 			"After extraction, use graphify_build to run the full pipeline (cluster, visualize, analyze).",
 		],
 
@@ -1023,6 +1043,9 @@ export function createExtractTool(pi: ExtensionAPI, config: ResolvedConfig) {
 					tokenBudget: params.tokenBudget,
 					maxConcurrency: params.maxConcurrency,
 					apiTimeout: params.apiTimeout,
+					resolution: params.resolution,
+					excludeHubs: params.excludeHubs,
+					exclude: params.exclude,
 				},
 				signal,
 				(msg) =>
@@ -1053,6 +1076,12 @@ export function createExtractTool(pi: ExtensionAPI, config: ResolvedConfig) {
 			if (params.backend) optionArgs.push({ label: "backend", value: params.backend });
 			if (params.maxWorkers)
 				optionArgs.push({ label: "max-workers", value: String(params.maxWorkers) });
+			if (params.resolution != null)
+				optionArgs.push({ label: "resolution", value: String(params.resolution) });
+			if (params.excludeHubs != null)
+				optionArgs.push({ label: "exclude-hubs", value: String(params.excludeHubs) });
+			if (params.exclude?.length)
+				optionArgs.push({ label: "exclude", value: params.exclude.join(", ") });
 			return new ToolCallHeader(
 				{ toolName: "Graphify", action: "extract", mainArg: params.inputPath, optionArgs },
 				theme,

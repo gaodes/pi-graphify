@@ -15,26 +15,26 @@ Pi extension wrapping the [graphify](https://github.com/safishamsi/graphify) Pyt
 
 ## Tools (11)
 
-| Tool                       | Description                                                                    |
-| -------------------------- | ------------------------------------------------------------------------------ |
-| `graphify_build`           | Full pipeline: detect → extract → cluster → visualize                          |
-| `graphify_query`           | BFS/DFS graph traversal                                                        |
-| `graphify_path`            | Shortest path between two concepts                                             |
-| `graphify_explain`         | Plain-language node explanation                                                |
-| `graphify_add`             | Fetch URL and add to corpus                                                    |
-| `graphify_update`          | Incremental update (changed files only)                                        |
-| `graphify_watch`           | Watch directory for changes                                                    |
-| `graphify_cluster`         | Re-run clustering on existing graph                                            |
-| `graphify_extract`         | Headless LLM extraction for CI (claude, kimi, openai, gemini, ollama, bedrock) |
-| `graphify_export_callflow` | Generate self-contained Mermaid architecture/call-flow HTML                    |
-| `graphify_upgrade`         | Check for and install graphifyy CLI updates via uv                             |
+| Tool                       | Description                                                                                          |
+| -------------------------- | ---------------------------------------------------------------------------------------------------- |
+| `graphify_build`           | Full pipeline: detect → extract → cluster → visualize                                                |
+| `graphify_query`           | BFS/DFS graph traversal                                                                              |
+| `graphify_path`            | Shortest path between two concepts                                                                   |
+| `graphify_explain`         | Plain-language node explanation                                                                      |
+| `graphify_add`             | Fetch URL and add to corpus                                                                          |
+| `graphify_update`          | Incremental update (changed files only)                                                              |
+| `graphify_watch`           | Watch directory for changes                                                                          |
+| `graphify_cluster`         | Re-run clustering on existing graph                                                                  |
+| `graphify_extract`         | Headless LLM extraction for CI (claude, kimi, openai, gemini, ollama, bedrock, claude-cli, deepseek) |
+| `graphify_export_callflow` | Generate self-contained Mermaid architecture/call-flow HTML                                          |
+| `graphify_upgrade`         | Check for and install graphifyy CLI updates via uv                                                   |
 
 ## Commands
 
 Subcommands: build, query, path, explain, add, update, watch, cluster, hook, extract, uninstall
 
 Build flags: `--mode deep`, `--no-viz`, `--obsidian`, `--svg`, `--graphml`, `--neo4j`, `--callflow`, `--update`, `--cluster-only`
-Extract flags: `--backend <claude|kimi|openai|gemini|ollama|bedrock>`, `--max-workers N`, `--token-budget N`, `--api-timeout N`
+Extract flags: `--backend <claude|kimi|openai|gemini|ollama|bedrock|claude-cli|deepseek>`, `--max-workers N`, `--max-concurrency N`, `--token-budget N`, `--api-timeout N`, `--resolution N`, `--exclude-hubs P`, `--exclude <pattern>`
 
 ## Runner Functions (not yet exposed as tools)
 
@@ -78,7 +78,7 @@ Key: `pi-graphify` in `prime-settings.json` (legacy `graphify` key auto-migrates
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 
-This project is indexed by GitNexus as **pi-graphify** (477 symbols, 718 relationships, 18 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+This project is indexed by GitNexus as **pi-graphify** (449 symbols, 664 relationships, 16 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
 
 > If any GitNexus tool warns the index is stale, run `npx gitnexus analyze` in terminal first.
 
