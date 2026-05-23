@@ -1,3 +1,5 @@
+import { fileURLToPath } from "node:url";
+import { dirname } from "node:path";
 import type {
 	AgentToolResult,
 	AgentToolUpdateCallback,
@@ -21,14 +23,21 @@ import {
 	explainNode,
 	exportCallflowHtml,
 	findPath,
+	getInstalledVersion,
 	queryGraph,
 	runExtract,
 	runUpgrade,
 	startWatch,
+	syncSkillFromUpstream,
 	updateGraph,
+	updateUpstreamVersion,
 } from "../lib/runner";
 
 import { createBoundedExec } from "./exec-adapter";
+
+// Extension package root — used to locate bundled skill and .upstream.json
+const _thisFile = fileURLToPath(import.meta.url);
+const EXTENSION_ROOT = dirname(dirname(dirname(_thisFile))); // src/tools/ → src/ → package root
 
 // ---------------------------------------------------------------------------
 // Shared exec adapter (see exec-adapter.ts for the bounded implementation)
@@ -1231,9 +1240,9 @@ export function createExportCallflowTool(pi: ExtensionAPI, _config: ResolvedConf
 
 const upgradeParameters = Type.Object({
 	action: Type.Optional(
-		Type.Union([Type.Literal("check"), Type.Literal("install")], {
+		Type.Union([Type.Literal("check"), Type.Literal("install"), Type.Literal("sync-skill")], {
 			description:
-				"'check' to see if a new version is available (default), 'install' to upgrade to latest. This updates the graphifyy Python CLI tool via uv — NOT the graphify knowledge graph.",
+				"'check' to see if a new version is available (default), 'install' to upgrade to latest, 'sync-skill' to re-download the bundled skill from upstream without upgrading the CLI. This updates the graphifyy Python CLI tool via uv — NOT the graphify knowledge graph.",
 			default: "check",
 		}),
 	),
@@ -1261,7 +1270,8 @@ export function createUpgradeTool(_pi: ExtensionAPI, _config: ResolvedConfig) {
 			"Use graphify_upgrade to check or install the latest version of the graphify CLI tool.",
 		promptGuidelines: [
 			"Use action='check' to see if a new version is available before installing.",
-			"Use action='install' to actually upgrade graphifyy via uv tool upgrade.",
+			"Use action='install' to upgrade graphifyy via uv tool upgrade. This also auto-syncs the bundled skill.",
+			"Use action='sync-skill' to re-download the bundled skill from GitHub without upgrading the CLI. Useful if the skill file is missing or manually edited.",
 			"This tool updates the graphifyy Python package — not the knowledge graph data.",
 		],
 
@@ -1301,6 +1311,68 @@ export function createUpgradeTool(_pi: ExtensionAPI, _config: ResolvedConfig) {
 				};
 			}
 
+			// action === 'sync-skill'
+			if (action === "sync-skill") {
+				onUpdate?.({
+					content: [{ type: "text", text: "Syncing bundled skill from upstream..." }],
+					details: {} as UpgradeDetails,
+				});
+
+				const installedVersion = await getInstalledVersion(exec, signal);
+
+				try {
+					const skillResult = await syncSkillFromUpstream(installedVersion, EXTENSION_ROOT, signal);
+					if (skillResult.synced) {
+						await updateUpstreamVersion(EXTENSION_ROOT, installedVersion);
+						return {
+							content: [
+								{
+									type: "text",
+									text: `Skill synced from upstream v${installedVersion}.`,
+								},
+							],
+							details: {
+								action: "sync-skill",
+								installedVersion,
+								latestVersion: installedVersion,
+								updateAvailable: false,
+							},
+						};
+					}
+					return {
+						content: [
+							{
+								type: "text",
+								text: skillResult.error
+									? `Skill sync failed: ${skillResult.error}`
+									: `Skill already up to date (v${installedVersion}).`,
+							},
+						],
+						details: {
+							action: "sync-skill",
+							installedVersion,
+							latestVersion: installedVersion,
+							updateAvailable: false,
+						},
+					};
+				} catch (err) {
+					return {
+						content: [
+							{
+								type: "text",
+								text: `Skill sync failed: ${err instanceof Error ? err.message : String(err)}`,
+							},
+						],
+						details: {
+							action: "sync-skill",
+							installedVersion,
+							latestVersion: installedVersion,
+							updateAvailable: false,
+						},
+					};
+				}
+			}
+
 			// action === 'install'
 			onUpdate?.({
 				content: [{ type: "text", text: "Upgrading graphifyy via uv..." }],
@@ -1309,12 +1381,30 @@ export function createUpgradeTool(_pi: ExtensionAPI, _config: ResolvedConfig) {
 
 			const result = await runUpgrade(exec, signal);
 
+			// Always attempt skill sync after install (even if no CLI upgrade, skill may be stale)
+			let skillSyncText = "";
+			try {
+				const skillResult = await syncSkillFromUpstream(result.newVersion, EXTENSION_ROOT, signal);
+				if (skillResult.synced) {
+					skillSyncText = result.upgraded
+						? `\nSkill synced from upstream v${result.newVersion}.`
+						: `\nSkill was stale — synced from upstream v${result.newVersion}.`;
+					await updateUpstreamVersion(EXTENSION_ROOT, result.newVersion);
+				} else if (skillResult.error && result.upgraded) {
+					skillSyncText = `\nSkill sync skipped: ${skillResult.error}`;
+				}
+			} catch (err) {
+				if (result.upgraded) {
+					skillSyncText = `\nSkill sync failed: ${err instanceof Error ? err.message : String(err)}`;
+				}
+			}
+
 			return {
 				content: [
 					{
 						type: "text",
 						text: result.upgraded
-							? `Upgraded graphifyy: ${result.previousVersion} → ${result.newVersion}`
+							? `Upgraded graphifyy: ${result.previousVersion} → ${result.newVersion}${skillSyncText}`
 							: `graphifyy is already up to date (v${result.newVersion})`,
 					},
 				],
@@ -1369,6 +1459,25 @@ export function createUpgradeTool(_pi: ExtensionAPI, _config: ResolvedConfig) {
 							{
 								label: "status",
 								value: details.updateAvailable ? "update available" : "up to date",
+								showCollapsed: false,
+							},
+						],
+					},
+					options,
+					theme,
+				);
+			}
+
+			if (details.action === "sync-skill") {
+				const textBlock = result.content.find((c) => c.type === "text");
+				return new ToolBody(
+					{
+						fields: [
+							{ label: "action", value: "sync-skill", showCollapsed: false },
+							{ label: "version", value: `v${details.installedVersion}`, showCollapsed: false },
+							{
+								label: "result",
+								value: (textBlock?.type === "text" && textBlock.text) || "done",
 								showCollapsed: false,
 							},
 						],

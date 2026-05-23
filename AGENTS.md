@@ -5,13 +5,13 @@ Pi extension wrapping the [graphify](https://github.com/safishamsi/graphify) Pyt
 ## Architecture
 
 - `src/config.ts` — Raw/resolved config loader
-- `src/lib/runner.ts` — Graphify CLI execution logic (no Pi imports). All functions accept an injected `exec` callback for testability.
-- `src/lib/runner.test.ts` — Unit tests for runner (7 passing)
+- `src/lib/runner.ts` — Graphify CLI execution logic (no Pi imports). All functions accept an injected `exec` callback for testability. Includes `getInstalledVersion`, `getLatestVersion`, `syncSkillFromUpstream`, `updateUpstreamVersion` for upgrade/skill-sync.
+- `src/lib/runner.test.ts` — Unit tests for runner (20 passing)
 - `src/tools/` — LLM-callable tools (thin wrappers around runner)
-  - All tools in `graphify-tools.ts`: build, query, path, explain, add, update, watch, cluster
+  - All tools in `graphify-tools.ts`: build, query, path, explain, add, update, watch, cluster, upgrade
   - Integration tests in `graphify.integration.test.ts` (10 passing)
 - `src/commands/` — `/graphify` slash command with autocomplete for all subcommands
-- `skills/graphify/` — Bundled skill for full-pipeline orchestration (semantic extraction, community labeling, export formats, video transcription, guided exploration)
+- `skills/graphify/` — Bundled skill synced from upstream `graphify/skill-pi.md` at the installed CLI version. Auto-synced on upgrade via `graphify_upgrade`, manual sync via `graphify_upgrade action='sync-skill'`.
 
 ## Tools (11)
 
@@ -31,7 +31,7 @@ Pi extension wrapping the [graphify](https://github.com/safishamsi/graphify) Pyt
 
 ## Commands
 
-Subcommands: build, query, path, explain, add, update, watch, cluster, hook, extract, uninstall
+Subcommands: build, query, path, explain, add, update, watch, cluster, hook, extract, uninstall, upgrade
 
 Build flags: `--mode deep`, `--no-viz`, `--obsidian`, `--svg`, `--graphml`, `--neo4j`, `--callflow`, `--update`, `--cluster-only`
 Extract flags: `--backend <claude|kimi|openai|gemini|ollama|bedrock|claude-cli|deepseek>`, `--max-workers N`, `--max-concurrency N`, `--token-budget N`, `--api-timeout N`, `--resolution N`, `--exclude-hubs P`, `--exclude <pattern>`
@@ -76,9 +76,10 @@ The `graphify extract` and `graphify export callflow-html` commands are now expo
 Key: `pi-graphify` in `prime-settings.json` (legacy `graphify` key auto-migrates)
 
 <!-- gitnexus:start -->
+
 # GitNexus — Code Intelligence
 
-This project is indexed by GitNexus as **pi-graphify** (449 symbols, 664 relationships, 16 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+This project is indexed by GitNexus as **pi-graphify** (461 symbols, 675 relationships, 16 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
 
 > If any GitNexus tool warns the index is stale, run `npx gitnexus analyze` in terminal first.
 
@@ -99,22 +100,22 @@ This project is indexed by GitNexus as **pi-graphify** (449 symbols, 664 relatio
 
 ## Resources
 
-| Resource | Use for |
-|----------|---------|
-| `gitnexus://repo/pi-graphify/context` | Codebase overview, check index freshness |
-| `gitnexus://repo/pi-graphify/clusters` | All functional areas |
-| `gitnexus://repo/pi-graphify/processes` | All execution flows |
-| `gitnexus://repo/pi-graphify/process/{name}` | Step-by-step execution trace |
+| Resource                                     | Use for                                  |
+| -------------------------------------------- | ---------------------------------------- |
+| `gitnexus://repo/pi-graphify/context`        | Codebase overview, check index freshness |
+| `gitnexus://repo/pi-graphify/clusters`       | All functional areas                     |
+| `gitnexus://repo/pi-graphify/processes`      | All execution flows                      |
+| `gitnexus://repo/pi-graphify/process/{name}` | Step-by-step execution trace             |
 
 ## CLI
 
-| Task | Read this skill file |
-|------|---------------------|
-| Understand architecture / "How does X work?" | `.claude/skills/gitnexus/gitnexus-exploring/SKILL.md` |
-| Blast radius / "What breaks if I change X?" | `.claude/skills/gitnexus/gitnexus-impact-analysis/SKILL.md` |
-| Trace bugs / "Why is X failing?" | `.claude/skills/gitnexus/gitnexus-debugging/SKILL.md` |
-| Rename / extract / split / refactor | `.claude/skills/gitnexus/gitnexus-refactoring/SKILL.md` |
-| Tools, resources, schema reference | `.claude/skills/gitnexus/gitnexus-guide/SKILL.md` |
-| Index, status, clean, wiki CLI commands | `.claude/skills/gitnexus/gitnexus-cli/SKILL.md` |
+| Task                                         | Read this skill file                                        |
+| -------------------------------------------- | ----------------------------------------------------------- |
+| Understand architecture / "How does X work?" | `.claude/skills/gitnexus/gitnexus-exploring/SKILL.md`       |
+| Blast radius / "What breaks if I change X?"  | `.claude/skills/gitnexus/gitnexus-impact-analysis/SKILL.md` |
+| Trace bugs / "Why is X failing?"             | `.claude/skills/gitnexus/gitnexus-debugging/SKILL.md`       |
+| Rename / extract / split / refactor          | `.claude/skills/gitnexus/gitnexus-refactoring/SKILL.md`     |
+| Tools, resources, schema reference           | `.claude/skills/gitnexus/gitnexus-guide/SKILL.md`           |
+| Index, status, clean, wiki CLI commands      | `.claude/skills/gitnexus/gitnexus-cli/SKILL.md`             |
 
 <!-- gitnexus:end -->

@@ -1164,57 +1164,54 @@ export interface UpgradeRunResult {
 	upgraded: boolean;
 }
 
+/** Get the currently installed graphifyy version. */
+export async function getInstalledVersion(exec: ExecFn, signal?: AbortSignal): Promise<string> {
+	const result = await exec(
+		"graphify --version 2>/dev/null || uv tool list 2>/dev/null | grep graphifyy | awk '{print $2}'",
+		{ signal, maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES },
+	);
+	const raw = result.stdout.trim();
+	// graphify --version may output warning lines; take the last line
+	const lastLine = raw.split("\n").pop() || raw;
+	return lastLine.replace(/^v/, "").replace(/^graphify\s+/i, "");
+}
+
+/** Get the latest available graphifyy version from PyPI. */
+export async function getLatestVersion(exec: ExecFn, signal?: AbortSignal): Promise<string | null> {
+	// pip3 index versions outputs: "graphifyy (0.8.16) Available versions: ..."
+	const result = await exec(
+		"pip3 index versions graphifyy 2>/dev/null | head -1 | sed -n 's/graphifyy ([^)]*).*/\\1/p'",
+		{ signal, maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES },
+	);
+	const version = result.stdout.trim();
+	if (version && /^\d+\.\d+/.test(version)) return version;
+
+	// Fallback: uv pip index
+	const uvResult = await exec(
+		"uv pip index versions graphifyy 2>/dev/null | head -1 | sed -n 's/graphifyy (v?([^)]*)).*/\\1/p'",
+		{ signal, maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES },
+	);
+	const uvVersion = uvResult.stdout.trim().replace(/^v/, "");
+	if (uvVersion && /^\d+\.\d+/.test(uvVersion)) return uvVersion;
+
+	return null;
+}
+
 /** Check the currently installed and latest available version of graphifyy. */
 export async function checkUpgrade(
 	exec: ExecFn,
 	signal?: AbortSignal,
 ): Promise<UpgradeCheckResult> {
-	const installedResult = await exec(
-		"graphify --version 2>/dev/null || uv tool list 2>/dev/null | grep graphifyy | awk '{print $2}'",
-		{ signal, maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES },
-	);
-	const installedVersion = installedResult.stdout.trim().replace(/^v/, "");
-
-	const latestResult = await exec(
-		"uv tool upgrade graphifyy --dry-run 2>&1 | grep -oP 'upgraded from v?\\S+ to v?\\K\\S+' || echo ''",
-		{ signal, maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES },
-	);
-	const latestLine = latestResult.stdout.trim();
-
-	// If dry-run shows an upgrade, parse the target version. Otherwise latest = installed.
-	let latestVersion = installedVersion;
-	let updateAvailable = false;
-
-	if (latestLine) {
-		latestVersion = latestLine;
-		updateAvailable = true;
-	} else {
-		// Fallback: check PyPI index
-		const pypiResult = await exec(
-			"uv pip index versions graphifyy 2>/dev/null | head -1 | grep -oP 'graphifyy v?\\K\\S+'",
-			{ signal, maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES },
-		);
-		const pypiVersion = pypiResult.stdout.trim();
-		if (pypiVersion && pypiVersion !== installedVersion) {
-			latestVersion = pypiVersion;
-			updateAvailable = true;
-		}
-	}
+	const installedVersion = await getInstalledVersion(exec, signal);
+	const latestVersion = (await getLatestVersion(exec, signal)) ?? installedVersion;
+	const updateAvailable = latestVersion !== installedVersion;
 
 	return { installedVersion, latestVersion, updateAvailable };
 }
 
 /** Run uv tool upgrade graphifyy and return the result. */
 export async function runUpgrade(exec: ExecFn, signal?: AbortSignal): Promise<UpgradeRunResult> {
-	const before = await checkUpgrade(exec, signal);
-
-	if (!before.updateAvailable) {
-		return {
-			previousVersion: before.installedVersion,
-			newVersion: before.installedVersion,
-			upgraded: false,
-		};
-	}
+	const beforeVersion = await getInstalledVersion(exec, signal);
 
 	const result = await exec("uv tool upgrade graphifyy 2>&1", {
 		signal,
@@ -1224,16 +1221,15 @@ export async function runUpgrade(exec: ExecFn, signal?: AbortSignal): Promise<Up
 		throw new Error(`Upgrade failed: ${result.stderr || result.stdout}`);
 	}
 
-	const after = await exec(
-		"graphify --version 2>/dev/null || uv tool list 2>/dev/null | grep graphifyy | awk '{print $2}'",
-		{ signal, maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES },
-	);
-	const newVersion = after.stdout.trim().replace(/^v/, "");
+	const afterVersion = await getInstalledVersion(exec, signal);
+
+	// Detect upgrade from uv output: "Updated graphifyy v0.8.13 -> v0.8.16"
+	const upgraded = afterVersion !== beforeVersion;
 
 	return {
-		previousVersion: before.installedVersion,
-		newVersion: newVersion || before.latestVersion,
-		upgraded: true,
+		previousVersion: beforeVersion,
+		newVersion: afterVersion,
+		upgraded,
 	};
 }
 
@@ -1276,6 +1272,119 @@ export async function ensureGraphifyGitignore(cwd: string): Promise<{ updated: b
 
 	await writeFile(path, next, "utf-8");
 	return { updated: true };
+}
+
+// ---------------------------------------------------------------------------
+// Skill sync — fetch upstream skill-pi.md and write to bundled skills/ directory
+// ---------------------------------------------------------------------------
+
+export interface SkillSyncResult {
+	synced: boolean;
+	fromVersion: string;
+	toVersion: string;
+	error?: string;
+}
+
+/** Upstream skill file URL template. */
+const UPSTREAM_SKILL_URL =
+	"https://raw.githubusercontent.com/safishamsi/graphify/v{VERSION}/graphify/skill-pi.md";
+
+/**
+ * Fetch the upstream skill-pi.md for a given graphify version and write it
+ * to the bundled skills directory. Uses native fetch — no exec dependency.
+ *
+ * @param version  Semver version string (e.g. "0.8.14")
+ * @param extensionRoot  Absolute path to the pi-graphify package root
+ * @param signal  Optional abort signal
+ */
+export async function syncSkillFromUpstream(
+	version: string,
+	extensionRoot: string,
+	signal?: AbortSignal,
+): Promise<SkillSyncResult> {
+	const url = UPSTREAM_SKILL_URL.replace("{VERSION}", version);
+	const skillPath = join(extensionRoot, "skills", "graphify", "SKILL.md");
+
+	try {
+		const response = await fetch(url, { signal });
+		if (!response.ok) {
+			return {
+				synced: false,
+				fromVersion: "",
+				toVersion: version,
+				error: `HTTP ${response.status} fetching ${url}`,
+			};
+		}
+
+		const content = await response.text();
+
+		if (!content.trim()) {
+			return {
+				synced: false,
+				fromVersion: "",
+				toVersion: version,
+				error: "Fetched skill-pi.md is empty",
+			};
+		}
+
+		// Read the current skill to detect if it actually changed
+		let currentContent: string | undefined;
+		try {
+			currentContent = await readFile(skillPath, "utf-8");
+		} catch {
+			// File may not exist yet — that's fine
+		}
+
+		if (currentContent === content) {
+			return {
+				synced: false,
+				fromVersion: version,
+				toVersion: version,
+			};
+		}
+
+		await writeFile(skillPath, content, "utf-8");
+
+		return {
+			synced: true,
+			fromVersion: currentContent ? "previous" : "none",
+			toVersion: version,
+		};
+	} catch (err) {
+		return {
+			synced: false,
+			fromVersion: "",
+			toVersion: version,
+			error: err instanceof Error ? err.message : String(err),
+		};
+	}
+}
+
+/**
+ * Update the upstreamVersion in .upstream.json after a successful skill sync.
+ */
+export async function updateUpstreamVersion(
+	extensionRoot: string,
+	newVersion: string,
+): Promise<void> {
+	const upstreamPath = join(extensionRoot, ".upstream.json");
+
+	let raw: string;
+	try {
+		raw = await readFile(upstreamPath, "utf-8");
+	} catch {
+		return; // No .upstream.json — nothing to update
+	}
+
+	const upstream = JSON.parse(raw) as Record<string, unknown>;
+	if (
+		typeof upstream.primary === "object" &&
+		upstream.primary !== null &&
+		"upstreamVersion" in (upstream.primary as Record<string, unknown>)
+	) {
+		(upstream.primary as Record<string, unknown>).upstreamVersion = newVersion;
+		await writeFile(upstreamPath, `${JSON.stringify(upstream, null, "\t")}\n`, "utf-8");
+	}
 }
 
 /** Safe shell argument quoting — wraps in single quotes, escapes internal single quotes. */

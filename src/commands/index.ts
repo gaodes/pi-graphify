@@ -2,16 +2,26 @@ import type { ExtensionAPI, ExtensionCommandContext } from "@earendil-works/pi-c
 import type { AutocompleteItem } from "@earendil-works/pi-tui";
 import { ensurePrimeSettings, loadConfig, type ResolvedConfig } from "../config";
 import {
+	checkUpgrade,
 	clusterOnly,
 	detectPython,
 	ensureInstalled,
 	explainNode,
 	findPath,
+	getInstalledVersion,
 	hookAction,
 	queryGraph,
+	runUpgrade,
+	syncSkillFromUpstream,
 	updateGraph,
+	updateUpstreamVersion,
 } from "../lib/runner";
 import { createBoundedExec } from "../tools/exec-adapter";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
+
+const _thisFile = fileURLToPath(import.meta.url);
+const EXTENSION_ROOT = dirname(dirname(dirname(_thisFile))); // src/commands/ → src/ → package root
 
 // ---------------------------------------------------------------------------
 // Autocomplete definitions
@@ -72,6 +82,21 @@ const SUBCOMMANDS: AutocompleteItem[] = [
 		value: "uninstall",
 		label: "uninstall",
 		description: "Remove graphify from all platforms (add --purge to also delete graphify-out/)",
+	},
+	{
+		value: "upgrade",
+		label: "upgrade",
+		description: "Check for updates, upgrade graphifyy CLI, or sync bundled skill",
+	},
+];
+
+const UPGRADE_ACTIONS: AutocompleteItem[] = [
+	{ value: "upgrade check", label: "check", description: "Check if a new version is available" },
+	{ value: "upgrade install", label: "install", description: "Upgrade to latest version" },
+	{
+		value: "upgrade sync-skill",
+		label: "sync-skill",
+		description: "Re-download bundled skill from upstream",
 	},
 ];
 
@@ -248,6 +273,13 @@ function getCompletions(argumentPrefix: string): AutocompleteItem[] {
 				{ value: "uninstall --purge", label: "--purge", description: "Also delete graphify-out/" },
 			];
 		}
+		case "upgrade": {
+			const partial = parts.slice(1).join(" ").toLowerCase();
+			if (partial) {
+				return UPGRADE_ACTIONS.filter((a) => a.label.startsWith(partial));
+			}
+			return UPGRADE_ACTIONS;
+		}
 		default: {
 			if (parts[parts.length - 1]?.startsWith("--")) {
 				return BUILD_FLAGS.filter((f) => f.value.startsWith(parts[parts.length - 1] ?? ""));
@@ -273,7 +305,8 @@ interface ParsedArgs {
 		| "cluster"
 		| "hook"
 		| "extract"
-		| "uninstall";
+		| "uninstall"
+		| "upgrade";
 	positionals: string[];
 	flags: Record<string, string | boolean>;
 }
@@ -300,6 +333,7 @@ function parseArgs(raw: string): ParsedArgs {
 				"hook",
 				"extract",
 				"uninstall",
+				"upgrade",
 			].includes(first) &&
 			!first.startsWith("-")
 		) {
@@ -608,6 +642,85 @@ async function handleUninstall(
 	}
 }
 
+async function handleUpgrade(
+	pi: ExtensionAPI,
+	ctx: ExtensionCommandContext,
+	config: ResolvedConfig,
+	positionals: string[],
+) {
+	const exec = createBoundedExec(pi, ctx.cwd);
+	const action = positionals[0] ?? "check";
+
+	if (!["check", "install", "sync-skill"].includes(action)) {
+		await ctx.ui.notify("Usage: /graphify upgrade <check|install|sync-skill>", "warning");
+		return;
+	}
+
+	try {
+		if (action === "check") {
+			const python = await detectPython(exec, config.pythonPath, ctx.cwd);
+			await ensureInstalled(exec, python, ctx.cwd);
+
+			const check = await checkUpgrade(exec);
+			if (check.updateAvailable) {
+				await ctx.ui.notify(
+					`Update available: graphifyy ${check.installedVersion} → ${check.latestVersion}`,
+				);
+			} else {
+				await ctx.ui.notify(`graphifyy is up to date (v${check.installedVersion})`);
+			}
+			return;
+		}
+
+		if (action === "sync-skill") {
+			const installedVersion = await getInstalledVersion(exec);
+
+			const skillResult = await syncSkillFromUpstream(installedVersion, EXTENSION_ROOT);
+			if (skillResult.error) {
+				await ctx.ui.notify(`Skill sync failed: ${skillResult.error}`, "error");
+				return;
+			}
+
+			if (skillResult.synced) {
+				await updateUpstreamVersion(EXTENSION_ROOT, installedVersion);
+				await ctx.ui.notify(`Skill synced from upstream v${installedVersion}`);
+			} else {
+				await ctx.ui.notify(`Skill already up to date (v${installedVersion})`);
+			}
+			return;
+		}
+
+		// action === 'install'
+		const python = await detectPython(exec, config.pythonPath, ctx.cwd);
+		await ensureInstalled(exec, python, ctx.cwd);
+
+		const result = await runUpgrade(exec);
+
+		// Auto-sync skill after upgrade
+		let skillNote = "";
+		try {
+			const skillResult = await syncSkillFromUpstream(result.newVersion, EXTENSION_ROOT);
+			if (skillResult.synced) {
+				await updateUpstreamVersion(EXTENSION_ROOT, result.newVersion);
+				skillNote = " (skill synced)";
+			}
+		} catch {
+			// Skill sync failure is non-fatal
+		}
+
+		if (result.upgraded) {
+			await ctx.ui.notify(
+				`Upgraded graphifyy: ${result.previousVersion} → ${result.newVersion}${skillNote}`,
+			);
+		} else {
+			await ctx.ui.notify(`graphifyy is already up to date (v${result.newVersion})`);
+		}
+	} catch (err) {
+		const message = err instanceof Error ? err.message : String(err);
+		await ctx.ui.notify(`Upgrade failed: ${message}`, "error");
+	}
+}
+
 // ---------------------------------------------------------------------------
 // Command registration
 // ---------------------------------------------------------------------------
@@ -660,6 +773,9 @@ export default function (pi: ExtensionAPI) {
 						break;
 					case "uninstall":
 						await handleUninstall(pi, ctx, parsed.flags);
+						break;
+					case "upgrade":
+						await handleUpgrade(pi, ctx, config, parsed.positionals);
 						break;
 				}
 			} catch (err) {

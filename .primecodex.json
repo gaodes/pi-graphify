@@ -1,19 +1,9 @@
 {
-  "version": 1,
-  "updatedAt": "2026-05-22T03:27:28+0300",
-  "kind": "package",
-  "name": "pi-graphify",
   "source": "ssh://git@gitlab-ssh.elches.dev:2222/agents/primecodex/packages/pi-graphify.git",
   "description": "Turn any folder into a queryable knowledge graph — build, query, explore, and update graphs from inside Pi via tools and /graphify command",
   "topic": "knowledge-graph",
   "requires": [
     "graphifyy (Python 3.10+)"
   ],
-  "integrationStatus": "partial",
-  "npm": {
-    "name": "@gaodes/pi-graphify",
-    "scope": "@gaodes",
-    "published": true,
-    "publishedUnderGaodes": true
-  }
+  "npmPublished": true
 }

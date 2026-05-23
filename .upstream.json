@@ -1,37 +1,41 @@
 {
-	"version": 1,
-	"updatedAt": "2026-05-22T03:59:56+0300",
-	"creationMethod": "inspiration",
-	"inspirations": [],
-	"updates": [
-		{
-			"updatedAt": "2026-05-11T00:00:00+0300",
-			"description": "Wrapped graphify CLI with Pi extension tools and commands",
-			"files": []
-		},
-		{
-			"updatedAt": "2026-05-11T00:00:00+0300",
-			"description": "Added graphify_extract tool for headless CI extraction with backend selection",
-			"files": []
-		},
-		{
-			"updatedAt": "2026-05-11T00:00:00+0300",
-			"description": "Added graphify_export_callflow tool for Mermaid architecture HTML generation",
-			"files": []
-		},
-		{
-			"updatedAt": "2026-05-22T03:59:56+0300",
-			"description": "Reviewed upstream 0.7.14–0.8.14: added claude-cli and deepseek backends, resolution/excludeHubs/exclude params to graphify_extract. Noted .worktrees/ skip and .gitignore fallback (0.8.14). Deferred: graphify prs, cache-check subcommands.",
-			"files": ["src/tools/graphify-tools.ts", "src/lib/runner.ts", "AGENTS.md"]
-		}
-	],
-	"primary": {
-		"name": "graphify",
-		"type": "git",
-		"url": "https://github.com/safishamsi/graphify",
-		"repo": "https://github.com/safishamsi/graphify",
-		"license": "MIT",
-		"relationship": "inspiration",
-		"upstreamVersion": "0.8.14"
-	}
+  "version": 1,
+  "updatedAt": "2026-05-22T03:59:56+0300",
+  "creationMethod": "inspiration",
+  "inspirations": [],
+  "updates": [
+    {
+      "updatedAt": "2026-05-11T00:00:00+0300",
+      "description": "Wrapped graphify CLI with Pi extension tools and commands",
+      "files": []
+    },
+    {
+      "updatedAt": "2026-05-11T00:00:00+0300",
+      "description": "Added graphify_extract tool for headless CI extraction with backend selection",
+      "files": []
+    },
+    {
+      "updatedAt": "2026-05-11T00:00:00+0300",
+      "description": "Added graphify_export_callflow tool for Mermaid architecture HTML generation",
+      "files": []
+    },
+    {
+      "updatedAt": "2026-05-22T03:59:56+0300",
+      "description": "Reviewed upstream 0.7.14–0.8.14: added claude-cli and deepseek backends, resolution/excludeHubs/exclude params to graphify_extract. Noted .worktrees/ skip and .gitignore fallback (0.8.14). Deferred: graphify prs, cache-check subcommands.",
+      "files": [
+        "src/tools/graphify-tools.ts",
+        "src/lib/runner.ts",
+        "AGENTS.md"
+      ]
+    }
+  ],
+  "primary": {
+    "name": "graphify",
+    "type": "git",
+    "url": "https://github.com/safishamsi/graphify",
+    "repo": "https://github.com/safishamsi/graphify",
+    "license": "MIT",
+    "relationship": "inspiration",
+    "upstreamVersion": "0.8.16"
+  }
 }

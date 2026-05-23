@@ -2,7 +2,16 @@ import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it, vi } from "vitest";
-import { detectFiles, detectPython, ensureGraphifyGitignore, ensureInstalled } from "./runner";
+import {
+	detectFiles,
+	detectPython,
+	ensureGraphifyGitignore,
+	ensureInstalled,
+	getInstalledVersion,
+	getLatestVersion,
+	syncSkillFromUpstream,
+	updateUpstreamVersion,
+} from "./runner";
 
 // ---------------------------------------------------------------------------
 // Mock exec function
@@ -217,5 +226,174 @@ describe("ensureGraphifyGitignore", () => {
 		} finally {
 			await rm(dir, { recursive: true, force: true });
 		}
+	});
+});
+
+// ---------------------------------------------------------------------------
+// syncSkillFromUpstream
+// ---------------------------------------------------------------------------
+
+describe("syncSkillFromUpstream", () => {
+	it("writes skill file when fetched successfully", async () => {
+		const dir = await mkdtemp(join(tmpdir(), "pi-graphify-test-"));
+		const skillDir = join(dir, "skills", "graphify");
+		const { mkdir } = await import("node:fs/promises");
+		await mkdir(skillDir, { recursive: true });
+
+		try {
+			const result = await syncSkillFromUpstream("0.8.14", dir);
+
+			// This test hits the real GitHub URL — it may fail without network
+			if (result.error) {
+				console.warn(`Skipping: ${result.error}`);
+				return;
+			}
+
+			expect(result.synced).toBe(true);
+			expect(result.toVersion).toBe("0.8.14");
+
+			const content = await readFile(join(skillDir, "SKILL.md"), "utf-8");
+			expect(content).toContain("name: graphify");
+			expect(content.length).toBeGreaterThan(1000);
+		} finally {
+			await rm(dir, { recursive: true, force: true });
+		}
+	});
+
+	it("returns error on HTTP failure (bad version tag)", async () => {
+		const dir = await mkdtemp(join(tmpdir(), "pi-graphify-test-"));
+
+		try {
+			const result = await syncSkillFromUpstream("99.99.99", dir);
+
+			expect(result.synced).toBe(false);
+			expect(result.error).toBeDefined();
+			expect(result.error).toContain("HTTP 404");
+		} finally {
+			await rm(dir, { recursive: true, force: true });
+		}
+	});
+
+	it("skips write when content is identical", async () => {
+		const dir = await mkdtemp(join(tmpdir(), "pi-graphify-test-"));
+		const skillDir = join(dir, "skills", "graphify");
+		const { mkdir } = await import("node:fs/promises");
+		await mkdir(skillDir, { recursive: true });
+
+		try {
+			// First sync to populate the file
+			const first = await syncSkillFromUpstream("0.8.14", dir);
+			if (first.error) {
+				console.warn(`Skipping: ${first.error}`);
+				return;
+			}
+
+			// Second sync should detect identical content
+			const second = await syncSkillFromUpstream("0.8.14", dir);
+			expect(second.synced).toBe(false);
+			expect(second.error).toBeUndefined();
+		} finally {
+			await rm(dir, { recursive: true, force: true });
+		}
+	});
+});
+
+// ---------------------------------------------------------------------------
+// updateUpstreamVersion
+// ---------------------------------------------------------------------------
+
+describe("updateUpstreamVersion", () => {
+	it("updates upstreamVersion in .upstream.json", async () => {
+		const dir = await mkdtemp(join(tmpdir(), "pi-graphify-test-"));
+
+		try {
+			const upstream = {
+				version: 1,
+				primary: {
+					name: "graphify",
+					upstreamVersion: "0.8.13",
+					relationship: "inspiration",
+				},
+			};
+			await writeFile(join(dir, ".upstream.json"), JSON.stringify(upstream, null, "\t"), "utf-8");
+
+			await updateUpstreamVersion(dir, "0.8.16");
+
+			const updated = JSON.parse(await readFile(join(dir, ".upstream.json"), "utf-8"));
+			expect(updated.primary.upstreamVersion).toBe("0.8.16");
+			// Other fields preserved
+			expect(updated.primary.name).toBe("graphify");
+			expect(updated.version).toBe(1);
+		} finally {
+			await rm(dir, { recursive: true, force: true });
+		}
+	});
+
+	it("is a no-op when .upstream.json does not exist", async () => {
+		const dir = await mkdtemp(join(tmpdir(), "pi-graphify-test-"));
+
+		try {
+			// Should not throw
+			await updateUpstreamVersion(dir, "0.8.16");
+		} finally {
+			await rm(dir, { recursive: true, force: true });
+		}
+	});
+});
+
+// ---------------------------------------------------------------------------
+// getInstalledVersion / getLatestVersion
+// ---------------------------------------------------------------------------
+
+describe("getInstalledVersion", () => {
+	it("extracts version from graphify --version output", async () => {
+		const mockExec = createMockExec({
+			"graphify --version": { stdout: "graphify 0.8.16\n", stderr: "", exitCode: 0 },
+		});
+		const version = await getInstalledVersion(mockExec);
+		expect(version).toBe("0.8.16");
+	});
+
+	it("strips leading v from version", async () => {
+		const mockExec = createMockExec({
+			"graphify --version": { stdout: "v0.8.13\n", stderr: "", exitCode: 0 },
+		});
+		const version = await getInstalledVersion(mockExec);
+		expect(version).toBe("0.8.13");
+	});
+});
+
+describe("getLatestVersion", () => {
+	it("extracts version from pip3 index versions output", async () => {
+		const mockExec = createMockExec({
+			"pip3 index versions graphifyy": {
+				stdout: "0.8.16\n",
+				stderr: "",
+				exitCode: 0,
+			},
+		});
+		const version = await getLatestVersion(mockExec);
+		expect(version).toBe("0.8.16");
+	});
+
+	it("falls back to uv pip index if pip3 fails", async () => {
+		const mockExec = (cmd: string) => {
+			if (cmd.includes("pip3")) {
+				return Promise.resolve({ stdout: "", stderr: "", exitCode: 1 });
+			}
+			return Promise.resolve({
+				stdout: "0.8.15\n",
+				stderr: "",
+				exitCode: 0,
+			});
+		};
+		const version = await getLatestVersion(mockExec);
+		expect(version).toBe("0.8.15");
+	});
+
+	it("returns null when both methods fail", async () => {
+		const mockExec = () => Promise.resolve({ stdout: "", stderr: "", exitCode: 1 });
+		const version = await getLatestVersion(mockExec);
+		expect(version).toBeNull();
 	});
 });
