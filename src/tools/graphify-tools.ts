@@ -967,7 +967,7 @@ const extractParameters = Type.Object({
 			],
 			{
 				description:
-					"LLM backend: claude (Anthropic), kimi, openai, gemini, ollama (local), bedrock (AWS), claude-cli (no API key, routes through Claude Code CLI), deepseek (requires DEEPSEEK_API_KEY). Defaults to auto-detected.",
+					"LLM backend: claude (Anthropic), kimi, openai, gemini, ollama (local), bedrock (AWS), claude-cli (no API key, routes through Claude Code CLI), deepseek (requires DEEPSEEK_API_KEY). Defaults to deepseek.",
 			},
 		),
 	),
@@ -1020,13 +1020,13 @@ export function createExtractTool(pi: ExtensionAPI, config: ResolvedConfig) {
 		name: "graphify_extract",
 		label: "Graphify Extract",
 		description:
-			"Headless LLM extraction for CI — extracts entities and relationships from a directory using an LLM backend without requiring an IDE. Supports claude, kimi, openai, gemini, ollama, bedrock, claude-cli, and deepseek backends.",
+			"Headless LLM extraction for CI — extracts entities and relationships from a directory using an LLM backend without requiring an IDE. Defaults to deepseek backend. Also supports claude, kimi, openai, gemini, ollama, bedrock, and claude-cli backends.",
 		parameters: extractParameters,
 		promptSnippet:
 			"Use graphify_extract for headless extraction in CI pipelines or when you want pure LLM-based graph building without interactive mode.",
 		promptGuidelines: [
 			"graphify_extract runs in headless mode — no IDE interaction needed.",
-			"Specify the backend explicitly for reproducibility: claude, kimi, openai, gemini, ollama, bedrock, claude-cli, or deepseek.",
+			"Defaults to the deepseek backend. Specify another backend explicitly only if deepseek is unavailable.",
 			"After extraction, use graphify_build to run the full pipeline (cluster, visualize, analyze).",
 		],
 
@@ -1047,7 +1047,7 @@ export function createExtractTool(pi: ExtensionAPI, config: ResolvedConfig) {
 				ctx.cwd,
 				{
 					inputPath: params.inputPath,
-					backend: params.backend,
+					backend: params.backend ?? "deepseek",
 					maxWorkers: params.maxWorkers,
 					tokenBudget: params.tokenBudget,
 					maxConcurrency: params.maxConcurrency,
@@ -1070,7 +1070,7 @@ export function createExtractTool(pi: ExtensionAPI, config: ResolvedConfig) {
 				],
 				details: {
 					inputPath: params.inputPath,
-					backend: params.backend ?? "auto-detected",
+					backend: params.backend ?? "deepseek",
 					files: result.files,
 					inputTokens: result.inputTokens,
 					outputTokens: result.outputTokens,
