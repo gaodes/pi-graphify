@@ -946,27 +946,38 @@ export async function runExtract(
 
 	onUpdate?.(result.stdout.trim());
 
-	// Parse output to get token counts
-	const inputMatch = result.stdout.match(/input_tokens[=:](\d+)/i);
-	const outputMatch = result.stdout.match(/output_tokens[=:](\d+)/i);
-	const filesMatch = result.stdout.match(/(\d+)\s+files?/i);
-	const nodesMatch = result.stdout.match(/(\d+)\s+nodes?/i);
-	const edgesMatch = result.stdout.match(/(\d+)\s+edges?/i);
+	// Parse stats from extract CLI stdout. The CLI prints:
+	//   [graphify extract] wrote graphify-out/graph.json: N nodes, M edges, K communities
+	//   [graphify extract] tokens: N in / M out, est. cost (~backend): $X.XXXX
+	// Numbers may be comma-formatted (e.g. "12,345").
+	const stdout = result.stdout;
 
-	const extractedRaw = await exec(
-		`${python} -c "import json; from pathlib import Path; p=Path('.graphify_extract.json'); print(p.read_text() if p.exists() else '{"nodes":[],"edges":[]}')"`,
-		{ cwd, signal, maxOutputBytes: JSON_EXEC_OUTPUT_BYTES },
-	);
-	const extracted = JSON.parse(extractedRaw.stdout);
+	// Match the summary line for nodes/edges/communities
+	const summaryMatch = stdout.match(/(\d[\d,]*)\s+nodes?,\s*(\d[\d,]*)\s+edges?,\s*(\d[\d,]*)\s+communities/i);
+	const nodesStr = summaryMatch
+		? summaryMatch[1].replace(/,/g, '')
+		: stdout.match(/(\d+)\s+nodes?/i)?.[1];
+	const edgesStr = summaryMatch
+		? summaryMatch[2].replace(/,/g, '')
+		: stdout.match(/(\d+)\s+edges?/i)?.[1];
+
+	// Match token counts from the cost line: "N in / M out"
+	const tokenMatch = stdout.match(/(\d[\d,]*)\s+in\s*\/\s*(\d[\d,]*)\s+out/i);
+	const inputTokens = tokenMatch
+		? Number.parseInt(tokenMatch[1].replace(/,/g, ''), 10)
+		: Number.parseInt(stdout.match(/input_tokens[=:](\d+)/i)?.[1] ?? '0', 10);
+	const outputTokens = tokenMatch
+		? Number.parseInt(tokenMatch[2].replace(/,/g, ''), 10)
+		: Number.parseInt(stdout.match(/output_tokens[=:](\d+)/i)?.[1] ?? '0', 10);
+
+	const filesMatch = stdout.match(/(\d+)\s+files?/i);
 
 	return {
 		files: filesMatch ? Number.parseInt(filesMatch[1], 10) : 0,
-		inputTokens: inputMatch ? Number.parseInt(inputMatch[1], 10) : (extracted.input_tokens ?? 0),
-		outputTokens: outputMatch
-			? Number.parseInt(outputMatch[1], 10)
-			: (extracted.output_tokens ?? 0),
-		nodes: nodesMatch ? Number.parseInt(nodesMatch[1], 10) : (extracted.nodes?.length ?? 0),
-		edges: edgesMatch ? Number.parseInt(edgesMatch[1], 10) : (extracted.edges?.length ?? 0),
+		inputTokens,
+		outputTokens,
+		nodes: nodesStr ? Number.parseInt(nodesStr, 10) : 0,
+		edges: edgesStr ? Number.parseInt(edgesStr, 10) : 0,
 	};
 }
 
