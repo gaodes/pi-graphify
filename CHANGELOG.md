@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.8] - 2026-05-25
+
+### Added
+
+- `graphify_upgrade` tool: check for and install graphifyy Python CLI updates via `uv`. Supports `check`, `install`, and `sync-skill` actions.
+- `/graphify upgrade` subcommand with autocomplete for actions.
+- `graphify_extract` now defaults to `deepseek` backend when no backend is specified.
+
+### Fixed
+
+- `graphify_extract` no longer fails with "Expected property name or '}'" JSON parse error. Removed broken JSON read-back from a non-existent `.graphify_extract.json` file; stats are now parsed directly from CLI stdout via regex.
+
+### Changed
+
+- Updated tool table formatting in AGENTS.md for consistent column widths.
+
 ## [0.1.7] - 2026-05-22
 
 ### Added
@@ -118,7 +134,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Tools: `graphify_build`, `graphify_query`, `graphify_path`, `graphify_explain`, `graphify_add`, `graphify_update`, `graphify_watch`, `graphify_cluster`.
 - Single `/graphify` command with autocomplete for subcommands and flags (build, query, path, explain, add, update, watch, cluster, hook).
 
-[Unreleased]: https://gitlab.elches.dev/agents/primecodex/packages/pi-graphify/-/compare/v0.1.6...main
+[Unreleased]: https://gitlab.elches.dev/agents/primecodex/packages/pi-graphify/-/compare/v0.1.8...main
+[0.1.8]: https://gitlab.elches.dev/agents/primecodex/packages/pi-graphify/-/compare/v0.1.7...v0.1.8
+[0.1.7]: https://gitlab.elches.dev/agents/primecodex/packages/pi-graphify/-/compare/v0.1.6...v0.1.7
 [0.1.6]: https://gitlab.elches.dev/agents/primecodex/packages/pi-graphify/-/compare/v0.1.5...v0.1.6
 [0.1.5]: https://gitlab.elches.dev/agents/primecodex/packages/pi-graphify/-/compare/v0.1.4...v0.1.5
 [0.1.4]: https://gitlab.elches.dev/agents/primecodex/packages/pi-graphify/-/compare/v0.1.3...v0.1.4

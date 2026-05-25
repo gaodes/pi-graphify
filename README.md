@@ -20,7 +20,7 @@ It also bundles a `graphify` skill (`skills/graphify/SKILL.md`) for full-pipelin
 | `graphify_update`          | Incremental update — re-extract only changed files                                               |
 | `graphify_watch`           | Watch a directory for changes, auto-rebuild graph on code edits                                  |
 | `graphify_cluster`         | Re-run community detection on an existing graph (no re-extraction)                               |
-| `graphify_extract`         | Headless LLM extraction for CI — supports claude, kimi, openai, gemini, ollama, bedrock backends |
+| `graphify_extract`         | Headless LLM extraction for CI — defaults to deepseek; also supports claude, kimi, openai, gemini, ollama, bedrock, claude-cli |
 | `graphify_export_callflow` | Generate self-contained Mermaid architecture/call-flow HTML from graph.json                      |
 | `graphify_upgrade`         | Check for and install graphifyy CLI updates via uv                                               |
 
@@ -67,6 +67,13 @@ It also bundles a `graphify` skill (`skills/graphify/SKILL.md`) for full-pipelin
 /graphify extract <path> --max-workers 4      # limit parallel workers
 /graphify extract <path> --token-budget 4096  # cap tokens per LLM call
 /graphify extract <path> --api-timeout 300    # HTTP timeout in seconds
+/graphify extract <path> --backend deepseek   # DeepSeek backend (default)
+/graphify extract <path> --backend claude-cli  # route through Claude Code CLI
+/graphify extract <path> --resolution 2.0      # Leiden clustering resolution
+/graphify extract <path> --exclude-hubs 0.05   # exclude top-P% hub nodes
+/graphify extract <path> --exclude '*.min.js'  # runtime exclusion patterns
+/graphify upgrade                            # check for graphifyy CLI updates
+/graphify upgrade --install                  # install latest graphifyy version
 /graphify uninstall                           # remove graphify from all platforms
 /graphify uninstall --purge                   # also delete graphify-out/
 ```
