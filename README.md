@@ -130,12 +130,12 @@ If you want to track graph output for documentation purposes, override in your p
 
 ## Reliability
 
-All child-process invocations (Python CLI, inline scripts) run through a **bounded exec adapter** that caps stdout/stderr at 1 MiB by default. This prevents V8 heap exhaustion when graph operations produce multi-MB output — the root cause of the exit-code 32102 (OOM) crash in earlier versions.
+All child-process invocations run through a **bounded exec adapter** that caps stdout/stderr at 1 MiB by default. This prevents V8 heap exhaustion when graph operations produce multi-MB output — the root cause of the exit-code 32102 (OOM) crash in earlier versions.
 
 Key safety features:
 
 - **Output budgets**: 256 KiB for queries, 1 MiB for general operations, 2 MiB for JSON parsing
-- **Large-graph guard**: graphs exceeding 10 MiB bypass the inline Python rebuild and fall back to the CLI directly
+- **Thin CLI layer**: all graph operations delegate directly to the `graphify` CLI, avoiding inline Python script overhead and ensuring automatic upstream compatibility
 - **Signal-death handling**: child processes killed by signals are reported as failures (exit code 1), not silent successes
 - **LRU cache bounding**: auto-context augmentation caches cap at 256 entries
 

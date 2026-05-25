@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-05-22T03:59:56+0300",
+  "updatedAt": "2026-05-25T06:12:37+0300",
   "creationMethod": "inspiration",
   "inspirations": [],
   "updates": [
@@ -28,6 +28,15 @@
         "AGENTS.md"
       ]
     }
+    {
+      "updatedAt": "2026-05-25T06:12:37+0300",
+      "description": "Thin-layer refactoring: replaced 424 lines of inline Python with CLI delegation to graphify. buildGraph, queryGraph, findPath, explainNode, addUrl, updateGraph, clusterOnly now call graphify CLI directly. Removed detectFiles().",
+      "files": [
+        "src/lib/runner.ts",
+        "src/lib/runner.test.ts",
+        "src/tools/graphify-tools.ts"
+      ]
+    }
   ],
   "primary": {
     "name": "graphify",
@@ -36,6 +45,6 @@
     "repo": "https://github.com/safishamsi/graphify",
     "license": "MIT",
     "relationship": "inspiration",
-    "upstreamVersion": "0.8.16"
+    "upstreamVersion": "0.8.18"
   }
 }
