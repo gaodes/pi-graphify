@@ -1,80 +1,80 @@
 {
-	"name": "@gaodes/pi-graphify",
-	"version": "0.1.9",
-	"description": "Turn any folder into a queryable knowledge graph — build, query, explore, and update graphs from inside Pi",
-	"keywords": [
-		"pi-package",
-		"pi-extension"
-	],
-	"type": "module",
-	"private": false,
-	"main": "./src/tools/index.ts",
-	"files": [
-		"src/",
-		"README.md",
-		"CHANGELOG.md"
-	],
-	"scripts": {
-		"typecheck": "tsc --noEmit",
-		"lint": "biome check src/",
-		"lint:fix": "biome check --write src/",
-		"test": "vitest run",
-		"test:watch": "vitest"
-	},
-	"pi": {
-		"extensions": [
-			"./src/tools/index.ts",
-			"./src/commands/index.ts"
-		],
-		"skills": [
-			"skills"
-		]
-	},
-	"dependencies": {
-		"@gaodes/pi-utils-ui": "^0.3.0"
-	},
-	"devDependencies": {
-		"@biomejs/biome": "^2.4.3",
-		"@earendil-works/pi-ai": ">=0.69.0",
-		"@earendil-works/pi-coding-agent": ">=0.69.0",
-		"@earendil-works/pi-tui": ">=0.69.0",
-		"@gaodes/pi-test-harness": ">=0.1.0",
-		"@types/node": "^22.0.0",
-		"typebox": ">=1.0.0",
-		"typescript": "^5.0.0",
-		"vitest": "^4.1.5"
-	},
-	"peerDependencies": {
-		"@earendil-works/pi-ai": ">=0.69.0",
-		"@earendil-works/pi-coding-agent": ">=0.69.0",
-		"@earendil-works/pi-tui": ">=0.69.0",
-		"typebox": ">=1.0.0"
-	},
-	"peerDependenciesMeta": {
-		"@earendil-works/pi-ai": {
-			"optional": true
-		},
-		"@earendil-works/pi-coding-agent": {
-			"optional": true
-		},
-		"@earendil-works/pi-tui": {
-			"optional": true
-		},
-		"typebox": {
-			"optional": true
-		}
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/gaodes/pi-graphify.git"
-	},
-	"publishConfig": {
-		"access": "public"
-	},
-	"bugs": {
-		"url": "https://github.com/gaodes/pi-graphify/issues"
-	},
-	"homepage": "https://github.com/gaodes/pi-graphify#readme",
-	"license": "MIT",
-	"author": "El Che"
+  "name": "@gaodes/pi-graphify",
+  "version": "0.2.0",
+  "description": "Turn any folder into a queryable knowledge graph — build, query, explore, and update graphs from inside Pi",
+  "keywords": [
+    "pi-package",
+    "pi-extension"
+  ],
+  "type": "module",
+  "private": false,
+  "main": "./src/tools/index.ts",
+  "files": [
+    "src/",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "lint": "biome check src/",
+    "lint:fix": "biome check --write src/",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "pi": {
+    "extensions": [
+      "./src/tools/index.ts",
+      "./src/commands/index.ts"
+    ],
+    "skills": [
+      "skills"
+    ]
+  },
+  "dependencies": {
+    "@gaodes/pi-utils-ui": "^0.3.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.4.3",
+    "@earendil-works/pi-ai": ">=0.69.0",
+    "@earendil-works/pi-coding-agent": ">=0.69.0",
+    "@earendil-works/pi-tui": ">=0.69.0",
+    "@gaodes/pi-test-harness": ">=0.1.0",
+    "@types/node": "^22.0.0",
+    "typebox": ">=1.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^4.1.5"
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-ai": ">=0.69.0",
+    "@earendil-works/pi-coding-agent": ">=0.69.0",
+    "@earendil-works/pi-tui": ">=0.69.0",
+    "typebox": ">=1.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@earendil-works/pi-ai": {
+      "optional": true
+    },
+    "@earendil-works/pi-coding-agent": {
+      "optional": true
+    },
+    "@earendil-works/pi-tui": {
+      "optional": true
+    },
+    "typebox": {
+      "optional": true
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gaodes/pi-graphify.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "bugs": {
+    "url": "https://github.com/gaodes/pi-graphify/issues"
+  },
+  "homepage": "https://github.com/gaodes/pi-graphify#readme",
+  "license": "MIT",
+  "author": "El Che"
 }

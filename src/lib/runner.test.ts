@@ -192,7 +192,11 @@ describe("installSkillFromCLI", () => {
 	it("returns installed=true on success", async () => {
 		const exec = createMockExec({
 			"graphify --version": { stdout: "0.8.18", stderr: "", exitCode: 0 },
-			"graphify install": { stdout: "  skill installed  ->  ~/.pi/agent/skills/graphify/SKILL.md\n\nDone.", stderr: "", exitCode: 0 },
+			"graphify install": {
+				stdout: "  skill installed  ->  ~/.pi/agent/skills/graphify/SKILL.md\n\nDone.",
+				stderr: "",
+				exitCode: 0,
+			},
 		});
 
 		const result = await installSkillFromCLI(exec);

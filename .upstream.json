@@ -21,7 +21,7 @@
 		},
 		{
 			"updatedAt": "2026-05-22T03:59:56+0300",
-			"description": "Reviewed upstream 0.7.14\u20130.8.14: added claude-cli and deepseek backends, resolution/excludeHubs/exclude params to graphify_extract. Noted .worktrees/ skip and .gitignore fallback (0.8.14). Deferred: graphify prs, cache-check subcommands.",
+			"description": "Reviewed upstream 0.7.14–0.8.14: added claude-cli and deepseek backends, resolution/excludeHubs/exclude params to graphify_extract. Noted .worktrees/ skip and .gitignore fallback (0.8.14). Deferred: graphify prs, cache-check subcommands.",
 			"files": [
 				"src/tools/graphify-tools.ts",
 				"src/lib/runner.ts",
