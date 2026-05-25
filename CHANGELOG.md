@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- **Thin-layer refactoring**: Replaced 424 lines of inline Python in `runner.ts` with CLI delegates to `graphify` (v0.8.18+). `buildGraph`, `queryGraph`, `findPath`, `explainNode`, `addUrl`, `updateGraph`, and `clusterOnly` now call the `graphify` CLI directly instead of embedding Python scripts via `exec`. This makes the extension a thin wrapper between the coding agent and the CLI tool, reducing maintenance burden and ensuring automatic compatibility with upstream graphify changes.
+- `buildGraph` now chains `graphify extract` + `graphify cluster-only` instead of running the full pipeline inline.
+- Optional exports (obsidian, svg, graphml) moved to a separate `exportGraph()` function that reads from `graphify-out/graph.json`.
+- Removed `detectFiles()` — the CLI handles file detection internally.
+- Removed `LARGE_GRAPH_JSON_BYTES` constant — no longer needed since update delegates to CLI.
+
+### Removed
+
+- `detectFiles()` function and its tests (now handled by `graphify extract` CLI).
+
 ## [0.1.8] - 2026-05-25
 
 ### Added
@@ -24,6 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.7] - 2026-05-22
 
 ### Added
+
 - `graphify_extract`: `claude-cli` backend — routes through Claude Code CLI, no API key required (upstream 0.7.17)
 - `graphify_extract`: `deepseek` backend — requires `DEEPSEEK_API_KEY` env var (upstream 0.8.9)
 - `graphify_extract`: `resolution` parameter — Leiden clustering resolution passed as `--resolution N` (upstream 0.8.10)
@@ -31,6 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `graphify_extract`: `exclude` parameter — runtime gitignore-style exclusion patterns via `--exclude` (upstream 0.8.14)
 
 ### Changed
+
 - Updated upstream version tracking from graphify 0.7.13 to 0.8.14
 
 ## [0.1.6] - 2026-05-20

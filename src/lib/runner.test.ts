@@ -3,7 +3,6 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it, vi } from "vitest";
 import {
-	detectFiles,
 	detectPython,
 	ensureGraphifyGitignore,
 	ensureInstalled,
@@ -119,52 +118,8 @@ describe("ensureInstalled", () => {
 });
 
 // ---------------------------------------------------------------------------
-// detectFiles
+// detectFiles — removed (now handled by graphify CLI)
 // ---------------------------------------------------------------------------
-
-describe("detectFiles", () => {
-	it("parses detection output correctly", async () => {
-		const detectionResult = {
-			total_files: 5,
-			total_words: 1200,
-			files: {
-				code: ["/tmp/test/main.ts", "/tmp/test/util.ts"],
-				document: ["/tmp/test/README.md"],
-				paper: [],
-				image: [],
-				video: [],
-			},
-		};
-
-		const mockExec = createMockExec({
-			"from graphify.detect import detect": {
-				stdout: JSON.stringify(detectionResult),
-				stderr: "",
-				exitCode: 0,
-			},
-		});
-
-		const result = await detectFiles(mockExec, "python3", "/tmp/test", "/tmp/test");
-		expect(result.total_files).toBe(5);
-		expect(result.total_words).toBe(1200);
-		expect(result.files.code).toHaveLength(2);
-		expect(result.files.document).toHaveLength(1);
-	});
-
-	it("throws on detection failure", async () => {
-		const mockExec = createMockExec({
-			"from graphify.detect import detect": {
-				stdout: "",
-				stderr: "ModuleNotFoundError: No module named 'graphify'",
-				exitCode: 1,
-			},
-		});
-
-		await expect(detectFiles(mockExec, "python3", "/tmp/test", "/tmp/test")).rejects.toThrow(
-			"graphify detect failed",
-		);
-	});
-});
 
 // ---------------------------------------------------------------------------
 // ensureGraphifyGitignore

@@ -8,7 +8,7 @@
  * The exec adapter in the tools/commands layer wraps this to accept a single shell string.
  */
 
-import { readFile, stat, writeFile } from "node:fs/promises";
+import { readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 
 export interface ExecOptions {
@@ -21,7 +21,6 @@ export interface ExecOptions {
 export const DEFAULT_EXEC_OUTPUT_BYTES = 1_048_576; // 1 MiB
 export const JSON_EXEC_OUTPUT_BYTES = 2_097_152; // 2 MiB
 export const QUERY_EXEC_OUTPUT_BYTES = 262_144; // 256 KiB
-export const LARGE_GRAPH_JSON_BYTES = 10 * 1024 * 1024; // 10 MiB
 export const OUTPUT_LIMIT_EXIT_CODE = 125;
 
 export interface ExecResult {
@@ -114,35 +113,7 @@ export async function ensureInstalled(
 }
 
 // ---------------------------------------------------------------------------
-// Detect files
-// ---------------------------------------------------------------------------
-
-export interface DetectResult {
-	total_files: number;
-	total_words: number;
-	files: Record<string, string[]>;
-	skipped_sensitive?: number;
-}
-
-export async function detectFiles(
-	exec: ExecFn,
-	python: string,
-	cwd: string,
-	inputPath: string,
-	signal?: AbortSignal,
-): Promise<DetectResult> {
-	const result = await exec(
-		`${python} -c "import json; from graphify.detect import detect; from pathlib import Path; r=detect(Path(${pythonLiteral(inputPath)})); print(json.dumps(r))"`,
-		{ cwd, signal, maxOutputBytes: JSON_EXEC_OUTPUT_BYTES },
-	);
-	if (result.exitCode !== 0) {
-		throw new Error(`graphify detect failed: ${result.stderr}`);
-	}
-	return JSON.parse(result.stdout.trim()) as DetectResult;
-}
-
-// ---------------------------------------------------------------------------
-// Build graph (full pipeline)
+// Build graph (full pipeline) — delegates to graphify CLI
 // ---------------------------------------------------------------------------
 
 export interface BuildOptions {
@@ -158,307 +129,146 @@ export interface BuildOptions {
 
 export async function buildGraph(
 	exec: ExecFn,
-	python: string,
+	_python: string,
 	cwd: string,
 	options: BuildOptions,
 	signal?: AbortSignal,
 	onUpdate?: (message: string) => void,
 ): Promise<{ nodes: number; edges: number; communities: number }> {
-	const { inputPath } = options;
-	const outDir = "graphify-out";
+	const { inputPath, noViz } = options;
 
 	const gitignoreResult = await ensureGraphifyGitignore(cwd);
 	if (gitignoreResult.updated) {
-		onUpdate?.("Updated .gitignore for graphify artifacts.");
+		onUpdate?.("Updated .gitignore for graph artifacts.");
 	}
 
-	await exec(`mkdir -p ${outDir}`, { cwd, signal });
+	// Step 1: graphify extract — full pipeline (detect → extract → cluster → graph.json)
+	onUpdate?.("Running graphify extract...");
+	const extractResult = await exec(`graphify extract ${shellQuote(inputPath)}`, {
+		cwd,
+		signal,
+		maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES,
+	});
+	if (extractResult.exitCode !== 0) {
+		throw new Error(`graphify extract failed: ${extractResult.stderr || extractResult.stdout}`);
+	}
+	onUpdate?.(extractResult.stdout.trim());
 
-	await exec(
-		`${python} -c "import sys; open(${pythonLiteral(`${outDir}/.graphify_python`)}, 'w').write(sys.executable)"`,
-		{ cwd, signal, maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES },
+	// Step 2: graphify cluster-only — generate report + visualization
+	const vizFlag = noViz ? " --no-viz" : "";
+	onUpdate?.("Generating report and visualization...");
+	const clusterResult = await exec(`graphify cluster-only ${shellQuote(inputPath)}${vizFlag}`, {
+		cwd,
+		signal,
+		maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES,
+	});
+	if (clusterResult.exitCode !== 0) {
+		onUpdate?.(`Warning: report generation failed: ${clusterResult.stderr}`);
+	} else {
+		onUpdate?.(clusterResult.stdout.trim());
+	}
+
+	// Step 3: Optional exports (obsidian, svg, graphml)
+	if (options.obsidian || options.svg || options.graphml) {
+		await exportGraph(exec, _python, cwd, options, signal, onUpdate);
+	}
+
+	// Parse stats from extract output
+	const stdout = extractResult.stdout;
+	const match = stdout.match(
+		/(\d[\d,]*)\s+nodes?,\s*(\d[\d,]*)\s+edges?,\s*(\d[\d,]*)\s+communities/i,
 	);
-
-	onUpdate?.("Detecting files...");
-	const detection = await detectFiles(exec, python, cwd, inputPath, signal);
-
-	if (detection.total_files === 0) {
-		throw new Error(`No supported files found in ${inputPath}.`);
-	}
-
-	onUpdate?.(
-		`Corpus: ${detection.total_files} files · ~${detection.total_words.toLocaleString()} words`,
-	);
-
-	// Save detection result for downstream steps
-	await writeFile(join(cwd, ".graphify_detect.json"), JSON.stringify(detection, null, 2), "utf-8");
-
-	// AST extraction
-	onUpdate?.("Extracting structural relationships (AST)...");
-	const astResult = await exec(
-		`${python} -c "
-import sys, json
-from graphify.extract import collect_files, extract
-from pathlib import Path
-
-code_files = []
-detect = json.loads(Path('.graphify_detect.json').read_text())
-for f in detect.get('files', {}).get('code', []):
-    code_files.extend(collect_files(Path(f)) if Path(f).is_dir() else [Path(f)])
-
-if code_files:
-    result = extract(code_files)
-    Path('.graphify_ast.json').write_text(json.dumps(result, indent=2))
-    print(f'AST: {len(result['nodes'])} nodes, {len(result['edges'])} edges')
-else:
-    Path('.graphify_ast.json').write_text(json.dumps({'nodes':[],'edges':[],'input_tokens':0,'output_tokens':0}))
-    print('No code files - skipping AST extraction')
-"`,
-		{ cwd, signal, maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES },
-	);
-
-	if (astResult.exitCode !== 0) {
-		throw new Error(`AST extraction failed: ${astResult.stderr}`);
-	}
-	onUpdate?.(astResult.stdout.trim());
-
-	// Semantic extraction (placeholder for code-only corpus)
-	const semanticFiles = [
-		...(detection.files.document ?? []),
-		...(detection.files.paper ?? []),
-		...(detection.files.image ?? []),
-	];
-	if (semanticFiles.length > 0) {
-		onUpdate?.(
-			`Semantic extraction: ${semanticFiles.length} files — extracting entities and relationships...`,
-		);
-	}
-
-	// Always write semantic placeholder for merge step
-	await exec(
-		`${python} -c "import json; from pathlib import Path; Path('.graphify_semantic.json').write_text(json.dumps({'nodes':[],'edges':[],'hyperedges':[],'input_tokens':0,'output_tokens':0}))"`,
-		{ cwd, signal, maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES },
-	);
-
-	// Merge AST + semantic
-	onUpdate?.("Merging extraction results...");
-	const mergeResult = await exec(
-		`${python} -c "
-import json; from pathlib import Path
-ast = json.loads(Path('.graphify_ast.json').read_text())
-sem = json.loads(Path('.graphify_semantic.json').read_text())
-seen = {n['id'] for n in ast['nodes']}
-merged_nodes = list(ast['nodes'])
-for n in sem['nodes']:
-    if n['id'] not in seen: merged_nodes.append(n); seen.add(n['id'])
-merged_edges = ast['edges'] + sem['edges']
-merged = {'nodes': merged_nodes, 'edges': merged_edges, 'hyperedges': sem.get('hyperedges',[]), 'input_tokens': sem.get('input_tokens',0), 'output_tokens': sem.get('output_tokens',0)}
-Path('.graphify_extract.json').write_text(json.dumps(merged, indent=2))
-print(f'Merged: {len(merged_nodes)} nodes, {len(merged_edges)} edges')
-"`,
-		{ cwd, signal, maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES },
-	);
-	if (mergeResult.exitCode !== 0) {
-		throw new Error(`Merge failed: ${mergeResult.stderr}`);
-	}
-	onUpdate?.(mergeResult.stdout.trim());
-
-	// Build, cluster, analyze
-	onUpdate?.("Building graph and detecting communities...");
-	const buildResult = await exec(
-		`${python} -c "
-import json
-from graphify.build import build_from_json
-from graphify.cluster import cluster, score_all
-from graphify.analyze import god_nodes, surprising_connections, suggest_questions
-from graphify.report import generate
-from graphify.export import to_json
-from pathlib import Path
-
-extraction = json.loads(Path('.graphify_extract.json').read_text())
-detection = json.loads(Path('.graphify_detect.json').read_text()) if Path('.graphify_detect.json').exists() else {}
-
-G = build_from_json(extraction)
-if G.number_of_nodes() == 0:
-    print('ERROR: Graph is empty')
-    raise SystemExit(1)
-communities = cluster(G)
-cohesion = score_all(G, communities)
-tokens = {'input': extraction.get('input_tokens',0), 'output': extraction.get('output_tokens',0)}
-gods = god_nodes(G)
-surprises = surprising_connections(G, communities)
-labels = {cid: 'Community ' + str(cid) for cid in communities}
-questions = suggest_questions(G, communities, labels)
-
-report = generate(G, communities, cohesion, labels, gods, surprises, detection, tokens, ${pythonLiteral(inputPath)}, suggested_questions=questions)
-Path('graphify-out/GRAPH_REPORT.md').write_text(report)
-to_json(G, communities, 'graphify-out/graph.json')
-
-analysis = {'communities': {str(k):v for k,v in communities.items()}, 'cohesion': {str(k):v for k,v in cohesion.items()}, 'gods': gods, 'surprises': surprises, 'questions': questions}
-Path('.graphify_analysis.json').write_text(json.dumps(analysis, indent=2))
-print(f'Graph: {G.number_of_nodes()} nodes, {G.number_of_edges()} edges, {len(communities)} communities')
-"`,
-		{ cwd, signal, maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES },
-	);
-
-	if (buildResult.exitCode !== 0) {
-		throw new Error(`Build failed: ${buildResult.stderr || buildResult.stdout}`);
-	}
-	onUpdate?.(buildResult.stdout.trim());
-
-	// Generate HTML (unless no-viz)
-	if (!options.noViz) {
-		onUpdate?.("Generating interactive HTML visualization...");
-		await exec(
-			`${python} -c "
-import json
-from graphify.build import build_from_json
-from graphify.export import to_html
-from pathlib import Path
-
-extraction = json.loads(Path('.graphify_extract.json').read_text())
-analysis = json.loads(Path('.graphify_analysis.json').read_text())
-labels_raw = json.loads(Path('.graphify_labels.json').read_text()) if Path('.graphify_labels.json').exists() else {}
-
-G = build_from_json(extraction)
-communities = {int(k):v for k,v in analysis['communities'].items()}
-labels = {int(k):v for k,v in labels_raw.items()}
-
-if G.number_of_nodes() > 5000:
-    print(f'Graph has {G.number_of_nodes()} nodes - too large for HTML viz.')
-else:
-    to_html(G, communities, 'graphify-out/graph.html', community_labels=labels or None)
-    print('graph.html written')
-"`,
-			{ cwd, signal, maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES },
-		);
-	}
-
-	// Optional exports
-	if (options.obsidian) {
-		onUpdate?.("Generating Obsidian vault...");
-		await exec(
-			`${python} -c "
-import json
-from graphify.build import build_from_json
-from graphify.export import to_obsidian, to_canvas
-from pathlib import Path
-
-extraction = json.loads(Path('.graphify_extract.json').read_text())
-analysis = json.loads(Path('.graphify_analysis.json').read_text())
-labels_raw = json.loads(Path('.graphify_labels.json').read_text()) if Path('.graphify_labels.json').exists() else {}
-
-G = build_from_json(extraction)
-communities = {int(k):v for k,v in analysis['communities'].items()}
-cohesion = {int(k):v for k,v in analysis['cohesion'].items()}
-labels = {int(k):v for k,v in labels_raw.items()}
-
-n = to_obsidian(G, communities, 'graphify-out/obsidian', community_labels=labels or None, cohesion=cohesion)
-print(f'Obsidian vault: {n} notes')
-to_canvas(G, communities, 'graphify-out/obsidian/graph.canvas', community_labels=labels or None)
-"`,
-			{ cwd, signal, maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES },
-		);
-	}
-
-	if (options.svg) {
-		await exec(
-			`${python} -c "
-import json
-from graphify.build import build_from_json
-from graphify.export import to_svg
-from pathlib import Path
-extraction = json.loads(Path('.graphify_extract.json').read_text())
-analysis = json.loads(Path('.graphify_analysis.json').read_text())
-labels_raw = json.loads(Path('.graphify_labels.json').read_text()) if Path('.graphify_labels.json').exists() else {}
-G = build_from_json(extraction)
-communities = {int(k):v for k,v in analysis['communities'].items()}
-labels = {int(k):v for k,v in labels_raw.items()}
-to_svg(G, communities, 'graphify-out/graph.svg', community_labels=labels or None)
-print('graph.svg written')
-"`,
-			{ cwd, signal, maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES },
-		);
-	}
-
-	if (options.graphml) {
-		await exec(
-			`${python} -c "
-import json
-from graphify.build import build_from_json
-from graphify.export import to_graphml
-from pathlib import Path
-extraction = json.loads(Path('.graphify_extract.json').read_text())
-analysis = json.loads(Path('.graphify_analysis.json').read_text())
-G = build_from_json(extraction)
-communities = {int(k):v for k,v in analysis['communities'].items()}
-to_graphml(G, communities, 'graphify-out/graph.graphml')
-print('graph.graphml written')
-"`,
-			{ cwd, signal, maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES },
-		);
-	}
-
-	if (options.neo4j) {
-		await exec(
-			`${python} -c "
-import json
-from graphify.build import build_from_json
-from graphify.export import to_cypher
-from pathlib import Path
-G = build_from_json(json.loads(Path('.graphify_extract.json').read_text()))
-to_cypher(G, 'graphify-out/cypher.txt')
-print('cypher.txt written')
-"`,
-			{ cwd, signal, maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES },
-		);
-	}
-
-	// Save manifest and cost
-	await exec(
-		`${python} -c "
-import json
-from pathlib import Path
-from datetime import datetime, timezone
-from graphify.detect import save_manifest
-
-detect = json.loads(Path('.graphify_detect.json').read_text()) if Path('.graphify_detect.json').exists() else {}
-if detect: save_manifest(detect.get('files', {}))
-
-extract = json.loads(Path('.graphify_extract.json').read_text()) if Path('.graphify_extract.json').exists() else {}
-input_tok = extract.get('input_tokens', 0)
-output_tok = extract.get('output_tokens', 0)
-
-cost_path = Path('graphify-out/cost.json')
-if cost_path.exists():
-    cost = json.loads(cost_path.read_text())
-else:
-    cost = {'runs': [], 'total_input_tokens': 0, 'total_output_tokens': 0}
-
-cost['runs'].append({'date': datetime.now(timezone.utc).isoformat(), 'input_tokens': input_tok, 'output_tokens': output_tok, 'files': detect.get('total_files',0)})
-cost['total_input_tokens'] += input_tok
-cost['total_output_tokens'] += output_tok
-cost_path.write_text(json.dumps(cost, indent=2))
-"`,
-		{ cwd, signal, maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES },
-	);
-
-	// Clean up temp files
-	await exec(
-		`rm -f .graphify_detect.json .graphify_extract.json .graphify_ast.json .graphify_semantic.json .graphify_analysis.json .graphify_labels.json`,
-		{ cwd, signal, maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES },
-	);
-
-	const match = buildResult.stdout.match(/Graph: (\d+) nodes, (\d+) edges, (\d+) communities/);
 	return {
-		nodes: match ? Number.parseInt(match[1], 10) : 0,
-		edges: match ? Number.parseInt(match[2], 10) : 0,
-		communities: match ? Number.parseInt(match[3], 10) : 0,
+		nodes: match ? Number.parseInt(match[1].replace(/,/g, ""), 10) : 0,
+		edges: match ? Number.parseInt(match[2].replace(/,/g, ""), 10) : 0,
+		communities: match ? Number.parseInt(match[3].replace(/,/g, ""), 10) : 0,
 	};
 }
 
 // ---------------------------------------------------------------------------
-// Query
+// Optional exports (obsidian, svg, graphml) — reads from graph.json
+// ---------------------------------------------------------------------------
+
+export interface ExportOptions {
+	obsidian?: boolean;
+	svg?: boolean;
+	graphml?: boolean;
+}
+
+export async function exportGraph(
+	exec: ExecFn,
+	python: string,
+	cwd: string,
+	options: ExportOptions,
+	signal?: AbortSignal,
+	onUpdate?: (message: string) => void,
+): Promise<void> {
+	const exports: string[] = [];
+	if (options.obsidian) exports.push("obsidian");
+	if (options.svg) exports.push("svg");
+	if (options.graphml) exports.push("graphml");
+	if (exports.length === 0) return;
+
+	onUpdate?.(`Generating exports: ${exports.join(", ")}...`);
+
+	const result = await exec(
+		`${python} -c "
+import json, sys
+from pathlib import Path
+from networkx.readwrite import json_graph as _jg
+
+gp = Path('graphify-out/graph.json')
+if not gp.exists():
+    print('error: graphify-out/graph.json not found', file=sys.stderr)
+    sys.exit(1)
+
+data = json.loads(gp.read_text(encoding='utf-8'))
+G = _jg.node_link_graph(data, edges='links')
+
+communities = {}
+for nid, ndata in G.nodes(data=True):
+    cid = ndata.get('community', ndata.get('community_id'))
+    if cid is not None:
+        key = int(cid) if isinstance(cid, (int, float)) else cid
+        communities.setdefault(key, []).append(nid)
+labels = {cid: 'Community ' + str(cid) for cid in communities}
+${
+	options.obsidian
+		? `
+from graphify.export import to_obsidian, to_canvas
+n = to_obsidian(G, communities, 'graphify-out/obsidian', community_labels=labels)
+to_canvas(G, communities, 'graphify-out/obsidian/graph.canvas', community_labels=labels)
+print(f'Obsidian vault: {n} notes')`
+		: ""
+}
+${
+	options.svg
+		? `
+from graphify.export import to_svg
+to_svg(G, communities, 'graphify-out/graph.svg', community_labels=labels)
+print('graph.svg written')`
+		: ""
+}
+${
+	options.graphml
+		? `
+from graphify.export import to_graphml
+to_graphml(G, communities, 'graphify-out/graph.graphml')
+print('graph.graphml written')`
+		: ""
+}
+"`,
+		{ cwd, signal, maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES },
+	);
+
+	if (result.exitCode !== 0) {
+		throw new Error(`Export failed: ${result.stderr || result.stdout}`);
+	}
+	onUpdate?.(result.stdout.trim());
+}
+
+// ---------------------------------------------------------------------------
+// Query — delegates to graphify CLI
 // ---------------------------------------------------------------------------
 
 export interface QueryOptions {
@@ -469,7 +279,7 @@ export interface QueryOptions {
 
 export async function queryGraph(
 	exec: ExecFn,
-	python: string,
+	_python: string,
 	cwd: string,
 	options: QueryOptions,
 	signal?: AbortSignal,
@@ -478,83 +288,9 @@ export async function queryGraph(
 
 	const maxBytes = Math.min(Math.max(budget * 4 + 4096, 16_384), QUERY_EXEC_OUTPUT_BYTES);
 
+	const modeFlag = mode === "dfs" ? " --dfs" : "";
 	const result = await exec(
-		`${python} -c "
-import json, sys
-from networkx.readwrite import json_graph
-from pathlib import Path
-
-if not Path('graphify-out/graph.json').exists():
-    print('ERROR: No graph found. Build one first.')
-    sys.exit(1)
-
-data = json.loads(Path('graphify-out/graph.json').read_text())
-G = json_graph.node_link_graph(data, edges='links')
-
-question = ${pythonLiteral(question)}
-mode = ${pythonLiteral(mode)}
-terms = [t.lower() for t in question.split() if len(t) > 3]
-
-scored = []
-for nid, ndata in G.nodes(data=True):
-    label = ndata.get('label', '').lower()
-    score = sum(1 for t in terms if t in label)
-    if score > 0: scored.append((score, nid))
-scored.sort(reverse=True)
-start_nodes = [nid for _, nid in scored[:3]]
-
-if not start_nodes:
-    print('No matching nodes found for: ' + ' '.join(terms))
-    sys.exit(0)
-
-subgraph_nodes = set()
-subgraph_edges = []
-
-if mode == 'dfs':
-    visited = set()
-    stack = [(n, 0) for n in reversed(start_nodes)]
-    while stack:
-        node, depth = stack.pop()
-        if node in visited or depth > 6: continue
-        visited.add(node)
-        subgraph_nodes.add(node)
-        for neighbor in G.neighbors(node):
-            if neighbor not in visited:
-                stack.append((neighbor, depth + 1))
-                subgraph_edges.append((node, neighbor))
-else:
-    frontier = set(start_nodes)
-    subgraph_nodes = set(start_nodes)
-    for _ in range(3):
-        next_frontier = set()
-        for n in frontier:
-            for neighbor in G.neighbors(n):
-                if neighbor not in subgraph_nodes:
-                    next_frontier.add(neighbor)
-                    subgraph_edges.append((n, neighbor))
-        subgraph_nodes.update(next_frontier)
-        frontier = next_frontier
-
-def relevance(nid):
-    label = G.nodes[nid].get('label', '').lower()
-    return sum(1 for t in terms if t in label)
-
-ranked_nodes = sorted(subgraph_nodes, key=relevance, reverse=True)
-
-lines = [f'Traversal: {mode.upper()} | Start: {[G.nodes[n].get('label', n) for n in start_nodes]} | {len(subgraph_nodes)} nodes']
-for nid in ranked_nodes:
-    d = G.nodes[nid]
-    lines.append(f'  NODE {d.get('label', nid)} [src={d.get('source_file', '')}]')
-for u, v in subgraph_edges:
-    if u in subgraph_nodes and v in subgraph_nodes:
-        d = G.edges[u, v]
-        lines.append(f'  EDGE {G.nodes[u].get('label', u)} --{d.get('relation', '')} [{d.get('confidence', '')}]--> {G.nodes[v].get('label', v)}')
-
-output = chr(10).join(lines)
-if len(output) > ${budget * 4}:
-    output = output[:${budget * 4}] + f'\\n... (truncated)'
-print(output)
-"`,
+		`graphify query ${shellQuote(question)}${modeFlag} --budget ${budget}`,
 		{ cwd, signal, maxOutputBytes: maxBytes },
 	);
 
@@ -566,63 +302,22 @@ print(output)
 }
 
 // ---------------------------------------------------------------------------
-// Path (shortest path between two concepts)
+// Path (shortest path) — delegates to graphify CLI
 // ---------------------------------------------------------------------------
 
 export async function findPath(
 	exec: ExecFn,
-	python: string,
+	_python: string,
 	cwd: string,
 	fromConcept: string,
 	toConcept: string,
 	signal?: AbortSignal,
 ): Promise<string> {
-	const result = await exec(
-		`${python} -c "
-import json, sys
-import networkx as nx
-from networkx.readwrite import json_graph
-from pathlib import Path
-
-if not Path('graphify-out/graph.json').exists():
-    print('ERROR: No graph found. Build one first.')
-    sys.exit(1)
-
-data = json.loads(Path('graphify-out/graph.json').read_text())
-G = json_graph.node_link_graph(data, edges='links')
-
-a_term = ${pythonLiteral(fromConcept)}
-b_term = ${pythonLiteral(toConcept)}
-
-def find_node(term):
-    term = term.lower()
-    scored = sorted([(sum(1 for w in term.split() if w in G.nodes[n].get('label','').lower()), n) for n in G.nodes()], reverse=True)
-    return scored[0][1] if scored and scored[0][0] > 0 else None
-
-src = find_node(a_term)
-tgt = find_node(b_term)
-
-if not src or not tgt:
-    print(f'Could not find nodes matching: {a_term!r} or {b_term!r}')
-    sys.exit(0)
-
-try:
-    path = nx.shortest_path(G, src, tgt)
-    print(f'Shortest path ({len(path)-1} hops):')
-    for i, nid in enumerate(path):
-        label = G.nodes[nid].get('label', nid)
-        if i < len(path) - 1:
-            edge = G.edges[nid, path[i+1]]
-            rel = edge.get('relation', '')
-            conf = edge.get('confidence', '')
-            print(f'  {label} --{rel}--> [{conf}]')
-        else:
-            print(f'  {label}')
-except nx.NetworkXNoPath:
-    print(f'No path found between {a_term!r} and {b_term!r}')
-"`,
-		{ cwd, signal, maxOutputBytes: QUERY_EXEC_OUTPUT_BYTES },
-	);
+	const result = await exec(`graphify path ${shellQuote(fromConcept)} ${shellQuote(toConcept)}`, {
+		cwd,
+		signal,
+		maxOutputBytes: QUERY_EXEC_OUTPUT_BYTES,
+	});
 
 	if (result.exitCode !== 0 && !result.stdout.trim()) {
 		throw new Error(`Path search failed: ${result.stderr}`);
@@ -632,55 +327,21 @@ except nx.NetworkXNoPath:
 }
 
 // ---------------------------------------------------------------------------
-// Explain (explain a single node)
+// Explain (explain a single node) — delegates to graphify CLI
 // ---------------------------------------------------------------------------
 
 export async function explainNode(
 	exec: ExecFn,
-	python: string,
+	_python: string,
 	cwd: string,
 	concept: string,
 	signal?: AbortSignal,
 ): Promise<string> {
-	const result = await exec(
-		`${python} -c "
-import json, sys
-from networkx.readwrite import json_graph
-from pathlib import Path
-
-if not Path('graphify-out/graph.json').exists():
-    print('ERROR: No graph found. Build one first.')
-    sys.exit(1)
-
-data = json.loads(Path('graphify-out/graph.json').read_text())
-G = json_graph.node_link_graph(data, edges='links')
-
-term = ${pythonLiteral(concept)}
-term_lower = term.lower()
-
-scored = sorted([(sum(1 for w in term_lower.split() if w in G.nodes[n].get('label','').lower()), n) for n in G.nodes()], reverse=True)
-if not scored or scored[0][0] == 0:
-    print(f'No node matching {term!r}')
-    sys.exit(0)
-
-nid = scored[0][1]
-d = G.nodes[nid]
-print(f'NODE: {d.get('label', nid)}')
-print(f'  source: {d.get('source_file', 'unknown')}')
-print(f'  type: {d.get('file_type', 'unknown')}')
-print(f'  degree: {G.degree(nid)}')
-print()
-print('CONNECTIONS:')
-for neighbor in G.neighbors(nid):
-    edge = G.edges[nid, neighbor]
-    nlabel = G.nodes[neighbor].get('label', neighbor)
-    rel = edge.get('relation', '')
-    conf = edge.get('confidence', '')
-    src_file = G.nodes[neighbor].get('source_file', '')
-    print(f'  --{rel}--> {nlabel} [{conf}] ({src_file})')
-"`,
-		{ cwd, signal, maxOutputBytes: QUERY_EXEC_OUTPUT_BYTES },
-	);
+	const result = await exec(`graphify explain ${shellQuote(concept)}`, {
+		cwd,
+		signal,
+		maxOutputBytes: QUERY_EXEC_OUTPUT_BYTES,
+	});
 
 	if (result.exitCode !== 0 && !result.stdout.trim()) {
 		throw new Error(`Explain failed: ${result.stderr}`);
@@ -690,7 +351,7 @@ for neighbor in G.neighbors(nid):
 }
 
 // ---------------------------------------------------------------------------
-// Add URL
+// Add URL — delegates to graphify CLI
 // ---------------------------------------------------------------------------
 
 export interface AddOptions {
@@ -701,33 +362,21 @@ export interface AddOptions {
 
 export async function addUrl(
 	exec: ExecFn,
-	python: string,
+	_python: string,
 	cwd: string,
 	options: AddOptions,
 	signal?: AbortSignal,
 ): Promise<string> {
 	const { url, author, contributor } = options;
-	const authorKwarg = author ? `, author=${pythonLiteral(author)}` : "";
-	const contributorKwarg = contributor ? `, contributor=${pythonLiteral(contributor)}` : "";
+	let cmd = `graphify add ${shellQuote(url)}`;
+	if (author) cmd += ` --author ${shellQuote(author)}`;
+	if (contributor) cmd += ` --contributor ${shellQuote(contributor)}`;
 
-	const result = await exec(
-		`${python} -c "
-import sys
-from graphify.ingest import ingest
-from pathlib import Path
-
-try:
-    out = ingest(${pythonLiteral(url)}, Path('./raw')${authorKwarg}${contributorKwarg})
-    print(f'Saved to {out}')
-except ValueError as e:
-    print(f'error: {e}', file=sys.stderr)
-    sys.exit(1)
-except RuntimeError as e:
-    print(f'error: {e}', file=sys.stderr)
-    sys.exit(1)
-"`,
-		{ cwd, signal, maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES },
-	);
+	const result = await exec(cmd, {
+		cwd,
+		signal,
+		maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES,
+	});
 
 	if (result.exitCode !== 0) {
 		throw new Error(`Failed to add URL: ${result.stderr || result.stdout}`);
@@ -737,89 +386,40 @@ except RuntimeError as e:
 }
 
 // ---------------------------------------------------------------------------
-// Update (incremental re-extraction)
+// Update (incremental re-extraction) — delegates to graphify CLI
 // ---------------------------------------------------------------------------
 
 export async function updateGraph(
 	exec: ExecFn,
-	python: string,
+	_python: string,
 	cwd: string,
 	inputPath: string,
 	signal?: AbortSignal,
 	onUpdate?: (message: string) => void,
 ): Promise<{ newFiles: number; nodes: number; edges: number }> {
-	onUpdate?.("Checking for changes...");
+	onUpdate?.("Running graphify update...");
 
-	const result = await exec(
-		`${python} -c "
-import json
-from graphify.detect import detect_incremental
-from pathlib import Path
-
-r = detect_incremental(Path(${pythonLiteral(inputPath)}))
-print(json.dumps(r, indent=2))
-"`,
-		{ cwd, signal, maxOutputBytes: JSON_EXEC_OUTPUT_BYTES },
-	);
+	const result = await exec(`graphify update ${shellQuote(inputPath)}`, {
+		cwd,
+		signal,
+		maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES,
+	});
 
 	if (result.exitCode !== 0) {
-		throw new Error(`Incremental detect failed: ${result.stderr}`);
+		throw new Error(`graphify update failed: ${result.stderr || result.stdout}`);
 	}
 
-	const incremental = JSON.parse(result.stdout.trim()) as {
-		new_total: number;
-		new_files?: Record<string, string[]>;
-	};
+	onUpdate?.(result.stdout.trim());
 
-	if (incremental.new_total === 0) {
-		return { newFiles: 0, nodes: 0, edges: 0 };
-	}
-
-	onUpdate?.(`${incremental.new_total} files changed — re-extracting...`);
-
-	// Large-graph guard: if graph.json exceeds 10 MiB, skip the memory-heavy
-	// inline Python rebuild and fall back to the graphify CLI directly.
-	const graphJsonPath = join(cwd, "graphify-out", "graph.json");
-	try {
-		const graphStat = await stat(graphJsonPath);
-		if (graphStat.size > LARGE_GRAPH_JSON_BYTES) {
-			onUpdate?.(
-				`Large graph detected (${(graphStat.size / 1024 / 1024).toFixed(1)} MiB) — using CLI fallback for update.`,
-			);
-			const cliResult = await exec(`${python} -m graphify update ${shellQuote(inputPath)}`, {
-				cwd,
-				signal,
-				maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES,
-			});
-			if (cliResult.exitCode !== 0) {
-				throw new Error(`Graphify CLI update failed: ${cliResult.stderr || cliResult.stdout}`);
-			}
-			// Parse node/edge counts best-effort from CLI output
-			const nodeMatch = cliResult.stdout.match(/(\d+)\s+nodes?/i);
-			const edgeMatch = cliResult.stdout.match(/(\d+)\s+edges?/i);
-			return {
-				newFiles: incremental.new_total,
-				nodes: nodeMatch ? Number.parseInt(nodeMatch[1], 10) : 0,
-				edges: edgeMatch ? Number.parseInt(edgeMatch[1], 10) : 0,
-			};
-		}
-	} catch (err: unknown) {
-		const code =
-			typeof err === "object" && err !== null && "code" in err
-				? (err as { code?: string }).code
-				: undefined;
-		if (code !== "ENOENT") {
-			throw err;
-		}
-		// ENOENT is fine — graph.json doesn't exist yet, proceed with normal build
-	}
-
-	const buildResult = await buildGraph(exec, python, cwd, { inputPath }, signal, onUpdate);
+	// Parse stats from CLI output
+	const nodeMatch = result.stdout.match(/(\d[\d,]*)\s+nodes?/i);
+	const edgeMatch = result.stdout.match(/(\d[\d,]*)\s+edges?/i);
+	const filesMatch = result.stdout.match(/(\d+)\s+(?:files?|re-extracted)/i);
 
 	return {
-		newFiles: incremental.new_total,
-		nodes: buildResult.nodes,
-		edges: buildResult.edges,
+		newFiles: filesMatch ? Number.parseInt(filesMatch[1], 10) : 1,
+		nodes: nodeMatch ? Number.parseInt(nodeMatch[1].replace(/,/g, ""), 10) : 0,
+		edges: edgeMatch ? Number.parseInt(edgeMatch[1].replace(/,/g, ""), 10) : 0,
 	};
 }
 
@@ -849,33 +449,20 @@ export async function startWatch(
 }
 
 // ---------------------------------------------------------------------------
-// Cluster-only (rerun clustering)
+// Cluster-only (rerun clustering) — delegates to graphify CLI
 // ---------------------------------------------------------------------------
 
 export async function clusterOnly(
 	exec: ExecFn,
-	python: string,
+	_python: string,
 	cwd: string,
 	signal?: AbortSignal,
 ): Promise<{ communities: number }> {
-	const result = await exec(
-		`${python} -c "
-import json, sys
-from graphify.cluster import cluster, score_all
-from graphify.report import generate
-from graphify.export import to_json
-from networkx.readwrite import json_graph
-from pathlib import Path
-
-data = json.loads(Path('graphify-out/graph.json').read_text())
-import networkx as nx
-G = json_graph.node_link_graph(data, edges='links')
-communities = cluster(G)
-to_json(G, communities, 'graphify-out/graph.json')
-print(f'Re-clustered: {len(communities)} communities')
-"`,
-		{ cwd, signal, maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES },
-	);
+	const result = await exec("graphify cluster-only .", {
+		cwd,
+		signal,
+		maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES,
+	});
 
 	if (result.exitCode !== 0) {
 		throw new Error(`Cluster-only failed: ${result.stderr || result.stdout}`);
@@ -953,22 +540,24 @@ export async function runExtract(
 	const stdout = result.stdout;
 
 	// Match the summary line for nodes/edges/communities
-	const summaryMatch = stdout.match(/(\d[\d,]*)\s+nodes?,\s*(\d[\d,]*)\s+edges?,\s*(\d[\d,]*)\s+communities/i);
+	const summaryMatch = stdout.match(
+		/(\d[\d,]*)\s+nodes?,\s*(\d[\d,]*)\s+edges?,\s*(\d[\d,]*)\s+communities/i,
+	);
 	const nodesStr = summaryMatch
-		? summaryMatch[1].replace(/,/g, '')
+		? summaryMatch[1].replace(/,/g, "")
 		: stdout.match(/(\d+)\s+nodes?/i)?.[1];
 	const edgesStr = summaryMatch
-		? summaryMatch[2].replace(/,/g, '')
+		? summaryMatch[2].replace(/,/g, "")
 		: stdout.match(/(\d+)\s+edges?/i)?.[1];
 
 	// Match token counts from the cost line: "N in / M out"
 	const tokenMatch = stdout.match(/(\d[\d,]*)\s+in\s*\/\s*(\d[\d,]*)\s+out/i);
 	const inputTokens = tokenMatch
-		? Number.parseInt(tokenMatch[1].replace(/,/g, ''), 10)
-		: Number.parseInt(stdout.match(/input_tokens[=:](\d+)/i)?.[1] ?? '0', 10);
+		? Number.parseInt(tokenMatch[1].replace(/,/g, ""), 10)
+		: Number.parseInt(stdout.match(/input_tokens[=:](\d+)/i)?.[1] ?? "0", 10);
 	const outputTokens = tokenMatch
-		? Number.parseInt(tokenMatch[2].replace(/,/g, ''), 10)
-		: Number.parseInt(stdout.match(/output_tokens[=:](\d+)/i)?.[1] ?? '0', 10);
+		? Number.parseInt(tokenMatch[2].replace(/,/g, ""), 10)
+		: Number.parseInt(stdout.match(/output_tokens[=:](\d+)/i)?.[1] ?? "0", 10);
 
 	const filesMatch = stdout.match(/(\d+)\s+files?/i);
 

@@ -10,19 +10,19 @@ It also bundles a `graphify` skill (`skills/graphify/SKILL.md`) for full-pipelin
 
 ## Tools
 
-| Tool                       | Description                                                                                      |
-| -------------------------- | ------------------------------------------------------------------------------------------------ |
-| `graphify_build`           | Build a knowledge graph from a directory (full pipeline: detect → extract → cluster → visualize) |
-| `graphify_query`           | Query the graph — BFS for broad context, DFS for tracing specific paths                          |
-| `graphify_path`            | Find the shortest path between two concepts in the graph                                         |
-| `graphify_explain`         | Plain-language explanation of a node — everything connected to it                                |
-| `graphify_add`             | Fetch a URL and add it to the corpus, then update the graph                                      |
-| `graphify_update`          | Incremental update — re-extract only changed files                                               |
-| `graphify_watch`           | Watch a directory for changes, auto-rebuild graph on code edits                                  |
-| `graphify_cluster`         | Re-run community detection on an existing graph (no re-extraction)                               |
+| Tool                       | Description                                                                                                                    |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `graphify_build`           | Build a knowledge graph from a directory (full pipeline: detect → extract → cluster → visualize)                               |
+| `graphify_query`           | Query the graph — BFS for broad context, DFS for tracing specific paths                                                        |
+| `graphify_path`            | Find the shortest path between two concepts in the graph                                                                       |
+| `graphify_explain`         | Plain-language explanation of a node — everything connected to it                                                              |
+| `graphify_add`             | Fetch a URL and add it to the corpus, then update the graph                                                                    |
+| `graphify_update`          | Incremental update — re-extract only changed files                                                                             |
+| `graphify_watch`           | Watch a directory for changes, auto-rebuild graph on code edits                                                                |
+| `graphify_cluster`         | Re-run community detection on an existing graph (no re-extraction)                                                             |
 | `graphify_extract`         | Headless LLM extraction for CI — defaults to deepseek; also supports claude, kimi, openai, gemini, ollama, bedrock, claude-cli |
-| `graphify_export_callflow` | Generate self-contained Mermaid architecture/call-flow HTML from graph.json                      |
-| `graphify_upgrade`         | Check for and install graphifyy CLI updates via uv                                               |
+| `graphify_export_callflow` | Generate self-contained Mermaid architecture/call-flow HTML from graph.json                                                    |
+| `graphify_upgrade`         | Check for and install graphifyy CLI updates via uv                                                                             |
 
 ## Commands
 
