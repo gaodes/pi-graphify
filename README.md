@@ -112,7 +112,7 @@ When `graphify-out/graph.json` exists in the current project, pi-graphify:
 
 Notes:
 
-- This is Pi-native behavior in this extension; upstream `graphify pi install` installs the Graphify skill but does not install these Pi runtime hooks.
+- This is Pi-native behavior in this extension; the Graphify skill is installed by `graphify install --platform pi` to the global Pi skills directory (`~/.pi/agent/skills/graphify/SKILL.md`). Auto-reinstalled on upgrade via `graphify_upgrade`.
 - Auto-context hooks stay idle in projects where `<outputDir>/graph.json` is missing.
 
 ## Git tracking policy

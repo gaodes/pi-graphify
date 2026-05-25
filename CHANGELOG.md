@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- **Skill delegation to CLI**: Removed bundled `skills/graphify/SKILL.md` in favor of the graphify CLI's native `graphify install --platform pi` mechanism. The skill is now installed to `~/.pi/agent/skills/graphify/SKILL.md` (global Pi skills directory) and stays in sync with the CLI version automatically. This eliminates the redundant bundled skill and the stale-version warning.
+- `syncSkillFromUpstream()` (fetch-from-GitHub) replaced with `installSkillFromCLI()` (delegates to `graphify install --platform pi`).
+- `graphify_upgrade` `sync-skill` action now runs `graphify install --platform pi` instead of fetching from GitHub.
+- `graphify_upgrade` `install` action reinstalls the Pi skill after upgrading.
+
+### Removed
+
+- Bundled `skills/graphify/SKILL.md` — no longer shipped in the npm package.
+- `syncSkillFromUpstream()` and `UPSTREAM_SKILL_URL` constant — replaced by `installSkillFromCLI()`.
+
 ## [0.1.9] - 2026-05-25
 
 ### Changed

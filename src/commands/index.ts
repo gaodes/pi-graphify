@@ -8,11 +8,10 @@ import {
 	ensureInstalled,
 	explainNode,
 	findPath,
-	getInstalledVersion,
 	hookAction,
+	installSkillFromCLI,
 	queryGraph,
 	runUpgrade,
-	syncSkillFromUpstream,
 	updateGraph,
 	updateUpstreamVersion,
 } from "../lib/runner";
@@ -673,19 +672,16 @@ async function handleUpgrade(
 		}
 
 		if (action === "sync-skill") {
-			const installedVersion = await getInstalledVersion(exec);
-
-			const skillResult = await syncSkillFromUpstream(installedVersion, EXTENSION_ROOT);
+			const skillResult = await installSkillFromCLI(exec);
 			if (skillResult.error) {
-				await ctx.ui.notify(`Skill sync failed: ${skillResult.error}`, "error");
+				await ctx.ui.notify(`Skill install failed: ${skillResult.error}`, "error");
 				return;
 			}
 
-			if (skillResult.synced) {
-				await updateUpstreamVersion(EXTENSION_ROOT, installedVersion);
-				await ctx.ui.notify(`Skill synced from upstream v${installedVersion}`);
+			if (skillResult.installed) {
+				await ctx.ui.notify(`Skill installed from graphifyy v${skillResult.version}`);
 			} else {
-				await ctx.ui.notify(`Skill already up to date (v${installedVersion})`);
+				await ctx.ui.notify(`Skill install failed (unknown reason)`);
 			}
 			return;
 		}
@@ -696,16 +692,16 @@ async function handleUpgrade(
 
 		const result = await runUpgrade(exec);
 
-		// Auto-sync skill after upgrade
+		// Auto-reinstall Pi skill after upgrade
 		let skillNote = "";
 		try {
-			const skillResult = await syncSkillFromUpstream(result.newVersion, EXTENSION_ROOT);
-			if (skillResult.synced) {
+			const skillResult = await installSkillFromCLI(exec);
+			if (skillResult.installed) {
 				await updateUpstreamVersion(EXTENSION_ROOT, result.newVersion);
-				skillNote = " (skill synced)";
+				skillNote = " (skill reinstalled)";
 			}
 		} catch {
-			// Skill sync failure is non-fatal
+			// Skill install failure is non-fatal
 		}
 
 		if (result.upgraded) {

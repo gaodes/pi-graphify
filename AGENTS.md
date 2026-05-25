@@ -5,13 +5,13 @@ Pi extension wrapping the [graphify](https://github.com/safishamsi/graphify) Pyt
 ## Architecture
 
 - `src/config.ts` — Raw/resolved config loader
-- `src/lib/runner.ts` — Graphify CLI execution logic (no Pi imports). All functions accept an injected `exec` callback for testability. Includes `getInstalledVersion`, `getLatestVersion`, `syncSkillFromUpstream`, `updateUpstreamVersion` for upgrade/skill-sync.
-- `src/lib/runner.test.ts` — Unit tests for runner (20 passing)
+- `src/lib/runner.ts` — Graphify CLI execution logic (no Pi imports). All functions accept an injected `exec` callback for testability. Includes `getInstalledVersion`, `getLatestVersion`, `installSkillFromCLI`, `updateUpstreamVersion` for upgrade/skill-install.
+- `src/lib/runner.test.ts` — Unit tests for runner (40 passing)
 - `src/tools/` — LLM-callable tools (thin wrappers around runner)
   - All tools in `graphify-tools.ts`: build, query, path, explain, add, update, watch, cluster, upgrade
   - Integration tests in `graphify.integration.test.ts` (10 passing)
 - `src/commands/` — `/graphify` slash command with autocomplete for all subcommands
-- `skills/graphify/` — Bundled skill synced from upstream `graphify/skill-pi.md` at the installed CLI version. Auto-synced on upgrade via `graphify_upgrade`, manual sync via `graphify_upgrade action='sync-skill'`.
+- Skill is installed by the graphify CLI to `~/.pi/agent/skills/graphify/SKILL.md` via `graphify install --platform pi`. Auto-reinstalled on upgrade via `graphify_upgrade`.
 
 ## Tools (11)
 
@@ -78,7 +78,7 @@ Key: `pi-graphify` in `prime-settings.json` (legacy `graphify` key auto-migrates
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 
-This project is indexed by GitNexus as **pi-graphify** (493 symbols, 728 relationships, 18 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+This project is indexed by GitNexus as **pi-graphify** (478 symbols, 713 relationships, 18 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
 
 > If any GitNexus tool warns the index is stale, run `npx gitnexus analyze` in terminal first.
 

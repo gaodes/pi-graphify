@@ -8,7 +8,7 @@ import {
 	ensureInstalled,
 	getInstalledVersion,
 	getLatestVersion,
-	syncSkillFromUpstream,
+	installSkillFromCLI,
 	updateUpstreamVersion,
 } from "./runner";
 
@@ -185,71 +185,31 @@ describe("ensureGraphifyGitignore", () => {
 });
 
 // ---------------------------------------------------------------------------
-// syncSkillFromUpstream
+// installSkillFromCLI
 // ---------------------------------------------------------------------------
 
-describe("syncSkillFromUpstream", () => {
-	it("writes skill file when fetched successfully", async () => {
-		const dir = await mkdtemp(join(tmpdir(), "pi-graphify-test-"));
-		const skillDir = join(dir, "skills", "graphify");
-		const { mkdir } = await import("node:fs/promises");
-		await mkdir(skillDir, { recursive: true });
+describe("installSkillFromCLI", () => {
+	it("returns installed=true on success", async () => {
+		const exec = createMockExec({
+			"graphify --version": { stdout: "0.8.18", stderr: "", exitCode: 0 },
+			"graphify install": { stdout: "  skill installed  ->  ~/.pi/agent/skills/graphify/SKILL.md\n\nDone.", stderr: "", exitCode: 0 },
+		});
 
-		try {
-			const result = await syncSkillFromUpstream("0.8.14", dir);
-
-			// This test hits the real GitHub URL — it may fail without network
-			if (result.error) {
-				console.warn(`Skipping: ${result.error}`);
-				return;
-			}
-
-			expect(result.synced).toBe(true);
-			expect(result.toVersion).toBe("0.8.14");
-
-			const content = await readFile(join(skillDir, "SKILL.md"), "utf-8");
-			expect(content).toContain("name: graphify");
-			expect(content.length).toBeGreaterThan(1000);
-		} finally {
-			await rm(dir, { recursive: true, force: true });
-		}
+		const result = await installSkillFromCLI(exec);
+		expect(result.installed).toBe(true);
+		expect(result.version).toBe("0.8.18");
+		expect(result.error).toBeUndefined();
 	});
 
-	it("returns error on HTTP failure (bad version tag)", async () => {
-		const dir = await mkdtemp(join(tmpdir(), "pi-graphify-test-"));
+	it("returns error when graphify install fails", async () => {
+		const exec = createMockExec({
+			"graphify --version": { stdout: "0.8.18", stderr: "", exitCode: 0 },
+			"graphify install": { stdout: "", stderr: "error: platform not found", exitCode: 1 },
+		});
 
-		try {
-			const result = await syncSkillFromUpstream("99.99.99", dir);
-
-			expect(result.synced).toBe(false);
-			expect(result.error).toBeDefined();
-			expect(result.error).toContain("HTTP 404");
-		} finally {
-			await rm(dir, { recursive: true, force: true });
-		}
-	});
-
-	it("skips write when content is identical", async () => {
-		const dir = await mkdtemp(join(tmpdir(), "pi-graphify-test-"));
-		const skillDir = join(dir, "skills", "graphify");
-		const { mkdir } = await import("node:fs/promises");
-		await mkdir(skillDir, { recursive: true });
-
-		try {
-			// First sync to populate the file
-			const first = await syncSkillFromUpstream("0.8.14", dir);
-			if (first.error) {
-				console.warn(`Skipping: ${first.error}`);
-				return;
-			}
-
-			// Second sync should detect identical content
-			const second = await syncSkillFromUpstream("0.8.14", dir);
-			expect(second.synced).toBe(false);
-			expect(second.error).toBeUndefined();
-		} finally {
-			await rm(dir, { recursive: true, force: true });
-		}
+		const result = await installSkillFromCLI(exec);
+		expect(result.installed).toBe(false);
+		expect(result.error).toContain("graphify install failed");
 	});
 });
 

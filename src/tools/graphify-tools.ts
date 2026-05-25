@@ -23,12 +23,11 @@ import {
 	explainNode,
 	exportCallflowHtml,
 	findPath,
-	getInstalledVersion,
+	installSkillFromCLI,
 	queryGraph,
 	runExtract,
 	runUpgrade,
 	startWatch,
-	syncSkillFromUpstream,
 	updateGraph,
 	updateUpstreamVersion,
 } from "../lib/runner";
@@ -1242,7 +1241,7 @@ const upgradeParameters = Type.Object({
 	action: Type.Optional(
 		Type.Union([Type.Literal("check"), Type.Literal("install"), Type.Literal("sync-skill")], {
 			description:
-				"'check' to see if a new version is available (default), 'install' to upgrade to latest, 'sync-skill' to re-download the bundled skill from upstream without upgrading the CLI. This updates the graphifyy Python CLI tool via uv — NOT the graphify knowledge graph.",
+				"'check' to see if a new version is available (default), 'install' to upgrade to latest, 'sync-skill' to reinstall the graphify Pi skill from the CLI without upgrading. This updates the graphifyy Python CLI tool via uv — NOT the graphify knowledge graph.",
 			default: "check",
 		}),
 	),
@@ -1270,8 +1269,8 @@ export function createUpgradeTool(_pi: ExtensionAPI, _config: ResolvedConfig) {
 			"Use graphify_upgrade to check or install the latest version of the graphify CLI tool.",
 		promptGuidelines: [
 			"Use action='check' to see if a new version is available before installing.",
-			"Use action='install' to upgrade graphifyy via uv tool upgrade. This also auto-syncs the bundled skill.",
-			"Use action='sync-skill' to re-download the bundled skill from GitHub without upgrading the CLI. Useful if the skill file is missing or manually edited.",
+			"Use action='install' to upgrade graphifyy via uv tool upgrade. This also reinstalls the Pi skill via `graphify install --platform pi`.",
+			"Use action='sync-skill' to reinstall the Pi skill from the CLI without upgrading. Useful if the skill file is missing or outdated.",
 			"This tool updates the graphifyy Python package — not the knowledge graph data.",
 		],
 
@@ -1314,27 +1313,24 @@ export function createUpgradeTool(_pi: ExtensionAPI, _config: ResolvedConfig) {
 			// action === 'sync-skill'
 			if (action === "sync-skill") {
 				onUpdate?.({
-					content: [{ type: "text", text: "Syncing bundled skill from upstream..." }],
+					content: [{ type: "text", text: "Reinstalling graphify Pi skill from CLI..." }],
 					details: {} as UpgradeDetails,
 				});
 
-				const installedVersion = await getInstalledVersion(exec, signal);
-
 				try {
-					const skillResult = await syncSkillFromUpstream(installedVersion, EXTENSION_ROOT, signal);
-					if (skillResult.synced) {
-						await updateUpstreamVersion(EXTENSION_ROOT, installedVersion);
+					const skillResult = await installSkillFromCLI(exec, signal);
+					if (skillResult.installed) {
 						return {
 							content: [
 								{
 									type: "text",
-									text: `Skill synced from upstream v${installedVersion}.`,
+									text: `Skill installed from graphifyy v${skillResult.version}.`,
 								},
 							],
 							details: {
 								action: "sync-skill",
-								installedVersion,
-								latestVersion: installedVersion,
+								installedVersion: skillResult.version,
+								latestVersion: skillResult.version,
 								updateAvailable: false,
 							},
 						};
@@ -1344,14 +1340,14 @@ export function createUpgradeTool(_pi: ExtensionAPI, _config: ResolvedConfig) {
 							{
 								type: "text",
 								text: skillResult.error
-									? `Skill sync failed: ${skillResult.error}`
-									: `Skill already up to date (v${installedVersion}).`,
+									? `Skill install failed: ${skillResult.error}`
+									: `Skill install failed (unknown reason).`,
 							},
 						],
 						details: {
 							action: "sync-skill",
-							installedVersion,
-							latestVersion: installedVersion,
+							installedVersion: skillResult.version,
+							latestVersion: skillResult.version,
 							updateAvailable: false,
 						},
 					};
@@ -1360,13 +1356,13 @@ export function createUpgradeTool(_pi: ExtensionAPI, _config: ResolvedConfig) {
 						content: [
 							{
 								type: "text",
-								text: `Skill sync failed: ${err instanceof Error ? err.message : String(err)}`,
+								text: `Skill install failed: ${err instanceof Error ? err.message : String(err)}`,
 							},
 						],
 						details: {
 							action: "sync-skill",
-							installedVersion,
-							latestVersion: installedVersion,
+							installedVersion: "",
+							latestVersion: "",
 							updateAvailable: false,
 						},
 					};
@@ -1381,21 +1377,21 @@ export function createUpgradeTool(_pi: ExtensionAPI, _config: ResolvedConfig) {
 
 			const result = await runUpgrade(exec, signal);
 
-			// Always attempt skill sync after install (even if no CLI upgrade, skill may be stale)
+			// Always reinstall Pi skill after upgrade to keep it in sync
 			let skillSyncText = "";
 			try {
-				const skillResult = await syncSkillFromUpstream(result.newVersion, EXTENSION_ROOT, signal);
-				if (skillResult.synced) {
+				const skillResult = await installSkillFromCLI(exec, signal);
+				if (skillResult.installed) {
 					skillSyncText = result.upgraded
-						? `\nSkill synced from upstream v${result.newVersion}.`
-						: `\nSkill was stale — synced from upstream v${result.newVersion}.`;
+						? `\nSkill reinstalled from graphifyy v${result.newVersion}.`
+						: `\nSkill reinstalled (graphifyy v${result.newVersion}).`;
 					await updateUpstreamVersion(EXTENSION_ROOT, result.newVersion);
 				} else if (skillResult.error && result.upgraded) {
-					skillSyncText = `\nSkill sync skipped: ${skillResult.error}`;
+					skillSyncText = `\nSkill reinstall skipped: ${skillResult.error}`;
 				}
 			} catch (err) {
 				if (result.upgraded) {
-					skillSyncText = `\nSkill sync failed: ${err instanceof Error ? err.message : String(err)}`;
+					skillSyncText = `\nSkill reinstall failed: ${err instanceof Error ? err.message : String(err)}`;
 				}
 			}
 

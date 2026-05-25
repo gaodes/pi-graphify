@@ -875,86 +875,51 @@ export async function ensureGraphifyGitignore(cwd: string): Promise<{ updated: b
 }
 
 // ---------------------------------------------------------------------------
-// Skill sync — fetch upstream skill-pi.md and write to bundled skills/ directory
+// Skill install — delegate to `graphify install --platform pi`
 // ---------------------------------------------------------------------------
 
-export interface SkillSyncResult {
-	synced: boolean;
-	fromVersion: string;
-	toVersion: string;
+export interface SkillInstallResult {
+	installed: boolean;
+	version: string;
 	error?: string;
 }
 
-/** Upstream skill file URL template. */
-const UPSTREAM_SKILL_URL =
-	"https://raw.githubusercontent.com/safishamsi/graphify/v{VERSION}/graphify/skill-pi.md";
-
 /**
- * Fetch the upstream skill-pi.md for a given graphify version and write it
- * to the bundled skills directory. Uses native fetch — no exec dependency.
+ * Install or update the graphify Pi skill by delegating to the CLI's
+ * `graphify install --platform pi` command. The CLI writes the skill
+ * to `~/.pi/agent/skills/graphify/SKILL.md` (global Pi skills directory).
  *
- * @param version  Semver version string (e.g. "0.8.14")
- * @param extensionRoot  Absolute path to the pi-graphify package root
- * @param signal  Optional abort signal
+ * @param exec     Exec function for running commands
+ * @param signal   Optional abort signal
  */
-export async function syncSkillFromUpstream(
-	version: string,
-	extensionRoot: string,
+export async function installSkillFromCLI(
+	exec: ExecFn,
 	signal?: AbortSignal,
-): Promise<SkillSyncResult> {
-	const url = UPSTREAM_SKILL_URL.replace("{VERSION}", version);
-	const skillPath = join(extensionRoot, "skills", "graphify", "SKILL.md");
-
+): Promise<SkillInstallResult> {
 	try {
-		const response = await fetch(url, { signal });
-		if (!response.ok) {
+		const version = await getInstalledVersion(exec, signal);
+
+		const result = await exec("graphify install --platform pi 2>&1", {
+			signal,
+			maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES,
+		});
+
+		if (result.exitCode !== 0) {
 			return {
-				synced: false,
-				fromVersion: "",
-				toVersion: version,
-				error: `HTTP ${response.status} fetching ${url}`,
+				installed: false,
+				version,
+				error: `graphify install failed: ${result.stderr || result.stdout}`,
 			};
 		}
-
-		const content = await response.text();
-
-		if (!content.trim()) {
-			return {
-				synced: false,
-				fromVersion: "",
-				toVersion: version,
-				error: "Fetched skill-pi.md is empty",
-			};
-		}
-
-		// Read the current skill to detect if it actually changed
-		let currentContent: string | undefined;
-		try {
-			currentContent = await readFile(skillPath, "utf-8");
-		} catch {
-			// File may not exist yet — that's fine
-		}
-
-		if (currentContent === content) {
-			return {
-				synced: false,
-				fromVersion: version,
-				toVersion: version,
-			};
-		}
-
-		await writeFile(skillPath, content, "utf-8");
 
 		return {
-			synced: true,
-			fromVersion: currentContent ? "previous" : "none",
-			toVersion: version,
+			installed: true,
+			version,
 		};
 	} catch (err) {
 		return {
-			synced: false,
-			fromVersion: "",
-			toVersion: version,
+			installed: false,
+			version: "",
 			error: err instanceof Error ? err.message : String(err),
 		};
 	}

@@ -11,7 +11,6 @@
 	"main": "./src/tools/index.ts",
 	"files": [
 		"src/",
-		"skills/",
 		"README.md",
 		"CHANGELOG.md"
 	],
