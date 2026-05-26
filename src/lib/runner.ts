@@ -119,6 +119,7 @@ export async function ensureInstalled(
 export interface BuildOptions {
 	inputPath: string;
 	mode?: "standard" | "deep";
+	backend?: string;
 	noViz?: boolean;
 	obsidian?: boolean;
 	svg?: boolean;
@@ -143,14 +144,18 @@ export async function buildGraph(
 	}
 
 	// Step 1: graphify extract — full pipeline (detect → extract → cluster → graph.json)
-	onUpdate?.("Running graphify extract...");
-	const extractResult = await exec(`graphify extract ${shellQuote(inputPath)}`, {
+	const backend = normalizeExtractBackend(options.backend);
+	onUpdate?.(`Running graphify extract (backend: ${backend})...`);
+	const extractCmd = `graphify extract ${shellQuote(inputPath)} --backend ${backend}`;
+	const extractResult = await exec(extractCmd, {
 		cwd,
 		signal,
 		maxOutputBytes: DEFAULT_EXEC_OUTPUT_BYTES,
 	});
 	if (extractResult.exitCode !== 0) {
-		throw new Error(`graphify extract failed: ${extractResult.stderr || extractResult.stdout}`);
+		throw new Error(
+			`graphify extract failed (${backend}): ${extractResult.stderr || extractResult.stdout}`,
+		);
 	}
 	onUpdate?.(extractResult.stdout.trim());
 
@@ -510,7 +515,7 @@ export async function runExtract(
 	const { inputPath, backend, maxWorkers, tokenBudget, maxConcurrency, apiTimeout } = options;
 
 	let cmd = `${python} -m graphify extract ${shellQuote(inputPath)}`;
-	if (backend) cmd += ` --backend ${backend}`;
+	if (backend) cmd += ` --backend ${normalizeExtractBackend(backend)}`;
 	if (maxWorkers) cmd += ` --max-workers ${maxWorkers}`;
 	if (tokenBudget) cmd += ` --token-budget ${tokenBudget}`;
 	if (maxConcurrency) cmd += ` --max-concurrency ${maxConcurrency}`;
@@ -950,6 +955,23 @@ export async function updateUpstreamVersion(
 		(upstream.primary as Record<string, unknown>).upstreamVersion = newVersion;
 		await writeFile(upstreamPath, `${JSON.stringify(upstream, null, "\t")}\n`, "utf-8");
 	}
+}
+
+function normalizeExtractBackend(backend: string | undefined): string {
+	const fallback = "deepseek";
+	if (!backend) return fallback;
+
+	const allowed = new Set([
+		"deepseek",
+		"openai",
+		"claude",
+		"kimi",
+		"gemini",
+		"ollama",
+		"bedrock",
+		"claude-cli",
+	]);
+	return allowed.has(backend) ? backend : fallback;
 }
 
 /** Safe shell argument quoting — wraps in single quotes, escapes internal single quotes. */

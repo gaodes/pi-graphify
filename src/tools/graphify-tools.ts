@@ -81,6 +81,7 @@ export function createBuildTool(pi: ExtensionAPI, config: ResolvedConfig) {
 		promptGuidelines: [
 			"Call graphify_build before graphify_query, graphify_path, or graphify_explain — those tools require an existing graph.",
 			"Provide the exact directory path. Use '.' for the current directory.",
+			"Semantic extraction backend defaults to configured semanticBackend (deepseek by default).",
 		],
 
 		async execute(
@@ -101,6 +102,7 @@ export function createBuildTool(pi: ExtensionAPI, config: ResolvedConfig) {
 				{
 					inputPath: params.path,
 					mode: params.mode ?? "standard",
+					backend: config.semanticBackend,
 					noViz: params.no_viz,
 					obsidian: params.obsidian,
 					svg: params.svg,
@@ -1040,13 +1042,15 @@ export function createExtractTool(pi: ExtensionAPI, config: ResolvedConfig) {
 			const python = await detectPython(exec, config.pythonPath, ctx.cwd, signal);
 			await ensureInstalled(exec, python, ctx.cwd, signal);
 
+			const effectiveBackend = params.backend ?? config.semanticBackend;
+
 			const result = await runExtract(
 				exec,
 				python,
 				ctx.cwd,
 				{
 					inputPath: params.inputPath,
-					backend: params.backend ?? "deepseek",
+					backend: effectiveBackend,
 					maxWorkers: params.maxWorkers,
 					tokenBudget: params.tokenBudget,
 					maxConcurrency: params.maxConcurrency,
@@ -1069,7 +1073,7 @@ export function createExtractTool(pi: ExtensionAPI, config: ResolvedConfig) {
 				],
 				details: {
 					inputPath: params.inputPath,
-					backend: params.backend ?? "deepseek",
+					backend: effectiveBackend,
 					files: result.files,
 					inputTokens: result.inputTokens,
 					outputTokens: result.outputTokens,

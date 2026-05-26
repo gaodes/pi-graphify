@@ -33,7 +33,7 @@ It also bundles a `graphify` skill (`skills/graphify/SKILL.md`) for full-pipelin
 ### Subcommands and flags
 
 ```
-/graphify <path>                              # build graph (full pipeline)
+/graphify <path>                              # build graph (full pipeline, semantic backend defaults to deepseek)
 /graphify <path> --mode deep                  # thorough extraction, richer INFERRED edges
 /graphify <path> --update                     # incremental — re-extract only changed files
 /graphify <path> --cluster-only               # rerun clustering on existing graph
@@ -93,15 +93,16 @@ pi install @gaodes/pi-graphify
 
 Key: `pi-graphify` in `prime-settings.json` (legacy `graphify` key auto-migrates on load).
 
-| Setting                            | Type      | Default           | Description                                      |
-| ---------------------------------- | --------- | ----------------- | ------------------------------------------------ |
-| `enabled`                          | `boolean` | `true`            | Enable/disable the extension                     |
-| `pythonPath`                       | `string`  | `"python3"`       | Path to Python interpreter                       |
-| `outputDir`                        | `string`  | `"graphify-out"`  | Output directory name                            |
-| `statusbar`                        | `object`  | built-in defaults | Optional pi-statusbar widget settings            |
-| `autoContext.enabled`              | `boolean` | `true`            | Enable Graphify auto-context hooks               |
-| `autoContext.augmentSearchResults` | `boolean` | `true`            | Append Graphify hint to search tool results      |
-| `autoContext.queryBudget`          | `number`  | `1200`            | Budget hint for `graphify_query` follow-up usage |
+| Setting                            | Type      | Default           | Description                                             |
+| ---------------------------------- | --------- | ----------------- | ------------------------------------------------------- |
+| `enabled`                          | `boolean` | `true`            | Enable/disable the extension                            |
+| `pythonPath`                       | `string`  | `"python3"`       | Path to Python interpreter                              |
+| `outputDir`                        | `string`  | `"graphify-out"`  | Output directory name                                   |
+| `semanticBackend`                  | `string`  | `"deepseek"`      | Default semantic extraction backend for builds/extracts |
+| `statusbar`                        | `object`  | built-in defaults | Optional pi-statusbar widget settings                   |
+| `autoContext.enabled`              | `boolean` | `true`            | Enable Graphify auto-context hooks                      |
+| `autoContext.augmentSearchResults` | `boolean` | `true`            | Append Graphify hint to search tool results             |
+| `autoContext.queryBudget`          | `number`  | `1200`            | Budget hint for `graphify_query` follow-up usage        |
 
 ### Auto-context behavior
 

@@ -23,10 +23,21 @@ export interface ResolvedAutoContextConfig {
 	queryBudget: number;
 }
 
+export type SemanticBackend =
+	| "deepseek"
+	| "openai"
+	| "claude"
+	| "kimi"
+	| "gemini"
+	| "ollama"
+	| "bedrock"
+	| "claude-cli";
+
 export interface RawConfig {
 	enabled?: boolean;
 	pythonPath?: string;
 	outputDir?: string;
+	semanticBackend?: SemanticBackend;
 	autoContext?: AutoContextConfig;
 }
 
@@ -34,6 +45,7 @@ export interface ResolvedConfig {
 	enabled: boolean;
 	pythonPath: string;
 	outputDir: string;
+	semanticBackend: SemanticBackend;
 	autoContext: ResolvedAutoContextConfig;
 }
 
@@ -50,6 +62,7 @@ export const DEFAULT_CONFIG: ResolvedConfig = {
 	enabled: true,
 	pythonPath: "python3",
 	outputDir: "graphify-out",
+	semanticBackend: "deepseek",
 	autoContext: DEFAULT_AUTO_CONTEXT_CONFIG,
 };
 
@@ -82,6 +95,23 @@ function resolveAutoContext(raw: AutoContextConfig | undefined): ResolvedAutoCon
 	};
 }
 
+function resolveSemanticBackend(value: unknown): SemanticBackend {
+	const allowed: SemanticBackend[] = [
+		"deepseek",
+		"openai",
+		"claude",
+		"kimi",
+		"gemini",
+		"ollama",
+		"bedrock",
+		"claude-cli",
+	];
+	if (typeof value === "string" && allowed.includes(value as SemanticBackend)) {
+		return value as SemanticBackend;
+	}
+	return DEFAULT_CONFIG.semanticBackend;
+}
+
 export function resolveConfig(...configs: Array<RawConfig | undefined>): ResolvedConfig {
 	const resolved: ResolvedConfig = {
 		...DEFAULT_CONFIG,
@@ -92,6 +122,9 @@ export function resolveConfig(...configs: Array<RawConfig | undefined>): Resolve
 		if (raw.enabled !== undefined) resolved.enabled = raw.enabled;
 		if (raw.pythonPath !== undefined) resolved.pythonPath = raw.pythonPath;
 		if (raw.outputDir !== undefined) resolved.outputDir = raw.outputDir;
+		if (raw.semanticBackend !== undefined) {
+			resolved.semanticBackend = resolveSemanticBackend(raw.semanticBackend);
+		}
 		if (raw.autoContext !== undefined) {
 			resolved.autoContext = resolveAutoContext({ ...resolved.autoContext, ...raw.autoContext });
 		}
@@ -119,6 +152,7 @@ const DEFAULT_EXTENSION_SETTINGS: Record<string, unknown> = {
 	enabled: true,
 	pythonPath: "python3",
 	outputDir: "graphify-out",
+	semanticBackend: "deepseek",
 	autoContext: DEFAULT_AUTO_CONTEXT_CONFIG,
 };
 
@@ -160,6 +194,13 @@ export function ensurePrimeSettings(): void {
 	}
 
 	const extensionSettings = settings[EXTENSION_ID] as Record<string, unknown>;
+
+	if (!("semanticBackend" in extensionSettings)) {
+		extensionSettings.semanticBackend = "deepseek";
+		changed = true;
+	} else {
+		extensionSettings.semanticBackend = resolveSemanticBackend(extensionSettings.semanticBackend);
+	}
 
 	if (!("autoContext" in extensionSettings)) {
 		extensionSettings.autoContext = { ...DEFAULT_AUTO_CONTEXT_CONFIG };
