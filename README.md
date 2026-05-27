@@ -93,25 +93,65 @@ pi install @gaodes/pi-graphify
 
 Key: `pi-graphify` in `prime-settings.json` (legacy `graphify` key auto-migrates on load).
 
-| Setting                            | Type      | Default           | Description                                             |
-| ---------------------------------- | --------- | ----------------- | ------------------------------------------------------- |
-| `enabled`                          | `boolean` | `true`            | Enable/disable the extension                            |
-| `pythonPath`                       | `string`  | `"python3"`       | Path to Python interpreter                              |
-| `outputDir`                        | `string`  | `"graphify-out"`  | Output directory name                                   |
-| `semanticBackend`                  | `string`  | `"deepseek"`      | Default semantic extraction backend for builds/extracts |
-| `statusbar`                        | `object`  | built-in defaults | Optional pi-statusbar widget settings                   |
-| `autoContext.enabled`              | `boolean` | `true`            | Enable Graphify auto-context hooks                      |
-| `autoContext.augmentSearchResults` | `boolean` | `true`            | Append Graphify hint to search tool results             |
-| `autoContext.queryBudget`          | `number`  | `1200`            | Budget hint for `graphify_query` follow-up usage        |
+| Setting                                    | Type       | Default           | Description                                                        |
+| ------------------------------------------ | ---------- | ----------------- | ------------------------------------------------------------------ |
+| `enabled`                                  | `boolean`  | `true`            | Enable/disable the extension                                       |
+| `pythonPath`                               | `string`   | `"python3"`       | Path to Python interpreter                                         |
+| `outputDir`                                | `string`   | `"graphify-out"`  | Output directory name                                              |
+| `semanticBackend`                          | `string`   | `"deepseek"`      | Default semantic extraction backend for builds/extracts            |
+| `autoContext.enabled`                      | `boolean`  | `true`            | Enable Graphify auto-context hooks                                 |
+| `autoContext.sessionSummary`               | `boolean`  | `true`            | Inject architecture orientation at session start                   |
+| `autoContext.augmentSearchResults`         | `boolean`  | `true`            | Enable Graphify augmentation of tool results (hints + intent-aware suggestions)                       |
+| `autoContext.intentSuggestions`            | `boolean`  | `true`            | Generate intent-aware suggested queries in tool-result hints       |
+| `autoContext.autoQuery`                    | `boolean`  | `false`           | Run actual graphify queries on high-confidence intents (off by default) |
+| `autoContext.includeReport`                | `boolean`  | `true`            | Include GRAPH_REPORT.md content in session orientation             |
+| `autoContext.includeWiki`                  | `boolean`  | `true`            | Include wiki/index.md in session orientation                       |
+| `autoContext.reportMaxChars`               | `number`   | `6000`            | Max characters read from report/wiki files                         |
+| `autoContext.queryBudget`                  | `number`   | `1200`            | Budget hint for `graphify_query` follow-up usage                   |
+| `autoContext.maxSessionAugments`           | `number`   | `8`               | Max tool-result augmentations per session                          |
+| `autoContext.maxAugmentChars`              | `number`   | `1200`            | Hard bound on appended context characters                          |
+| `autoContext.minToolResultLines`           | `number`   | `8`               | Minimum lines in tool result to trigger augmentation               |
+| `autoContext.triggerTools`                 | `string[]` | (see defaults)    | Tool names that trigger augmentation                               |
+| `autoContext.triggerPatterns`              | `string[]` | (see defaults)    | Input patterns that trigger architecture-level hints               |
 
 ### Auto-context behavior
 
-When `graphify-out/graph.json` exists in the current project, pi-graphify:
+When `graphify-out/graph.json` exists in the current project, pi-graphify provides **architecture-level** context to the agent. This complements GitNexus (which provides symbol-level call-graph intelligence).
 
-- injects a concise `[Graphify active]` system-prompt hint on `before_agent_start` (once per session)
-- appends a short `[Graphify]` hint to `grep`, `ffgrep`, `find`, and `fffind` tool results, suggesting `graphify_query` for structural questions
+- **Session orientation** — injects a concise `[Graphify active]` prompt with suggested queries and report summary when `sessionSummary` is enabled
+- **Intent-aware tool hints** — classifies tool results by intent (broad search, high-value file reads, architecture terms) and appends relevant Graphify suggestions
+- **Optional auto-query** — when `autoQuery` is enabled, runs bounded `graphify query` on high-confidence intents (disabled by default to avoid cost/noise)
+- **Session budgets** — enforces max augmentations per session and hard character limits
+- **Deduplication** — caches augmented and empty results to avoid repeated noise
 
-Notes:
+### Settings profiles
+
+**Quiet** — session hint only:
+```json
+{ "pi-graphify": { "autoContext": { "sessionSummary": true, "augmentSearchResults": false, "autoQuery": false } } }
+```
+
+**Balanced** (default) — architecture hints without auto-query:
+```json
+{ "pi-graphify": { "autoContext": { "sessionSummary": true, "intentSuggestions": true, "augmentSearchResults": true, "autoQuery": false, "maxSessionAugments": 8 } } }
+```
+
+**Proactive** — auto-query on high-confidence intents:
+```json
+{ "pi-graphify": { "autoContext": { "sessionSummary": true, "intentSuggestions": true, "augmentSearchResults": true, "autoQuery": true, "maxSessionAugments": 12, "maxAugmentChars": 1800 } } }
+```
+
+### Graphify vs GitNexus
+
+| Aspect          | Graphify                                   | GitNexus                                  |
+| --------------- | ------------------------------------------ | ----------------------------------------- |
+| Scope           | Architecture, concepts, communities, docs  | Symbols, call graphs, execution flows     |
+| Best for        | "What is this system made of?"             | "What calls this, and what breaks?"       |
+| Augmentation    | Session orientation + intent-aware hints   | Pre-commit impact analysis + code context |
+| Trigger         | Broad search, overview files, architecture | Code edits, symbol lookups                |
+| Query tools     | `graphify_query`, `graphify_explain`       | `gitnexus_query`, `gitnexus_impact`       |
+
+Use Graphify when exploring system shape and cross-cutting concepts. Use GitNexus when tracing code paths and assessing change impact.
 
 - This is Pi-native behavior in this extension; the Graphify skill is installed by `graphify install --platform pi` to the global Pi skills directory (`~/.pi/agent/skills/graphify/SKILL.md`). Auto-reinstalled on upgrade via `graphify_upgrade`.
 - Auto-context hooks stay idle in projects where `<outputDir>/graph.json` is missing.

@@ -1,6 +1,6 @@
 {
   "name": "@gaodes/pi-graphify",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Turn any folder into a queryable knowledge graph — build, query, explore, and update graphs from inside Pi",
   "keywords": [
     "pi-package",

@@ -53,6 +53,14 @@ function baseConfig(overrides: Record<string, unknown> = {}) {
 			includeWiki: true,
 			reportMaxChars: 500,
 			queryBudget: 1200,
+			sessionSummary: false,
+			intentSuggestions: true,
+			maxSessionAugments: 8,
+			maxAugmentChars: 1200,
+			minToolResultLines: 1,
+			triggerTools: ["grep", "ffgrep", "find", "fffind", "read"],
+			triggerPatterns: [],
+			autoQuery: false,
 		},
 		...overrides,
 	};
@@ -111,11 +119,13 @@ describe("tools/index auto-context hooks", () => {
 
 		await handlers.get("session_start")?.({}, { cwd: root });
 
+		const multiLineText = Array.from({ length: 10 }, (_, i) => `match line ${i + 1}`).join("\n");
+
 		const first = await handlers.get("tool_result")?.(
 			{
 				toolName: "grep",
 				input: { pattern: "Main Module" },
-				content: [{ type: "text", text: "match" }],
+				content: [{ type: "text", text: multiLineText }],
 			},
 			{ cwd: root },
 		);
@@ -128,7 +138,7 @@ describe("tools/index auto-context hooks", () => {
 			{
 				toolName: "grep",
 				input: { pattern: "Main Module" },
-				content: [{ type: "text", text: "match" }],
+				content: [{ type: "text", text: multiLineText }],
 			},
 			{ cwd: root },
 		);
@@ -143,6 +153,14 @@ describe("tools/index auto-context hooks", () => {
 					includeWiki: true,
 					reportMaxChars: 500,
 					queryBudget: 1200,
+					sessionSummary: false,
+					intentSuggestions: true,
+					maxSessionAugments: 8,
+					maxAugmentChars: 1200,
+					minToolResultLines: 1,
+					triggerTools: ["grep", "ffgrep", "find", "fffind", "read"],
+					triggerPatterns: [],
+					autoQuery: false,
 				},
 			}),
 		);
@@ -153,14 +171,14 @@ describe("tools/index auto-context hooks", () => {
 			{
 				toolName: "grep",
 				input: { pattern: "Main Module" },
-				content: [{ type: "text", text: "match" }],
+				content: [{ type: "text", text: multiLineText }],
 			},
 			{ cwd: root },
 		);
 		expect(disabledResult).toBeUndefined();
 	});
 
-	it("does not augment bash or read tool results", async () => {
+	it("does not augment bash tool results", async () => {
 		const { root } = createTempGraphProject();
 		mockLoadConfig.mockReturnValue(baseConfig());
 		const { pi, handlers } = createPiStub();
@@ -168,17 +186,15 @@ describe("tools/index auto-context hooks", () => {
 
 		await handlers.get("session_start")?.({}, { cwd: root });
 
-		for (const toolName of ["bash", "read"]) {
-			const result = await handlers.get("tool_result")?.(
-				{
-					toolName,
-					input: { command: "echo hi" },
-					content: [{ type: "text", text: "output" }],
-				},
-				{ cwd: root },
-			);
-			expect(result).toBeUndefined();
-		}
+		const result = await handlers.get("tool_result")?.(
+			{
+				toolName: "bash",
+				input: { command: "echo hi" },
+				content: [{ type: "text", text: "output" }],
+			},
+			{ cwd: root },
+		);
+		expect(result).toBeUndefined();
 	});
 
 	it("respects configured outputDir for graph detection", async () => {

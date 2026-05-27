@@ -12,6 +12,20 @@ export interface AutoContextConfig {
 	includeWiki?: boolean;
 	reportMaxChars?: number;
 	queryBudget?: number;
+
+	// Phase 2: session-start orientation
+	sessionSummary?: boolean;
+
+	// Phase 3: intent-aware augmentation
+	intentSuggestions?: boolean;
+	maxSessionAugments?: number;
+	maxAugmentChars?: number;
+	minToolResultLines?: number;
+	triggerTools?: string[];
+	triggerPatterns?: string[];
+
+	// Phase 4: optional auto-query
+	autoQuery?: boolean;
 }
 
 export interface ResolvedAutoContextConfig {
@@ -21,6 +35,20 @@ export interface ResolvedAutoContextConfig {
 	includeWiki: boolean;
 	reportMaxChars: number;
 	queryBudget: number;
+
+	// Phase 2
+	sessionSummary: boolean;
+
+	// Phase 3
+	intentSuggestions: boolean;
+	maxSessionAugments: number;
+	maxAugmentChars: number;
+	minToolResultLines: number;
+	triggerTools: string[];
+	triggerPatterns: string[];
+
+	// Phase 4
+	autoQuery: boolean;
 }
 
 export type SemanticBackend =
@@ -56,6 +84,49 @@ export const DEFAULT_AUTO_CONTEXT_CONFIG: ResolvedAutoContextConfig = {
 	includeWiki: true,
 	reportMaxChars: 6000,
 	queryBudget: 1200,
+
+	// Phase 2
+	sessionSummary: true,
+
+	// Phase 3
+	intentSuggestions: true,
+	maxSessionAugments: 8,
+	maxAugmentChars: 1200,
+	minToolResultLines: 8,
+	triggerTools: ["grep", "ffgrep", "find", "fffind", "read"],
+	triggerPatterns: [
+		"architecture",
+		"layer",
+		"component",
+		"module",
+		"subsystem",
+		"pipeline",
+		"community",
+		"cluster",
+		"relate",
+		"connect",
+		"depends",
+		"touches",
+		"nearby",
+		"impact",
+		"cross-file",
+		"system",
+		"tool",
+		"command",
+		"skill",
+		"keybinding",
+		"settings",
+		"prime-settings",
+		"resources_discover",
+		"graph",
+		"graphify",
+		"knowledge graph",
+		"GRAPH_REPORT",
+		"graphify-out",
+	],
+
+	// Phase 4
+	autoQuery: false,
 };
 
 export const DEFAULT_CONFIG: ResolvedConfig = {
@@ -80,6 +151,11 @@ function sanitizePositiveInt(value: number | undefined, fallback: number): numbe
 	return rounded > 0 ? rounded : fallback;
 }
 
+function resolveStringArray(value: unknown, fallback: string[]): string[] {
+	if (!Array.isArray(value)) return fallback;
+	return value.every((v) => typeof v === "string") ? value : fallback;
+}
+
 function resolveAutoContext(raw: AutoContextConfig | undefined): ResolvedAutoContextConfig {
 	return {
 		enabled: raw?.enabled ?? DEFAULT_AUTO_CONTEXT_CONFIG.enabled,
@@ -92,6 +168,32 @@ function resolveAutoContext(raw: AutoContextConfig | undefined): ResolvedAutoCon
 			DEFAULT_AUTO_CONTEXT_CONFIG.reportMaxChars,
 		),
 		queryBudget: sanitizePositiveInt(raw?.queryBudget, DEFAULT_AUTO_CONTEXT_CONFIG.queryBudget),
+
+		// Phase 2
+		sessionSummary: raw?.sessionSummary ?? DEFAULT_AUTO_CONTEXT_CONFIG.sessionSummary,
+
+		// Phase 3
+		intentSuggestions: raw?.intentSuggestions ?? DEFAULT_AUTO_CONTEXT_CONFIG.intentSuggestions,
+		maxSessionAugments: sanitizePositiveInt(
+			raw?.maxSessionAugments,
+			DEFAULT_AUTO_CONTEXT_CONFIG.maxSessionAugments,
+		),
+		maxAugmentChars: sanitizePositiveInt(
+			raw?.maxAugmentChars,
+			DEFAULT_AUTO_CONTEXT_CONFIG.maxAugmentChars,
+		),
+		minToolResultLines: sanitizePositiveInt(
+			raw?.minToolResultLines,
+			DEFAULT_AUTO_CONTEXT_CONFIG.minToolResultLines,
+		),
+		triggerTools: resolveStringArray(raw?.triggerTools, DEFAULT_AUTO_CONTEXT_CONFIG.triggerTools),
+		triggerPatterns: resolveStringArray(
+			raw?.triggerPatterns,
+			DEFAULT_AUTO_CONTEXT_CONFIG.triggerPatterns,
+		),
+
+		// Phase 4
+		autoQuery: raw?.autoQuery ?? DEFAULT_AUTO_CONTEXT_CONFIG.autoQuery,
 	};
 }
 

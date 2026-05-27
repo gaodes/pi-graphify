@@ -5,6 +5,44 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.2] - 2026-05-27
+
+### Fixed
+
+- **autoQuery exec wiring** — replaced broken `pi.exec` cast with `createBoundedExec` adapter; auto-query mode now works when enabled.
+- **augmentToolResults config** — consolidated into `augmentSearchResults`; removed dead config key that was documented but never checked.
+- **includeWiki** — implemented wiki/index.md content injection in session orientation (was documented but unimplemented).
+- **setTimeout leak** — auto-query timeout now uses `try/finally` to guarantee cleanup.
+- **Snippet extraction** — replaced naive `slice(0, 400).replace()` with `truncateSnippet()` helper that cuts at last newline boundary.
+
+### Removed
+
+- `augmentToolResults` config key (use `augmentSearchResults` instead).
+- `raw/` dev test fixtures directory.
+
+## [Unreleased]
+
+### Added
+
+- **Architecture-level auto-context module** (`src/auto-context/`) — replaces inline auto-context in `src/tools/index.ts` with a structured module for state, graph detection, intent classification, augmentation, and optional auto-query.
+- **Session-start orientation** — injects actionable Graphify usage guidance with suggested queries and optional report summary when a graph exists.
+- **Intent-aware tool-result augmentation** — classifies tool results by intent (broad search, high-value file reads, architecture questions, settings/surface terms) and appends relevant Graphify suggestions instead of generic hints.
+- **Session budgets and deduplication** — enforces `maxSessionAugments`, `maxAugmentChars`, and `minToolResultLines` to prevent context spam.
+- **Optional auto-query mode** — `autoContext.autoQuery` (off by default) runs bounded `graphify query` on high-confidence intents.
+- **Expanded auto-context configuration** — `sessionSummary`, `intentSuggestions`, `augmentSearchResults`, `maxSessionAugments`, `maxAugmentChars`, `minToolResultLines`, `triggerTools`, `triggerPatterns`, `autoQuery`.
+
+### Changed
+
+- Auto-context hooks now live in `src/auto-context/` instead of `src/tools/index.ts` (no behavior regression).
+- `read` tool added to default `triggerTools` for high-value file reads.
+- Session-start prompt is richer when `sessionSummary` is enabled; falls back to basic prompt when disabled.
+- Configuration defaults expanded with all new fields; `prime-settings.json` auto-seeding includes new defaults.
+- Removed `augmentToolResults` config key (consolidated into `augmentSearchResults`).
+- Implemented `includeWiki` — wiki/index.md content now included in session orientation when present.
+- Fixed `autoQuery` wiring to use `createBoundedExec` adapter (was dead code due to `pi.exec` signature mismatch).
+- Fixed `setTimeout` leak in auto-query timeout handler (now uses `try/finally`).
+- Wired `extractRelevantReportSnippet` via shared `truncateSnippet` helper for cleaner snippet extraction.
+
 ## [0.2.1] - 2026-05-26
 
 ### Changed
